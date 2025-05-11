@@ -6,6 +6,7 @@ import Image from "next/image"
 import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
+import { API_URL } from "../utils/BASE_URL"
 
 export default function FreeShippingContent() {
     const [coupons, setCoupons] = useState<any[]>([])
@@ -17,8 +18,8 @@ export default function FreeShippingContent() {
             setIsLoading(true)
             try {
                 // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-                const response = await fetch(`${apiUrl}/coupons`)
+                // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+                const response = await fetch(`${API_URL}/coupons`)
 
                 if (!response.ok) {
                     throw new Error(`API responded with status: ${response.status}`)

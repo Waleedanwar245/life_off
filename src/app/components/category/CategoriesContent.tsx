@@ -5,6 +5,7 @@ import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import CategoriesCarousel from "./CategoriesCarousel"
 import CategoryGrid from "./CategoryGrid"
+import { API_URL } from "../utils/BASE_URL"
 
 export default function CategoriesContent() {
   const [categoriesData, setCategoriesData] = useState<any>(null)
@@ -15,9 +16,9 @@ export default function CategoriesContent() {
     const fetchCategories = async () => {
       setIsLoading(true)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+        // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
         // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-        const response = await fetch(`${apiUrl}/categories`)
+        const response = await fetch(`${API_URL}/categories`)
 
         if (!response.ok) {
           throw new Error(`API responded with status: ${response.status}`)

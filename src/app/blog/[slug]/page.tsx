@@ -1,5 +1,6 @@
 import BlogBanner from "@/app/components/blog/BlogBanner2"
 import BlogLayout from "@/app/components/blog/BlogLayout2"
+import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 // import RelatedBlogs from '@/app/components/blog/RelatedBlogs2'
 // import SplashScreen from '@/app/components/utils/SplashSvreen'
@@ -42,8 +43,8 @@ type Props = {
 // Fetch blog data
 async function getBlogBySlug(slug: string): Promise<any> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-    const res = await fetch(`${apiUrl}/blogs/slug/${slug}`, {
+    // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+    const res = await fetch(`${API_URL}/blogs/slug/${slug}`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     })
 

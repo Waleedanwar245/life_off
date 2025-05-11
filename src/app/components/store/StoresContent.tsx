@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
+import { API_URL } from "../utils/BASE_URL"
 
 // Define paths object to replace the imported PATH
 const PATH = {
@@ -34,8 +35,8 @@ export default function StoresContent() {
             setIsLoading(true)
             try {
                 // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-                const response = await fetch(`${apiUrl}/store`)
+                // const apiUrl =  "https://liveoffcoupon.com/api"
+                const response = await fetch(`${API_URL}/store`)
 
                 if (!response.ok) {
                     throw new Error(`API responded with status: ${response.status}`)

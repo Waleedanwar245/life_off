@@ -18,8 +18,8 @@ export async function generateMetadata(
   
   try {
     // Fetch data
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-    const res = await axios.get(`${apiUrl}/categories/slug/by/${slug}`)
+    // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+    const res = await axios.get(`${API_URL}/categories/slug/by/${slug}`)
     const data = res.data
     
     // Optionally access and extend parent metadata
