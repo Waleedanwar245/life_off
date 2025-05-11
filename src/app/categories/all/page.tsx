@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import CategoriesContent from "../../components/category/CategoriesContent"
+import CategoriesContent from "@/app/components/category/CategoriesContent"
 
 export const metadata: Metadata = {
   title: "All Categories | LiveOffCoupon",
