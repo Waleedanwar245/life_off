@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://liveoffcoupon.com/category/all",
+    canonical: "https://liveoffcoupon.com/categories",
   },
   other: {
     "google-site-verification": "jun25llOGzjnJpsoK3-Qvha-gL5rLMR73W68lVU-h6M",
