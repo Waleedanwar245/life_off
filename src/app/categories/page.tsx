@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import CategoriesContent from "../../components/category/CategoriesContent"
+import CategoriesContent from "../components/category/CategoriesContent"
 
 export const metadata: Metadata = {
   title: "All Categories | LiveOffCoupon",
@@ -28,5 +28,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <CategoriesContent />
+  return <CategoriesContent /> 
 }
