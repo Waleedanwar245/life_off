@@ -19,7 +19,7 @@ export default function CategoriesContent() {
         // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
         // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
         console.log("API_URL:::::",API_URL);
-        const response = await fetch(`${API_URL}/hahahah`)
+        const response = await fetch(`${API_URL}/categories`)
 
         if (!response.ok) {
           throw new Error(`API responded with status: ${response.status}`)
