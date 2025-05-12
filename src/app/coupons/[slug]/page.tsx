@@ -1,0 +1,141 @@
+import { API_URL } from "@/app/components/utils/BASE_URL"
+import SplashScreen from "@/app/components/utils/SplashSvreen"
+import type { Metadata, ResolvingMetadata } from "next"
+import { notFound } from "next/navigation"
+import { Suspense } from "react"
+import axios from "axios"
+import StoreHeader from "@/app/components/store/StoreHeader"
+import CouponTabs from "@/app/components/store/CouponTabs"
+
+// Types
+interface Store {
+  id: string
+  storeTitle: string
+  name: string
+  slug: string
+  storeDescription: string
+  metaDescription: string
+  logoUrl: string
+}
+
+interface StoreData {
+    store: Store
+    coupons?: any[]
+    products?: any[]
+}
+
+// Define Props type
+type Props = {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+// Fetch store data
+async function getStoreBySlug(slug: string): Promise<StoreData> {
+  console.log("slug:::",slug);
+  try {
+    const response = await axios.get(`${API_URL}/store/coupon-product-by-slug/${slug}`)
+    console.log("response::::",response);
+    return response.data
+  } catch (error) {
+    console.error("Error fetching store data:", error)
+    throw error
+  }
+}
+
+// Generate metadata for the page
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  try {
+    // Await the params to get the id
+    const { slug } = await params
+    console.log("params:::::",params);
+    const data = await getStoreBySlug(slug)
+    const store = data?.store
+
+    if (!store) {
+      return {
+        title: "Store Not Found | LiveOffCoupon",
+        description: "The requested store could not be found.",
+      }
+    }
+
+    const storeTitle = store.storeTitle?.trim() || store.name?.trim() || store.slug?.trim() || "Featured Store"
+    const storeDescription =
+      store.metaDescription?.trim() ||
+      store.storeDescription?.trim() ||
+      `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOffCoupon.`
+
+    return {
+      title: `${storeTitle} - Promo Codes & Deals | LiveOffCoupon`,
+      description: storeDescription,
+      openGraph: {
+        title: `${storeTitle} - Promo Codes & Deals | LiveOffCoupon`,
+        description: storeDescription,
+        url: `https://liveoffcoupon.com/coupons/${store.slug}`,
+        type: "website",
+        images: [
+          {
+            url: store.logoUrl || "/logo.png",
+            width: 1200,
+            height: 630,
+            alt: storeTitle,
+          },
+        ],
+      },
+      alternates: {
+        canonical: `https://liveoffcoupon.com/coupons/${store.slug}`,
+      },
+    }
+  } catch (error) {
+    console.error("Error generating metadata:", error)
+    return {
+      title: "Store | LiveOffCoupon",
+      description: "Discover the latest coupons and deals to save money on your favorite brands.",
+    }
+  }
+}
+
+// Generate JSON-LD schema
+function generateJsonLd(store: Store) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": store.storeTitle?.trim() || store.name?.trim() || "LiveOffCoupon Store",
+    "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+    "description": store.metaDescription?.trim() || store.storeDescription?.trim() || "Find the best deals and coupons.",
+    "image": store.logoUrl || "https://liveoffcoupon.com/default-store-image.jpg",
+  }
+}
+
+export default async function StorePage({ params }: Props) {
+  try {
+    // Await the params to get the id
+    const { slug } = await params
+    const data = await getStoreBySlug(slug)
+
+    if (!data || !data?.store) {
+      notFound()
+    }
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateJsonLd(data.store)),
+          }}
+        />
+        <Suspense fallback={<SplashScreen />}>
+          <div className='mt-[250px] md:mt-[135px]' >
+            <StoreHeader data={data} />
+          </div>
+          <CouponTabs data={data}  />
+          {/* <StoreContent storeData={data} /> */}
+        </Suspense>
+      </>
+    )
+  } catch (error) {
+    console.error("Error rendering store page:", error)
+    return <SplashScreen />
+  }
+}

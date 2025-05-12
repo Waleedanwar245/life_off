@@ -1,3 +1,4 @@
+'use client'
 // SplashScreen.tsx
 import { useEffect, useState } from 'react';
 import STORE_LOGO from "../../../../public/logo.svg"; // This gives you a string URL

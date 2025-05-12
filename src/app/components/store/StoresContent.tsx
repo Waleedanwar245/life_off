@@ -116,16 +116,16 @@ export default function StoresContent() {
                                             } w-[206px] h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-6 transition-transform hover:scale-105 shadow-md`}
                                     >
                                         {store?.logoUrl ? (
-                                            <Image
+                                            <img
                                                 src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"}
                                                 alt={`${store.name} logo`}
                                                 width={150}
                                                 height={150}
                                                 className="w-full h-full object-contain"
-                                                unoptimized // Use this for external images
+                                                // unoptimized // Use this for external images
                                             />
                                         ) : (
-                                            <Image
+                                            <img
                                                 src="/images/default_store_img.png"
                                                 alt="Default store logo"
                                                 width={150}

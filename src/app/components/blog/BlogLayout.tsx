@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { FaCalendarAlt } from "react-icons/fa"
-import Image from "next/image"
+// import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 
@@ -55,12 +55,12 @@ export default function BlogLayout({ data }: any) {
       {/* Author Profile Section */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12">
         <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 relative">
-          <Image
+          <img
             src={convertToSecureUrl(authorDetails?.imageUrl) || "/images/placeholder.svg?height=100&width=100"}
             alt="Author profile"
-            fill
+            // fill
             className="object-cover"
-            unoptimized // Use this for external images
+            // unoptimized // Use this for external images
           />
         </div>
         <div>
@@ -89,12 +89,12 @@ export default function BlogLayout({ data }: any) {
                 className="cursor-pointer border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="overflow-hidden relative h-48">
-                  <Image
+                  <img
                     src={convertToSecureUrl(post.featuredImage) || "/images/placeholder.svg"}
                     alt={post.title}
-                    fill
+                    // fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
-                    unoptimized // Use this for external images
+                    // unoptimized // Use this for external images
                   />
                 </div>
                 <div className="p-4">

@@ -48,27 +48,24 @@ export default function BlogBanner({ data }: any) {
         </div>
 
         {/* Featured Image */}
-        {/* <div className="relative w-full h-[506px]">
+        <div className="relative w-full h-[506px]">
           {data?.featuredImage ? (
-            <Image
+            <img
               src={convertToSecureUrl(data?.featuredImage) || "/placeholder.svg"}
               alt={data?.title || "Blog Image"}
-              fill
+              
               className="object-cover rounded-md"
               sizes="(max-width: 768px) 100vw, 1200px"
-              priority
             />
           ) : (
-            <Image
+            <img
               src="/placeholder.svg?height=506&width=1200"
               alt="Blog Image"
-              fill
               className="object-cover rounded-md"
               sizes="(max-width: 768px) 100vw, 1200px"
-              priority
             />
           )}
-        </div> */}
+        </div>
       </article>
     </div>
   )

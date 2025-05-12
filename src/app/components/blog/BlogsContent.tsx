@@ -15,8 +15,8 @@ export default function BlogsContent() {
     const fetchBlogs = async () => {
       setIsLoading(true)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-        //  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+        // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
         const response = await fetch(`${apiUrl}/blogs`, {
           method: "GET",
           headers: {

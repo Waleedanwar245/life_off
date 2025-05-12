@@ -75,10 +75,10 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
                                 className="cursor-pointer flex gap-3 border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                             >
                                 <div className="relative w-24 h-24">
-                                    <Image
+                                    <img
                                         src={convertToSecureUrl(article.image) || "/placeholder.svg"}
                                         alt={article.title}
-                                        fill
+                                        // fill
                                         className="object-cover"
                                         sizes="96px"
                                     />

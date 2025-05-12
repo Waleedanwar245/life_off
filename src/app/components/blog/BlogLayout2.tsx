@@ -46,15 +46,15 @@ export default async function BlogLayout({ data }: { data: any }) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Author Profile Section */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 my-12">
         <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
-          {/* <Image
+          <img
             src={convertToSecureUrl(authorDetails?.imageUrl) || "/placeholder.svg?height=100&width=100"}
             alt="Author profile"
-            fill
+            // fill
             className="object-cover"
             sizes="96px"
-          /> */}
+          />
         </div>
         <div>
           <h2 className="text-green-600 font-medium text-lg mb-1">{authorDetails?.name || "MARIA LALONDE"}</h2>
@@ -77,13 +77,13 @@ export default async function BlogLayout({ data }: { data: any }) {
               className="cursor-pointer border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="relative overflow-hidden h-48">
-                {/* <Image
+                <img
                   src={convertToSecureUrl(post.featuredImage) || "/placeholder.svg?height=192&width=384"}
                   alt={post.title}
-                  fill
+                  // fill
                   className="object-cover hover:scale-105 transition-transform duration-300"
                   sizes="(max-width: 768px) 100vw, 384px"
-                /> */}
+                />
               </div>
               <div className="p-4">
                 <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">{post.title}</h3>
