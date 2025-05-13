@@ -7,17 +7,14 @@ import Image from "next/image"
 import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import { API_URL } from "../utils/BASE_URL"
+import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 
 // Define paths object to replace the imported PATH
 const PATH = {
     SINGLE_STORE: "/coupons/:id",
 }
 
-// Helper function to convert URLs to secure URLs
-const convertToSecureUrl = (url: string | undefined) => {
-    if (!url) return undefined
-    return url.replace(/^http:\/\//i, "https://")
-}
+
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
 
