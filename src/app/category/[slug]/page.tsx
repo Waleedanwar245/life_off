@@ -8,6 +8,26 @@ type Props = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
+export async function generateStaticParams() {
+  try {
+    // Fetch all categories to generate static paths
+    const res = await axios.get(`${API_URL}/categories`)
+    const categories = res.data
+    
+    // Filter out categories with null slugs
+    const validCategories = categories.filter((category: any) => category.slug !== null);
+    
+    console.log(`Found ${validCategories.length} categories with valid slugs out of ${categories.length} total`);
+    
+    // Return an array of objects with the slug parameter
+    return validCategories.map((category: any) => ({
+      slug: category.slug,
+    }))
+  } catch (error) {
+    console.error("Error generating static params:", error)
+    return [] // Return empty array if there's an error
+  }
+}
 
 export async function generateMetadata(
   { params, searchParams }: Props,

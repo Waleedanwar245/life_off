@@ -30,6 +30,27 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+export async function generateStaticParams() {
+  try {
+    // Fetch all stores to generate static paths
+    const res = await axios.get(`${API_URL}/store`)
+    const stores = res.data
+    
+    // Filter out stores with null slugs
+    const validStores = stores.filter((store: any) => store.slug !== null);
+    
+    console.log(`Found ${validStores.length} stores with valid slugs out of ${stores.length} total`);
+    
+    // Return an array of objects with the slug parameter
+    return validStores.map((store: any) => ({
+      slug: store.slug,
+    }))
+  } catch (error) {
+    console.error("Error generating static params for stores:", error)
+    return [] // Return empty array if there's an error
+  }
+}
+
 // Fetch store data
 async function getStoreBySlug(slug: string): Promise<StoreData> {
   console.log("slug:::",slug);

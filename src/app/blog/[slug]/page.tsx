@@ -2,6 +2,7 @@ import BlogBanner from "@/app/components/blog/BlogBanner2"
 import BlogLayout from "@/app/components/blog/BlogLayout2"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
+import axios from "axios"
 // import RelatedBlogs from '@/app/components/blog/RelatedBlogs2'
 // import SplashScreen from '@/app/components/utils/SplashSvreen'
 import type { Metadata, ResolvingMetadata } from "next"
@@ -38,6 +39,27 @@ interface BlogResponse {
 type Props = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export async function generateStaticParams() {
+  try {
+    // Fetch all blog posts to generate static paths
+    const res = await axios.get(`${API_URL}/blogs`)
+    const blogs = res.data
+    
+    // Filter out blogs with null slugs
+    const validBlogs = blogs.filter((blog: any) => blog.slug !== null);
+    
+    console.log(`Found ${validBlogs.length} blog posts with valid slugs out of ${blogs.length} total`);
+    
+    // Return an array of objects with the slug parameter
+    return validBlogs.map((blog: any) => ({
+      slug: blog.slug,
+    }))
+  } catch (error) {
+    console.error("Error generating static params for blogs:", error)
+    return [] // Return empty array if there's an error
+  }
 }
 
 // Fetch blog data
