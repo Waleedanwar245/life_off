@@ -89,13 +89,20 @@ function Blogs() {
                 className="cursor-pointer flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
                 {/* Image Container */}
-                <div className="w-1/3 bg-purple-100 relative">
+                {/* <div className="w-1/3 bg-purple-100 relative">
                   <img
                     src={convertToSecureUrl(post.image) || "/placeholder.svg"}
                     alt={post.title}
                     // fill
                     className="object-cover rounded-[10px]"
                     // unoptimized
+                  />
+                </div> */}
+                  <div className="w-1/3 bg-purple-100 relative">
+                  <img
+                    src={convertToSecureUrl(post.image)}
+                    alt={post.title}
+                    className="w-full h-full object-cover rounded-[10px]"
                   />
                 </div>
 

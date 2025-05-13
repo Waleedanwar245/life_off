@@ -181,7 +181,7 @@ const Navbar = () => {
           className="cursor-pointer flex items-center space-x-2 underline hover:text-[#000] transition-colors"
           aria-label="Join our Facebook group"
         >
-          <Image src="/images/meta-icon.png" alt="Facebook icon" width={20} height={20} className="w-5 h-5" />
+          <Image src="/fb_icon.svg" alt="Facebook icon" width={20} height={20} className="w-5 h-5" />
           <span>Facebook</span>
         </a>
 
@@ -194,7 +194,7 @@ const Navbar = () => {
           className="cursor-pointer flex items-center space-x-2 underline hover:text-[#000] transition-colors"
           aria-label="Join our WhatsApp group"
         >
-          <Image src="/images/whatsapp-icon.png" alt="WhatsApp icon" width={20} height={20} className="w-5 h-5" />
+          <Image src="/whatapp-icon.svg" alt="WhatsApp icon" width={20} height={20} className="w-5 h-5" />
           <span>WhatsApp</span>
         </a>
       </div>
@@ -203,7 +203,7 @@ const Navbar = () => {
       <div className="h-[65px] hidden lg:flex">
         {/* Left side with white background */}
         <div onClick={() => router.push(PATH.LANDING_PAGE)} className="cursor-pointer bg-white flex items-center px-8">
-          <Image src="/images/store-logo.png" alt="Logo" width={48} height={48} className="h-12 w-auto" />
+          <Image src="/logo.svg" alt="Logo" width={48} height={48} className="h-12 w-auto" />
         </div>
 
         {/* Rest of navbar with dark background */}
@@ -290,7 +290,7 @@ const Navbar = () => {
           onClick={() => router.push(PATH.LANDING_PAGE)}
           className="cursor-pointer bg-white flex justify-center py-4"
         >
-          <Image src="/images/store-logo.png" alt="Logo" width={48} height={48} className="h-12 w-auto" />
+          <Image src="/logo.svg" alt="Logo" width={48} height={48} className="h-12 w-auto" />
         </div>
 
         {/* Search bar and menu toggle on second line */}

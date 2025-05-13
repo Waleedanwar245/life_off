@@ -146,13 +146,6 @@ export default async function Home() {
       <TopDealsSlider />
       <Blogs />
       <FAQ data={bannerData} /> 
-       {/*
-       
-        */}
-        {/*
-      
-        <TopDealsSlider />
-       */}
       </Suspense>
     </>
   )

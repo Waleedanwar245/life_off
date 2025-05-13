@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Stores on Offers",
     description: "Find amazing deals from your favorite brands, all in one place.",
     type: "website",
-    url: "https://liveoffcoupon.com/store/all",
+    url: "https://liveoffcoupon.com/stores",
     images: [
       {
         url: "/images/footer-logo.png",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://liveoffcoupon.com/store/all",
+    canonical: "https://liveoffcoupon.com/stores",
   },
   other: {
     "google-site-verification": "jun25llOGzjnJpsoK3-Qvha-gL5rLMB73W68lVU-h6M",

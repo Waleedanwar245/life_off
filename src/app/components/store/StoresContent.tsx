@@ -10,7 +10,7 @@ import { API_URL } from "../utils/BASE_URL"
 
 // Define paths object to replace the imported PATH
 const PATH = {
-    SINGLE_STORE: "/store/:id",
+    SINGLE_STORE: "/coupons/:id",
 }
 
 // Helper function to convert URLs to secure URLs
@@ -75,7 +75,7 @@ export default function StoresContent() {
                     "@type": "WebPage",
                     name: "Stores on Offers | LiveOffCoupon",
                     description: "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
-                    url: "https://liveoffcoupon.com/store/all",
+                    url: "https://liveoffcoupon.com/stores",
                 })}
             </Script>
 

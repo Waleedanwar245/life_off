@@ -39,7 +39,7 @@ export default function CouponDialog({ copyToClipboard, isModalOpen, handleCance
 
           {/* Coupon Code Section */}
           {couponCode.code ? (
-            <div className="flex w-full max-w-md border rounded-md overflow-hidden mx-4">
+            <div className="flex  max-w-md border rounded-md overflow-hidden mx-4">
               <div className="bg-white p-3 flex-grow text-center text-2xl font-bold text-gray-700">
                 {couponCode.code}
               </div>

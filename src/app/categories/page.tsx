@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: "All Categories | LiveOffCoupon",
     description: "Discover discounts in all product categories available on LiveOffCoupon.",
     type: "website",
-    url: "https://liveoffcoupon.com/category/all",
+    url: "https://liveoffcoupon.com/categories",
     images: [
       {
         url: "/images/store-logo.png",

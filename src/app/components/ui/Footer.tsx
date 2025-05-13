@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "react-hot-toast"
+import { API_URL } from "../utils/BASE_URL"
 
 // Define paths object to replace the imported PATH
 const PATH = {
@@ -13,12 +14,12 @@ const PATH = {
   SINGLE_STORE: "/store/:id",
   ALL_CATEGORY: "/categories",
   SHIPPING_PAGE: "/free-shipping",
-  ALL_BLOG: "/savings-tips",
-  SINGLE_EVENT: "/event/:id",
-  COUPON_REQUREST_OFFER: "/submit-coupon",
-  ABOUT_US: "/about-us",
-  PRIVACY_POLICY_LANDING: "/privacy-policy",
-  TERM_AND_CONDITIONS: "/terms-of-use",
+  ALL_BLOG: "/blogs",
+  SINGLE_EVENT: "/admin/seasonal/:id",
+  COUPON_REQUREST_OFFER: "/admin/submit-coupon",
+  ABOUT_US: "/admin/about-us",
+  PRIVACY_POLICY_LANDING: "/adamin/privacy-policy",
+  TERM_AND_CONDITIONS: "/admin/terms-of-use",
 }
 
 // Helper function to get error message
@@ -44,9 +45,9 @@ const FooterSection = () => {
 
     setIsSubmitting(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+      // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
       // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-      const response = await fetch(`${apiUrl}/newsletter`, {
+      const response = await fetch(`${API_URL}/newsletter`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +106,7 @@ const FooterSection = () => {
           <div className="col-span-1">
             <div className="flex items-center gap-2 mb-4 cursor-pointer" onClick={() => router.push(PATH.LANDING_PAGE)}>
               <Image
-                src="/images/footer-logo.png"
+                src="/footer_logo.svg"
                 alt="LiveOffCoupons Logo"
                 width={150}
                 height={71}
@@ -208,7 +209,7 @@ const FooterSection = () => {
               className="hover:text-[#95C959] transition"
               rel="noreferrer"
             >
-              <Image src="/images/fb-footer-logo.png" alt="Facebook" width={24} height={24} className="w-6 h-6" />
+              <Image src="/fb-logo.svg" alt="Facebook" width={24} height={24} className="w-6 h-6" />
             </a>
             <a
               href="https://www.instagram.com/liveoffcoupon/"
@@ -216,7 +217,7 @@ const FooterSection = () => {
               className="hover:text-[#95C959] transition"
               rel="noreferrer"
             >
-              <Image src="/images/instg-footer-logo.png" alt="Instagram" width={24} height={24} className="w-6 h-6" />
+              <Image src="/instagram-logo.svg" alt="Instagram" width={24} height={24} className="w-6 h-6" />
             </a>
             {/* Commented out social links preserved from original */}
             {/* <a href="#" className="hover:text-[#95C959] transition">

@@ -83,7 +83,7 @@ const MerchantCard = ({ data }: { data: any }) => {
                         alt={`${merchant?.name} logo`}
                         width={100}
                         height={50}
-                        className="object-contain"
+                        className="w-auto h-[76px] sm:h-[40px] lg:h-[50px] object-contain"
                         unoptimized
                       />
                     </div>

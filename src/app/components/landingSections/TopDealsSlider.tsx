@@ -186,10 +186,10 @@ function ProductCard({ product }: ProductProps) {
       className="cursor-pointer group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
     >
       <div className="relative overflow-hidden h-60">
-        <img
-          src={convertToSecureUrl(product.image) || "/placeholder.svg"}
-          alt={product?.title}
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+      <img
+          src={convertToSecureUrl(product.image)}
+          // alt={product?.title}
+          className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500"
           onError={(e) => {
             const target = e.target as HTMLImageElement
             target.onerror = null

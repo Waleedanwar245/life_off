@@ -5,6 +5,7 @@ import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import BlogFeaturedSection from "./BlogFeaturedSection"
 import BlogLayout from "./BlogLayout"
+import { API_URL } from "../utils/BASE_URL"
 
 export default function BlogsContent() {
   const [blogData, setBlogData] = useState<any>(null)
@@ -15,9 +16,7 @@ export default function BlogsContent() {
     const fetchBlogs = async () => {
       setIsLoading(true)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-        //  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-        const response = await fetch(`${apiUrl}/blogs`, {
+        const response = await fetch(`${API_URL}/blogs`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

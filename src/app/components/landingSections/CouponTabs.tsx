@@ -97,7 +97,6 @@ export default function CouponTabs({ data }: { data: any }) {
 
               {/* Logo */}
               <div className="h-16 flex items-center justify-center mb-4">
-                <div className="relative w-full h-full">
                   <img
                     src={convertToSecureUrl(coupon.logo) || "/placeholder.svg"}
                     alt={`${coupon.name} logo`}
@@ -110,7 +109,6 @@ export default function CouponTabs({ data }: { data: any }) {
                       target.src = "/placeholder.svg"
                     }}
                   />
-                </div>
               </div>
 
               {/* Offer Details */}
