@@ -15,11 +15,11 @@ const PATH = {
   ALL_CATEGORY: "/categories",
   SHIPPING_PAGE: "/free-shipping",
   ALL_BLOG: "/blogs",
-  SINGLE_EVENT: "/admin/seasonal/:id",
-  COUPON_REQUREST_OFFER: "/admin/submit-coupon",
-  ABOUT_US: "/admin/about-us",
-  PRIVACY_POLICY_LANDING: "/adamin/privacy-policy",
-  TERM_AND_CONDITIONS: "/admin/terms-of-use",
+  SINGLE_EVENT: "/event/:id",
+  COUPON_REQUREST_OFFER: "/submit",
+  ABOUT_US: "/about-us",
+  PRIVACY_POLICY_LANDING: "/privacy-policy",
+  TERM_AND_CONDITIONS: "/terms-conditions",
 }
 
 // Helper function to get error message
