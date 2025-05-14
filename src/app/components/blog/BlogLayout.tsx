@@ -5,6 +5,7 @@ import { FaCalendarAlt } from "react-icons/fa"
 // import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
+import { API_URL } from "../utils/BASE_URL"
 
 // Define paths object to replace the imported PATH
 const PATH = {
@@ -21,9 +22,7 @@ export default function BlogLayout({ data }: any) {
     const fetchLatestBlogs = async () => {
       setIsLoading(true)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-        //  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
-        const response = await fetch(`${apiUrl}/blogs/latest`)
+        const response = await fetch(`${API_URL}/blogs/latest`)
 
         if (!response.ok) {
           throw new Error(`API responded with status: ${response.status}`)
@@ -43,7 +42,7 @@ export default function BlogLayout({ data }: any) {
   }, [])
 
   const posts = latestPosts || []
-  const authorDetails = data?.__author__ || null
+  const authorDetails = data?.[0]?.__author__ || null
 
   // Function to navigate to a blog post
   const navigateToBlog = (slug: string) => {
@@ -93,7 +92,7 @@ export default function BlogLayout({ data }: any) {
                     src={convertToSecureUrl(post.featuredImage) || "/images/placeholder.svg"}
                     alt={post.title}
                     // fill
-                    className="object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                     // unoptimized // Use this for external images
                   />
                 </div>

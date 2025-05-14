@@ -1,45 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import BlogFeaturedSection from "./BlogFeaturedSection"
 import BlogLayout from "./BlogLayout"
-import { API_URL } from "../utils/BASE_URL"
 
-export default function BlogsContent() {
-  const [blogData, setBlogData] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(true)
+// Update the props to accept initialBlogData
+interface BlogsContentProps {
+  initialBlogData: any
+}
 
-  // Fetch blog data
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      setIsLoading(true)
-      try {
-        const response = await fetch(`${API_URL}/blogs`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+export default function BlogsContent({ initialBlogData }: BlogsContentProps) {
+  // Use the data passed from the server component
+  const [blogData] = useState(initialBlogData)
+  const [isLoading, setIsLoading] = useState(false)
 
-        if (!response.ok) {
-          throw new Error(`API responded with status: ${response.status}`)
-        }
-
-        const data = await response.json()
-        console.log("data:::", data)
-        setBlogData(data)
-      } catch (error) {
-        console.error("Error fetching blogs:", error)
-        setBlogData(null)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchBlogs()
-  }, [])
+  // No need for useEffect to fetch data anymore since we're getting it from props
 
   return (
     <div>
@@ -57,7 +34,7 @@ export default function BlogsContent() {
             url: "https://liveoffcoupon.com/",
             logo: {
               "@type": "ImageObject",
-              url: "https://liveoffcoupon.com/logo.png", // replace with your actual logo
+              url: "https://liveoffcoupon.com/logo.png",
             },
           },
         })}
@@ -67,13 +44,10 @@ export default function BlogsContent() {
         <SplashScreen />
       ) : (
         <>
-          {/* <BlogIcons /> */}
           <div className="mt-[250px] md:mt-[100px]">
             <BlogFeaturedSection data={blogData} />
           </div>
           <BlogLayout data={blogData} />
-          {/* <BlogNewsLayout data={data} />
-          <FooterSection /> */}
         </>
       )}
     </div>

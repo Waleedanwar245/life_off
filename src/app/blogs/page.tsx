@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { API_URL } from "@/app/components/utils/BASE_URL"
+import Link from "next/link"
 import BlogsContent from "../components/blog/BlogsContent"
 
 export const metadata: Metadata = {
@@ -28,7 +30,47 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Page() {
-  return <BlogsContent />
+// Server-side data fetching
+async function getBlogs() {
+  try {
+    const response = await fetch(`${API_URL}/blogs`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 3600 } // Revalidate every hour
+    })
+
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Error fetching blogs:", error)
+    return []
+  }
 }
 
+export default async function Page() {
+  // Fetch data on the server
+  const blogData = await getBlogs()
+  
+  return (
+    <>
+      {/* Add hidden links for SEO crawling */}
+      <div className="hidden">
+        {blogData && blogData.map((blog: any) => (
+          blog.slug && (
+            <Link key={blog.id} href={`/blog/${blog.slug}`}>
+              {blog.title}
+            </Link>
+          )
+        ))}
+      </div>
+      
+      {/* Pass the pre-fetched data to your client component */}
+      <BlogsContent initialBlogData={blogData} />
+    </>
+  )
+}
