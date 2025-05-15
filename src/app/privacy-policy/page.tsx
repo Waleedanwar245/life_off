@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://liveoffcoupon.com/logo200.png",
+        url: "https://liveoffcoupon.com/logo.svg",
         width: 1200,
         height: 630,
         alt: "LiveOffCoupon Privacy",

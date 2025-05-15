@@ -7,10 +7,36 @@ import CategoryGrid from "@/app/components/category/CategoryGrid"
 
 export const metadata: Metadata = {
   title: "All Categories | LiveOffCoupon",
-  description:
-    "Explore a wide range of categories on LiveOffCoupon, offering amazing deals and discounts across various product categories.",
-  // Rest of your metadata stays the same
-}
+  description: "Explore a wide range of categories on LiveOffCoupon, offering amazing deals and discounts across various product categories.",
+  alternates: {
+    canonical: "https://liveoffcoupon.com/categories",
+  },
+  openGraph: {
+    title: "All Categories | LiveOffCoupon",
+    description: "Discover discounts in all product categories available on LiveOffCoupon.",
+    url: "https://liveoffcoupon.com/categories",
+    type: "website",
+    images: [
+      {
+        url: "https://liveoffcoupon.com/logo.svg", // Use the correct path from IMAGES.STORE_LOGO
+        width: 800,
+        height: 600,
+        alt: "LiveOffCoupon Store Logo",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  verification: {
+    google: "jun25llOGzjnJpsoK3-Qvha-gL5rLMR73W68lVU-h6M",
+  },
+};
 
 // Server-side data fetching
 async function getCategories() {

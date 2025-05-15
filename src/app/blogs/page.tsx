@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: "https://liveoffcoupon.com/blogs",
     images: [
       {
-        url: "/images/store-logo.png",
+        url: "https://liveoffcoupon.com/logo.svg",
         width: 1200,
         height: 630,
         alt: "LiveOffCoupon",
