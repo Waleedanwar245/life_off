@@ -55,7 +55,7 @@ export default async function Page() {
             stores.slice(0, 30).map((store: any, index: number) => (
               <Link
                 key={index}
-                href={`/store/${store?.slug || "no-slug"}`}
+                href={`/coupons/${store?.slug || "no-slug"}`}
                 className={`${store.bgColor || "bg-white"} w-[206px] h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-6 transition-transform hover:scale-105 shadow-md`}
               >
                 {store?.logoUrl ? (

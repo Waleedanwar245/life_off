@@ -11,7 +11,7 @@ import { API_URL } from "../utils/BASE_URL"
 const PATH = {
   LANDING_PAGE: "/",
   STORE: "/stores",
-  SINGLE_STORE: "/store/:id",
+  SINGLE_STORE: "/coupons/:id",
   ALL_CATEGORY: "/categories",
   SHIPPING_PAGE: "/free-shipping",
   ALL_BLOG: "/blogs",

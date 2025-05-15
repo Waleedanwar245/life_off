@@ -11,7 +11,7 @@ import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 
 // Define paths object to replace the imported PATH
 const PATH = {
-    SINGLE_STORE: "/store/:id",
+    SINGLE_STORE: "/coupons/:id",
 }
 
 
