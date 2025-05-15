@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
+import { API_URL } from "../utils/BASE_URL"
 
 // Define paths object to replace the imported PATH
 const PATH = {
@@ -24,8 +25,7 @@ export default function RelatedBlogs({ SingBlogdata }: any) {
 
     const fetchRelatedBlogs = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-        const response = await fetch(`${apiUrl}/blogs?categoryId=${categoryId}`)
+        const response = await fetch(`${API_URL}/blogs?categoryId=${categoryId}`)
 
         if (!response.ok) {
           throw new Error(`API responded with status: ${response.status}`)

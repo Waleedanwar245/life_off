@@ -4,7 +4,8 @@ import { FaCalendarAlt } from "react-icons/fa"
 import { formatDate } from "../utils/formatDate"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 import dynamic from "next/dynamic"
-const SafeHtml = dynamic(() => import('../utils/SafeHtml'), { ssr: false });
+import { API_URL } from "../utils/BASE_URL"
+import SafeHtml from "../utils/SafeHtml"
 
 // Types
 interface BlogPost {
@@ -24,7 +25,7 @@ interface BlogsResponse {
 // Fetch trending blogs
 async function getTrendingBlogs(): Promise<any> {
     try {
-        const res = await fetch("https://liveoffcoupons.com/api/blogs", {
+        const res = await fetch(`${API_URL}/blogs`, {
             next: { revalidate: 3600 }, // Revalidate every hour
         })
 
@@ -55,9 +56,9 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
             })) || []
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+        <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 ">
             {/* Main Content */}
-            <div className="w-full md:w-2/3">
+            <div className="w-full md:w-2/3 mt-10">
                 {blogData?.content && <SafeHtml html={blogData.content} />}
 
             </div>

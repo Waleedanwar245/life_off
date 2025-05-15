@@ -2,25 +2,24 @@ import DealCard from "./DealCard";
 import StoreGrid from "./StoreGrid";
 
 export default function ChristmasDeals({ data }: any) {
-  console.log("data::", data)
 
   // Extract stores for the StoreGrid component
-  const storeList = data?.stores?.map((store: any) => store.name) || []
+  const storeList = data?.coupons?.store?.map((store: any) => store.name) || []
   console.log("storeList:::", storeList);
   // Transform coupons data to match the DealCard component format
   const dealsList =
     data?.coupons?.map((coupon: any) => ({
-      discount: coupon.mainImage || "",
-      type: coupon.secondaryImage || "OFF",
-      brand: coupon.name,
-      description: coupon.codeImage || "Coupon Code",
-      verified: coupon.isVerified,
-      expiry: formatDate(coupon.endDate),
-      logo: data?.stores?.[0]?.logoUrl || "/placeholder.svg?height=40&width=40",
-      code: coupon.code,
-      htmlCodeUrl: coupon.htmlCodeUrl,
-      detail: coupon.detail,
-      btnText:coupon.code? " View Coupon Code":" View Deal"
+      discount: coupon?.mainImage || "",
+      type: coupon?.secondaryImage || "OFF",
+      brand: coupon?.name,
+      description: coupon?.codeImage || "Coupon Code",
+      verified: coupon?.isVerified,
+      expiry: formatDate(coupon?.endDate),
+      logo: data?.coupons?.stores?.logoUrl || "/placeholder.svg?height=40&width=40",
+      code: coupon?.code,
+      htmlCodeUrl: coupon?.htmlCodeUrl,
+      detail: coupon?.detail,
+      btnText:coupon?.code? " View Coupon Code":" View Deal"
     })) || []
 
 

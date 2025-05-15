@@ -1,5 +1,6 @@
 import BlogBanner from "@/app/components/blog/BlogBanner2"
 import BlogLayout from "@/app/components/blog/BlogLayout2"
+import RelatedBlogs from "@/app/components/blog/RelatedBlogs2"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 import axios from "axios"
@@ -181,9 +182,9 @@ export default async function BlogPage({ params, searchParams }: Props) {
         <div className="mt-[200px] md:mt-[100px]">
           <BlogBanner data={data} />
         </div>
-        {/* <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading related blogs...</div>}>
+        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading related blogs...</div>}>
           <RelatedBlogs blogData={data} />
-        </Suspense> */}
+        </Suspense>
         <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading more content...</div>}>
           <BlogLayout data={data} />
         </Suspense>

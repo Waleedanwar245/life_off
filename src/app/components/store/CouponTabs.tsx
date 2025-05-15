@@ -99,7 +99,8 @@ export default function CouponTabs({ data }: { data: any }) {
     const fetchSimilarStores = async () => {
       setIsLoading((prev) => ({ ...prev, similarStores: true }))
       try {
-        const response = await axios.get(`${API_URL}/categories/${categoryId}/storesAttachment`)
+        const response = await axios.get(`${API_URL}/categories/${categoryId}/coupons`)
+        console.log("response::::",response);
         setSimilarStores(response.data)
       } catch (error) {
         console.error("Error fetching similar stores:", error)
