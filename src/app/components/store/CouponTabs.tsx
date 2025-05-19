@@ -11,6 +11,7 @@ import Image from "next/image"
 import ProductSlider from "./ProductSlider"
 import CouponDialog from "./CouponDialog"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
+import { Col, Row, Tag } from "antd"
 
 export default function CouponTabs({ data }: { data: any }) {
   const couponsRef = useRef<HTMLDivElement>(null)
@@ -87,7 +88,7 @@ export default function CouponTabs({ data }: { data: any }) {
     const fetchSimilarCoupons = async () => {
       setIsLoading((prev) => ({ ...prev, similarCoupons: true }))
       try {
-        const response = await axios.get(`${API_URL}/categories/${categoryId}/couponsAttachment`)
+        const response = await axios.get(`${API_URL}/categories/${categoryId}/coupons`)
         setSimilarCoupons(response.data)
       } catch (error) {
         console.error("Error fetching similar coupons:", error)
@@ -100,7 +101,6 @@ export default function CouponTabs({ data }: { data: any }) {
       setIsLoading((prev) => ({ ...prev, similarStores: true }))
       try {
         const response = await axios.get(`${API_URL}/categories/${categoryId}/coupons`)
-        console.log("response::::",response);
         setSimilarStores(response.data)
       } catch (error) {
         console.error("Error fetching similar stores:", error)
@@ -138,6 +138,7 @@ export default function CouponTabs({ data }: { data: any }) {
           title: coupon.name,
           expiry: isExpired ? "Expired" : `Expires ${endDate ? endDate.toLocaleDateString() : "N/A"}`,
           verified: coupon.isVerified,
+          isExclusive: coupon.isExclusive,
           description: coupon.detail,
           buttonText: isExpired ? "Expired" : coupon?.code ? "Reveal Code" : "Get Deal",
         }
@@ -173,6 +174,7 @@ export default function CouponTabs({ data }: { data: any }) {
           title: coupon.name || "",
           expiry: isExpired ? "Expired" : `Expires ${endDate ? endDate.toLocaleDateString() : "N/A"}`,
           verified: coupon.isVerified || false,
+          isExclusive: coupon.isExclusive,
           description: coupon.detail || "",
           buttonText: isExpired ? "Expired" : coupon.code ? "Reveal Code" : "Get Deal",
         }
@@ -199,7 +201,7 @@ export default function CouponTabs({ data }: { data: any }) {
   const currentStoreId = data?.store?.id
   const formattedSimilarStores = Array.from(
     new Map(
-      (similarStores  || [])
+      (similarStores || [])
         .filter((item: any) => item?.store?.id && item.store.id !== currentStoreId)
         .map((item: any) => [item.store.id, item]),
     ).values(),
@@ -209,7 +211,7 @@ export default function CouponTabs({ data }: { data: any }) {
       name: item.store.name || "No Name",
       logo: item.store.logoUrl || "/default-logo.png",
     }))
-    .slice(0, 6)
+    .slice(0, 3)
 
   const [expandedId, setExpandedId] = useState<any>(null)
   const [activeFilter, setActiveFilter] = useState("all")
@@ -291,7 +293,7 @@ export default function CouponTabs({ data }: { data: any }) {
             className="px-4 py-2 text-sm font-medium text-green-600 border-b-2 border-green-600"
           >
             Coupons
-          </button> 
+          </button>
           <button onClick={() => scrollToSection(storeInfoRef as any)} className="px-4 py-2 text-sm font-medium text-gray-600">
             Store Info
           </button>
@@ -327,7 +329,6 @@ export default function CouponTabs({ data }: { data: any }) {
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
-
                         return (
                           <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4">
                             <div className="flex flex-col md:flex-row md:items-center">
@@ -335,16 +336,14 @@ export default function CouponTabs({ data }: { data: any }) {
                                 <div className="flex items-start">
                                   <div className="text-center pr-4 py-4">
                                     <div
-                                      className={`font-bold text-xl ${
-                                        section === "Expired" ? "text-gray-800" : "text-[#7FA842]"
-                                      }`}
+                                      className={`font-bold text-xl ${section === "Expired" ? "text-gray-800" : "text-[#7FA842]"
+                                        }`}
                                     >
                                       {coupon?.discount}
                                     </div>
                                     <div
-                                      className={`font-bold text-xl ${
-                                        section === "Expired" ? "text-gray-800" : "text-[#7FA842]"
-                                      }`}
+                                      className={`font-bold text-xl ${section === "Expired" ? "text-gray-800" : "text-[#7FA842]"
+                                        }`}
                                     >
                                       {coupon?.second_img}
                                     </div>
@@ -352,7 +351,8 @@ export default function CouponTabs({ data }: { data: any }) {
                                   <div className="h-[] self-stretch w-px bg-gray-300 mx-2"></div>
                                   <div className="flex-1 pl-2 py-4">
                                     <div className="text-[13px] text-[#7FA842] font-[800]">{coupon?.codeorDeal}</div>
-                                    <div className="font-medium">{coupon.title}</div>
+                                    <div className="font-medium">{coupon.title} {coupon.isExclusive && <span> <Tag style={{ background: '#789A1A', color: 'white', height: '22px', lineHeight: '18px', fontSize: '14px' }} color="success" >Exclusive</Tag></span>}</div>
+
                                     <div className="flex items-center text-xs mt-1">
                                       <FiClock className="text-gray-400 mr-1" />
                                       <span className="text-gray-500 mr-2">{coupon.expiry}</span>
@@ -362,11 +362,14 @@ export default function CouponTabs({ data }: { data: any }) {
                                           <span className="text-green-500">Verified</span>
                                         </span>
                                       )}
+
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div className="mt-3 md:mt-0">
+                              <div className="mt-3 md:mt-0 relative">
+                                <div className="absolute bottom-[-55px] right-[25px]">
+                                </div>
                                 <button
                                   style={{
                                     width: "148px",
@@ -379,9 +382,8 @@ export default function CouponTabs({ data }: { data: any }) {
                                     letterSpacing: "0%",
                                     textAlign: "center",
                                   }}
-                                  className={`text-white border px-4 py-1.5 ${
-                                    section === "Expired" ? "bg-gray-400 " : "bg-gray-800 hover:bg-gray-700"
-                                  }`}
+                                  className={`text-white border px-4 py-1.5 ${section === "Expired" ? "bg-gray-400 " : "bg-gray-800 hover:bg-gray-700"
+                                    }`}
                                   onClick={() => {
                                     // Open the link in a new tab
                                     window.open(coupon?.htmlCode, "_blank")
@@ -438,31 +440,28 @@ export default function CouponTabs({ data }: { data: any }) {
                 <h3 className="text-sm font-bold mb-2">Filters Offers</h3>
                 <div className="space-y-2">
                   <button
-                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${
-                      activeFilter === "all"
+                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "all"
                         ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                     onClick={() => setActiveFilter("all")}
                   >
                     All ({activeCouponCount})
                   </button>
                   <button
-                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${
-                      activeFilter === "deals"
+                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "deals"
                         ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                     onClick={() => setActiveFilter("deals")}
                   >
                     Deals ({activeDealsCount})
                   </button>
                   <button
-                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${
-                      activeFilter === "codes"
+                    className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "codes"
                         ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                      }`}
                     onClick={() => setActiveFilter("codes")}
                   >
                     Codes ({activeCodesCount})
@@ -527,15 +526,22 @@ export default function CouponTabs({ data }: { data: any }) {
           </div>
         </div>
 
+        <Row>
+          <Col  xs={24} md={12}>
+            {data?.store?.products?.length > 0 && (
+              <div className="my-16">
+                <p className="text-[25px] md:text-[35px] font-bold mb-4">{data?.store?.name} Products</p>
+                <ProductSlider data={data} />
+              </div>
+            )}
+          </Col>
+        </Row>
+
         {/* Products Section */}
-        {data?.store?.products?.length > 0 && (
-          <div className="my-16">
-            <p className="text-[25px] md:text-[35px] font-bold mb-4">{data?.store?.name} Products</p>
-            <ProductSlider data={data} />
-          </div>
-        )}
 
         {/* Store Info Section */}
+        <Row>
+          <Col  xs={24} md={16}>
         <div ref={storeInfoRef} className="pt-8 border-t">
           {/* Render Store Article */}
           <div className="prose lg:prose-xl">
@@ -566,6 +572,8 @@ export default function CouponTabs({ data }: { data: any }) {
             ))}
           </div>
         </div>
+            </Col>
+            </Row>
       </div>
 
       <CouponDialog
