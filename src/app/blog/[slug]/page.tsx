@@ -3,12 +3,14 @@ import BlogLayout from "@/app/components/blog/BlogLayout2"
 import RelatedBlogs from "@/app/components/blog/RelatedBlogs2"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
+import { Col, Row } from "antd"
 import axios from "axios"
 // import RelatedBlogs from '@/app/components/blog/RelatedBlogs2'
 // import SplashScreen from '@/app/components/utils/SplashSvreen'
 import type { Metadata, ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
+
 
 // Types
 interface BlogPost {
@@ -47,12 +49,12 @@ export async function generateStaticParams() {
     // Fetch all blog posts to generate static paths
     const res = await axios.get(`${API_URL}/blogs`)
     const blogs = res.data
-    
+
     // Filter out blogs with null slugs
     const validBlogs = blogs.filter((blog: any) => blog.slug !== null);
-    
+
     console.log(`Found ${validBlogs.length} blog posts with valid slugs out of ${blogs.length} total`);
-    
+
     // Return an array of objects with the slug parameter
     return validBlogs.map((blog: any) => ({
       slug: blog.slug,
@@ -68,7 +70,7 @@ async function getBlogBySlug(slug: string): Promise<any> {
   try {
     // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
     const res = await fetch(`${API_URL}/blogs/slug/${slug}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      next: { revalidate: 10 }, // Revalidate every hour
     })
 
     if (!res.ok) {
@@ -172,23 +174,30 @@ export default async function BlogPage({ params, searchParams }: Props) {
     }
 
     return (
-      <>
+      <div className="max-w-[1440px] mx-auto px-4 py-8 md:py-12">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(generateJsonLd(data)),
           }}
         />
-        <div className="mt-[200px] md:mt-[100px]">
-          <BlogBanner data={data} />
-        </div>
-        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading related blogs...</div>}>
-          <RelatedBlogs blogData={data} />
-        </Suspense>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={24} md={16}>
+            <div className="mt-[200px] md:mt-[100px]">
+              <BlogBanner data={data} />
+            </div>
+
+          </Col>
+          <Col xs={24} sm={24} md={8}>
+            <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading related blogs...</div>}>
+              <div className="mt-[200px] md:mt-[120px]"> <RelatedBlogs blogData={data} /></div>
+            </Suspense>
+          </Col>
+        </Row>
         <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading more content...</div>}>
           <BlogLayout data={data} />
         </Suspense>
-      </>
+      </div>
     )
   } catch (error) {
     console.error("Error rendering blog page:", error)

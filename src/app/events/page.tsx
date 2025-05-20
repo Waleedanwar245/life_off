@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 async function getAllEvents() {
   try {
     const response = await fetch(`${API_URL}/events`, {
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 10 } // Revalidate every hour
     })
     
     if (!response.ok) {

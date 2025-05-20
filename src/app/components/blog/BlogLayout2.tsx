@@ -24,7 +24,7 @@ async function getLatestBlogs(): Promise<any> {
   try {
      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
     const res = await fetch(`${apiUrl}/blogs/latest`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      next: { revalidate: 10 }, // Revalidate every hour
     })
 
     if (!res.ok) {

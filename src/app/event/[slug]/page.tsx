@@ -49,7 +49,7 @@ export async function generateStaticParams() {
 async function getEventBySlug(slug: string) {
   try {
     const response = await fetch(`${API_URL}/events/slug/${slug}`, {
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 10 } // Revalidate every hour
     })
     
     if (!response.ok) {

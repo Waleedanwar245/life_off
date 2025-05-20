@@ -17,7 +17,7 @@ import FavoriteDeal from "./components/landingSections/FavoriteDeal"
 async function getLandingPageData() {
   try {
     const res = await fetch(`${API_URL}/landings/1`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      next: { revalidate: 10 }, // Revalidate every hour
     })
     console.log("data====res:::",res);
 
@@ -36,7 +36,7 @@ async function getLandingPageData() {
 async function getStoresData() {
   try {
     const res = await fetch(`${API_URL}/store`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 10 },
     })
 console.log("stireDAta::::",res);
     if (!res.ok) {
@@ -54,7 +54,7 @@ console.log("stireDAta::::",res);
 async function getCouponsData() {
   try {
     const res = await fetch(`${API_URL}/coupons`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 10 },
     })
 
     if (!res.ok) {
@@ -72,7 +72,7 @@ async function getCouponsData() {
 async function getCategoriesData() {
   try {
     const res = await fetch(`${API_URL}/categories/all`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 10 },
     })
 
     if (!res.ok) {

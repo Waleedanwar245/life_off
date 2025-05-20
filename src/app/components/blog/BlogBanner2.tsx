@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { FaCalendarAlt } from "react-icons/fa"
 import { convertToSecureUrl } from '../utils/convertToSecureUrl'
 import { formatDate } from '../utils/formatDate'
+import SafeHtml from '../utils/SafeHtml'
 
 interface BlogBannerProps {
   data: {
@@ -67,6 +68,11 @@ export default function BlogBanner({ data }: any) {
           )}
         </div>
       </article>
+
+       <div className="w-full  mt-6">
+                {data?.content &&  <div dangerouslySetInnerHTML={{ __html: data.content }} /> }
+
+            </div>
     </div>
   )
 }

@@ -54,23 +54,9 @@ const formatDate = (date: string) => {
                   alt={popularPost?.title}
                   className="w-full h-full object-cover"
                 />
-                {/* <div className="absolute top-4 left-4 bg-[#7FA842] text-white rounded-full w-16 h-16 flex flex-col items-center justify-center text-center">
-                  <span className="text-xs">
-                    {dayjs(popularPost.createdAt).format("MMM")}
-                  </span>
-                  <span className="text-lg font-bold">
-                    {dayjs(popularPost.createdAt).format("D")}
-                  </span>
-                </div> */}
               </div>
               <div className="absolute bottom-0 left-0 right-0 bg-white p-6">
-                {/* <div className="text-sm text-blue-600 uppercase tracking-wider mb-2 flex gap-2">
-                  <span>DISCOUNT EFFECT</span>
-                  <span>-</span>
-                  <span>PSYCHOLOGY OF DISCOUNTS</span>
-                  <span>-</span>
-                  <span>CONSUMER BEHAVIOUR</span>
-                </div> */}
+              
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">{popularPost?.title}</h1>
                 <div className="flex items-center gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-2">

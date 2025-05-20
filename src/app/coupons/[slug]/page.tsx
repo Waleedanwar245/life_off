@@ -56,7 +56,6 @@ async function getStoreBySlug(slug: string): Promise<StoreData> {
   console.log("slug:::",slug);
   try {
     const response = await axios.get(`${API_URL}/store/coupon-product-by-slug/${slug}`)
-    console.log("response::::",response);
     return response.data
   } catch (error) {
     console.error("Error fetching store data:", error)

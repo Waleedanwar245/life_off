@@ -38,7 +38,7 @@ async function getBlogs() {
       headers: {
         "Content-Type": "application/json",
       },
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 10 } // Revalidate every hour
     })
 
     if (!response.ok) {

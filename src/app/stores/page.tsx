@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 async function getStores() {
   try {
     const response = await fetch(`${API_URL}/store`, {
-      next: { revalidate: 3600 } // Revalidate every hour
+      next: { revalidate: 10 } // Revalidate every hour
     })
 
     if (!response.ok) {
