@@ -12,6 +12,7 @@ import ProductSlider from "./ProductSlider"
 import CouponDialog from "./CouponDialog"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 import { Col, Row, Tag } from "antd"
+import dayjs from "dayjs"
 
 export default function CouponTabs({ data }: { data: any }) {
   const couponsRef = useRef<HTMLDivElement>(null)
@@ -30,12 +31,16 @@ export default function CouponTabs({ data }: { data: any }) {
   // State for API data
   const [latestStores, setLatestStores] = useState<any[]>([])
   const [similarCoupons, setSimilarCoupons] = useState<any[]>([])
+  console.log("similarCoupons:::", similarCoupons);
   const [similarStores, setSimilarStores] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState({
     similarCoupons: false,
     similarStores: false,
     latestStores: false,
   })
+const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, true).isValid();
+
+
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -67,7 +72,7 @@ export default function CouponTabs({ data }: { data: any }) {
           const stores = response.data
             .filter((store: any) => store?.logoUrl && store?.createdAt)
             .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-            .slice(0, 6)
+            .slice(0, 8)
           setLatestStores(stores)
         }
       } catch (error) {
@@ -136,7 +141,14 @@ export default function CouponTabs({ data }: { data: any }) {
           htmlCode: apiCoupons?.htmlCode || "",
           second_img: coupon?.secondaryImage,
           title: coupon.name,
-          expiry: isExpired ? "Expired" : `Expires ${endDate ? endDate.toLocaleDateString() : "N/A"}`,
+          expiry: isExpired
+            ? "Expired"
+            : coupon.endDate
+              ? isValidDate(coupon.endDate as any)
+                ? `Expires ${dayjs(coupon.endDate).format("MMM D, YYYY")}`
+                : `Expires ${coupon.endDate}` // Show raw string if not a valid date
+              : "N/A",
+          // expiry: isExpired ? "Expired" : `Expires ${endDate ? endDate.toLocaleDateString() : "N/A"}`,
           verified: coupon.isVerified,
           isExclusive: coupon.isExclusive,
           description: coupon.detail,
@@ -147,39 +159,60 @@ export default function CouponTabs({ data }: { data: any }) {
   }
 
   // Map similar coupons with their different structure
-  function mapSimilarCoupons(similarCouponsData: any) {
-    if (!similarCouponsData || !Array.isArray(similarCouponsData)) return []
+function mapSimilarCoupons(similarCouponsData: any) {
+  if (!similarCouponsData || !Array.isArray(similarCouponsData)) return [];
 
-    const today = new Date()
-    const currentStoreId = data?.store?.id
+  const today = new Date();
+  const currentStoreId = data?.store?.id;
 
-    return similarCouponsData
-      .filter((coupon: any) => coupon?.store?.id !== currentStoreId)
-      .slice(0, 4)
-      .map((coupon: any) => {
-        const endDate = coupon.endDate ? new Date(coupon.endDate) : null
-        const isExpired = endDate ? endDate < today : false
-        const storeInfo = coupon.store || {}
+  const seenStoreIds = new Set<string>();
 
-        return {
-          storeName: storeInfo.storeId || "",
-          logo: storeInfo.logoUrl || "",
-          id: coupon.id || "",
-          type: "Similar",
-          discount: coupon.mainImage || "DEAL",
-          codeorDeal: coupon.codeimg3 || "",
-          code: coupon.code || "",
-          htmlCode: coupon.htmlCodeUrl || storeInfo.htmlCode || "",
-          second_img: coupon.secondaryImage || "",
-          title: coupon.name || "",
-          expiry: isExpired ? "Expired" : `Expires ${endDate ? endDate.toLocaleDateString() : "N/A"}`,
-          verified: coupon.isVerified || false,
-          isExclusive: coupon.isExclusive,
-          description: coupon.detail || "",
-          buttonText: isExpired ? "Expired" : coupon.code ? "Reveal Code" : "Get Deal",
-        }
-      })
-  }
+  return similarCouponsData
+    .filter((coupon: any) => coupon?.store?.id && coupon?.store?.id !== currentStoreId)
+    .filter((coupon: any) => {
+      const storeId = coupon?.store?.id;
+      if (!storeId) return false; // skip if storeId is missing
+      if (seenStoreIds.has(storeId)) {
+        // Store already included, skip this coupon
+        return false;
+      } else {
+        // First coupon of this store, include it and mark store as seen
+        seenStoreIds.add(storeId);
+        return true;
+      }
+    })
+    .slice(0, 4)
+    .map((coupon: any) => {
+      const endDate = coupon?.endDate ? new Date(coupon.endDate) : null;
+      const isExpired = endDate ? endDate < today : false;
+      const storeInfo = coupon?.store || {};
+
+      return {
+        storeName: storeInfo?.storeId || "",
+        logo: storeInfo?.logoUrl || "",
+        id: coupon?.id || "",
+        type: "Similar",
+        discount: coupon?.mainImage || "DEAL",
+        codeorDeal: coupon?.codeimg3 || "",
+        code: coupon?.code || "",
+        htmlCode: coupon?.htmlCodeUrl || storeInfo?.htmlCode || "",
+        second_img: coupon?.secondaryImage || "",
+        title: coupon?.name || "",
+        expiry: isExpired
+          ? "Expired"
+          : coupon?.endDate
+          ? isValidDate(coupon.endDate as any)
+            ? `Expires ${dayjs(coupon.endDate).format("MMM D, YYYY")}`
+            : `Expires ${coupon.endDate}` // Show raw string if not a valid date
+          : "N/A",
+        verified: coupon?.isVerified || false,
+        isExclusive: coupon?.isExclusive,
+        description: coupon?.detail || "",
+        buttonText: isExpired ? "Expired" : coupon?.code ? "Reveal Code" : "Get Deal",
+      };
+    });
+}
+
 
   const coupons = mapCoupons(data?.store || [])
   const mappedSimilarCoupons = mapSimilarCoupons(similarCoupons)
@@ -211,7 +244,7 @@ export default function CouponTabs({ data }: { data: any }) {
       name: item.store.name || "No Name",
       logo: item.store.logoUrl || "/default-logo.png",
     }))
-    .slice(0, 3)
+    .slice(0, 8)
 
   const [expandedId, setExpandedId] = useState<any>(null)
   const [activeFilter, setActiveFilter] = useState("all")
@@ -441,8 +474,8 @@ export default function CouponTabs({ data }: { data: any }) {
                 <div className="space-y-2">
                   <button
                     className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "all"
-                        ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     onClick={() => setActiveFilter("all")}
                   >
@@ -450,8 +483,8 @@ export default function CouponTabs({ data }: { data: any }) {
                   </button>
                   <button
                     className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "deals"
-                        ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     onClick={() => setActiveFilter("deals")}
                   >
@@ -459,8 +492,8 @@ export default function CouponTabs({ data }: { data: any }) {
                   </button>
                   <button
                     className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "codes"
-                        ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-[#7FA842] text-white hover:bg-[#81ac41]"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                     onClick={() => setActiveFilter("codes")}
                   >
@@ -527,7 +560,7 @@ export default function CouponTabs({ data }: { data: any }) {
         </div>
 
         <Row>
-          <Col  xs={24} md={12}>
+          <Col xs={24} md={12}>
             {data?.store?.products?.length > 0 && (
               <div className="my-16">
                 <p className="text-[25px] md:text-[35px] font-bold mb-4">{data?.store?.name} Products</p>
@@ -541,39 +574,39 @@ export default function CouponTabs({ data }: { data: any }) {
 
         {/* Store Info Section */}
         <Row>
-          <Col  xs={24} md={16}>
-        <div ref={storeInfoRef} className="pt-8 border-t">
-          {/* Render Store Article */}
-          <div className="prose lg:prose-xl">
-            {data?.store?.storeArticle ? (
-              <div dangerouslySetInnerHTML={{ __html: data?.store?.storeArticle }} />
-            ) : (
-              <p className="text-gray-500">No article available at the moment. Stay tuned for more updates!</p>
-            )}
-          </div>
-        </div>
-
-        {/* FAQs Section */}
-        <div ref={faqsRef} className=" ">
-          <h2 className="text-2xl font-bold py-12">Frequently Asked Questions</h2>
-
-          <div className="space-y-4">
-            {(data?.store?.faqs || []).map((faq: any, index: number) => (
-              <div key={index} className="border-b pb-4">
-                <details className="group">
-                  <summary className="flex justify-between items-center w-full text-left font-bold cursor-pointer">
-                    {faq.question}
-                    <FiPlus className="text-gray-500 group-open:hidden" />
-                    <FiCheck className="text-gray-500 hidden group-open:inline" />
-                  </summary>
-                  <p className="mt-2 text-gray-700">{faq.answer}</p>
-                </details>
+          <Col xs={24} md={16}>
+            <div ref={storeInfoRef} className="pt-8 border-t">
+              {/* Render Store Article */}
+              <div className="prose lg:prose-xl">
+                {data?.store?.storeArticle ? (
+                  <div dangerouslySetInnerHTML={{ __html: data?.store?.storeArticle }} />
+                ) : (
+                  <p className="text-gray-500">No article available at the moment. Stay tuned for more updates!</p>
+                )}
               </div>
-            ))}
-          </div>
-        </div>
-            </Col>
-            </Row>
+            </div>
+
+            {/* FAQs Section */}
+            <div ref={faqsRef} className=" ">
+              <h2 className="text-2xl font-bold py-12">Frequently Asked Questions</h2>
+
+              <div className="space-y-4">
+                {(data?.store?.faqs || []).map((faq: any, index: number) => (
+                  <div key={index} className="border-b pb-4">
+                    <details className="group">
+                      <summary className="flex justify-between items-center w-full text-left font-bold cursor-pointer">
+                        {faq.question}
+                        <FiPlus className="text-gray-500 group-open:hidden" />
+                        <FiCheck className="text-gray-500 hidden group-open:inline" />
+                      </summary>
+                      <p className="mt-2 text-gray-700">{faq.answer}</p>
+                    </details>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Col>
+        </Row>
       </div>
 
       <CouponDialog

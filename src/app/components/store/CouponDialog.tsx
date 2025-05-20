@@ -1,5 +1,6 @@
 "use client"
 import Image from "next/image"
+import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 
 export default function CouponDialog({ copyToClipboard, isModalOpen, handleCancel, couponCode, copied }: any) {
   if (!isModalOpen) return null
@@ -25,7 +26,7 @@ export default function CouponDialog({ copyToClipboard, isModalOpen, handleCance
           {/* Logo */}
           <div className="relative w-24 h-24 mb-4 rounded-full flex items-center justify-center">
             <Image
-              src={couponCode?.logo || "/placeholder.svg?height=80&width=120"}
+              src={convertToSecureUrl(couponCode?.logo) || "/placeholder.svg?height=80&width=120"}
               alt="Store Logo"
               width={120}
               height={80}
@@ -35,7 +36,11 @@ export default function CouponDialog({ copyToClipboard, isModalOpen, handleCance
           </div>
 
           {/* Coupon Title */}
-          <h2 className="text-3xl font-semibold text-gray-800 mb-6">{couponCode.couponName}</h2>
+          <h2 className="text-3xl font-semibold text-gray-800 mb-6" style={{
+            paddingInline: '20px',
+            fontSize: '25px',
+            textAlign: 'center'
+          }}>{couponCode.couponName}</h2>
 
           {/* Coupon Code Section */}
           {couponCode.code ? (
@@ -45,9 +50,8 @@ export default function CouponDialog({ copyToClipboard, isModalOpen, handleCance
               </div>
               <button
                 onClick={copyToClipboard}
-                className={`bg-[#7FA842] text-white px-4 flex items-center justify-center ${
-                  copied ? "bg-[#7FA842]" : "bg-[#7FA842] hover:bg-[#6d9339]"
-                }`}
+                className={`bg-[#7FA842] text-white px-4 flex items-center justify-center ${copied ? "bg-[#7FA842]" : "bg-[#7FA842] hover:bg-[#6d9339]"
+                  }`}
               >
                 {copied ? (
                   <>
