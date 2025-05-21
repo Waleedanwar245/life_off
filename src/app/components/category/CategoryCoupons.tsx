@@ -5,6 +5,7 @@ import axios from "axios"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 import dynamic from "next/dynamic";
 import { API_URL } from "../utils/BASE_URL";
+import CouponDialog from "../store/CouponDialog";
 const SafeHtml = dynamic(() => import('../utils/SafeHtml'), { ssr: false });
 
 
@@ -14,7 +15,16 @@ export default function CategoryCoupons({ data }: any) {
   const [selectedCategory, setSelectedCategory] = useState<any>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true)
-//   const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [couponCode, setCouponCode] = useState({
+    code: "",
+    couponName: "",
+    logo: "",
+    storeName: "",
+    htmlCode: "",
+  })
+  //   const navigate = useNavigate()
 
   // Fetch all categories using Axios
   const fetchCategories = async () => {
@@ -30,11 +40,9 @@ export default function CategoryCoupons({ data }: any) {
 
   // Fetch coupons by category ID using Axios
   const fetchCoupons = async (categoryId: string) => {
-    console.log("categoryId:::",categoryId);
     setIsLoading(true)
     try {
-      const response = await axios.get(`${API_URL}/categories/${categoryId}/coupons`) 
-      console.log("response:::",response);
+      const response = await axios.get(`${API_URL}/categories/${categoryId}/coupons`)
       // Replace with your actual API endpoint
       setCoupons(response.data)
       setIsLoading(false)
@@ -64,6 +72,25 @@ export default function CategoryCoupons({ data }: any) {
     setSelectedCategory(categoryId)
     fetchCoupons(categoryId) // Fetch coupons for the newly selected category
   }
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+    // Reset copied state when modal closes
+    setTimeout(() => setCopied(false), 300)
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(couponCode.code)
+    setCopied(true)
+
+    // Reset the button text after 2 seconds
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -90,11 +117,10 @@ export default function CategoryCoupons({ data }: any) {
                     <li key={category.id}>
                       <button
                         onClick={() => handleCategoryClick(category.id)}
-                        className={`w-full text-left px-4 py-3 rounded-md transition-colors ${
-                          selectedCategory === category.id
+                        className={`w-full text-left px-4 py-3 rounded-md transition-colors ${selectedCategory === category.id
                             ? "bg-blue-50 text-blue-700 font-medium"
                             : "hover:bg-gray-100"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center">
                           {category.image && (
@@ -159,6 +185,20 @@ export default function CategoryCoupons({ data }: any) {
                         // onClick={() =>
                         //   navigate(PATH.SINGLE_STORE.replace(":id", coupon?.store?.slug || "no-slug"))
                         // }
+                        onClick={() => {
+                          // Open the link in a new tab
+                          window.open(coupon?.htmlCodeUrl, "_blank")
+                          setCouponCode({
+                            code: coupon?.code,
+                            couponName: coupon?.title,
+                            logo: coupon.store?.logoUrl,
+                            storeName: coupon?.storeName,
+                            htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,
+                          })
+
+                          // Show the modal
+                          showModal()
+                        }}
                         className="bg-[#7FA842] hover:bg-[#6a8e38] text-white font-bold py-3 px-1 rounded w-full mb-4 transition-colors duration-300"
                       >
                         {coupon.code ? `Reveal Code` : "Get Deal"}
@@ -181,6 +221,13 @@ export default function CategoryCoupons({ data }: any) {
           )}
         </div>
       </div>
+      <CouponDialog
+        isModalOpen={isModalOpen}
+        handleCancel={handleCancel}
+        copyToClipboard={copyToClipboard}
+        copied={copied}
+        couponCode={couponCode}
+      />
     </div>
   )
 }

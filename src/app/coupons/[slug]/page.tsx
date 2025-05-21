@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import axios from "axios"
 import StoreHeader from "@/app/components/store/StoreHeader"
 import CouponTabs from "@/app/components/store/CouponTabs"
+import dayjs from "dayjs"
 
 // Types
 interface Store {
@@ -19,9 +20,9 @@ interface Store {
 }
 
 interface StoreData {
-    store: Store
-    coupons?: any[]
-    products?: any[]
+  store: Store
+  coupons?: any[]
+  products?: any[]
 }
 
 // Define Props type
@@ -35,12 +36,12 @@ export async function generateStaticParams() {
     // Fetch all stores to generate static paths
     const res = await axios.get(`${API_URL}/store`)
     const stores = res.data
-    
+
     // Filter out stores with null slugs
     const validStores = stores.filter((store: any) => store.slug !== null);
-    
+
     console.log(`Found ${validStores.length} stores with valid slugs out of ${stores.length} total`);
-    
+
     // Return an array of objects with the slug parameter
     return validStores.map((store: any) => ({
       slug: store.slug,
@@ -87,7 +88,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   try {
     // Await the params to get the id
     const { slug } = await params
-    console.log("params:::::",params);
+    console.log("params:::::", params);
     const data = await getStoreBySlug(slug)
     const store = data?.store
 
@@ -103,12 +104,12 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       store.metaDescription?.trim() ||
       store.storeDescription?.trim() ||
       `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOffCoupon.`
-
+    console.log("=====>",`${dayjs().format('MMMM YYYY')}`);
     return {
-      title: `${storeTitle} - Promo Codes & Deals | LiveOffCoupon`,
+      title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOffCoupon`,
       description: storeDescription,
       openGraph: {
-        title: `${storeTitle} - Promo Codes & Deals | LiveOffCoupon`,
+        title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOffCoupon`,
         description: storeDescription,
         url: `https://liveoffcoupon.com/coupons/${store.slug}`,
         type: "website",
@@ -168,7 +169,7 @@ export default async function StorePage({ params }: Props) {
           <div className='mt-[250px] md:mt-[135px]' >
             <StoreHeader data={data} />
           </div>
-          <CouponTabs data={data}  />
+          <CouponTabs data={data} />
           {/* <StoreContent storeData={data} /> */}
         </Suspense>
       </>

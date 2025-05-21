@@ -4,7 +4,7 @@ import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa"
 // import Image from "next/image"
 
 export default function ProductGrid({ data }: any) {
-  const products = data?.list?.store?.products || []
+  const products = data?.store?.products || []
 
   const formatPrice = (price: any) => {
     if (typeof price !== "string" && typeof price !== "number") return "0.00"
@@ -65,6 +65,7 @@ export default function ProductGrid({ data }: any) {
                 },
               }}
             />
+
           )
         })}
       </div>
@@ -117,19 +118,19 @@ function ProductCard({ product }: ProductProps) {
       onClick={() => window.open(product.htmlUrl, "_blank")}
       className="cursor-pointer group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
     >
-      <div className="relative overflow-hidden h-48">
+      <div className="relative overflow-hidden ">
         <div className="relative w-full h-full">
           <img
             src={product.image || "/placeholder.svg?height=200&width=300"}
             alt={product.title}
             // fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            // unoptimized
-            // onError={(e) => {
-            //   const target = e.target as HTMLImageElement
-            //   target.onerror = null
-            //   target.src = "/placeholder.svg?height=200&width=300"
-            // }}
+          // unoptimized
+          // onError={(e) => {
+          //   const target = e.target as HTMLImageElement
+          //   target.onerror = null
+          //   target.src = "/placeholder.svg?height=200&width=300"
+          // }}
           />
         </div>
         {product.discount && (

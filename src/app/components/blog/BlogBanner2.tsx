@@ -24,7 +24,6 @@ export default function BlogBanner({ data }: any) {
   const defaultTitle = "11 Size-Inclusive Fashion Brands That Should Be on Your Radar"
   const defaultAuthor = "Maria Lalonde"
   const defaultDate = "February 28, 2025"
-  
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       <article className="space-y-6">

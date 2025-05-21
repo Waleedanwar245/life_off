@@ -88,7 +88,7 @@ const FavoriteDeal = () => {
               {product?.imageUrl && (
                 <div className="w-1/2 relative h-32">
                   <img
-                    src={product.imageUrl || "/placeholder.svg"}
+                    src={convertToSecureUrl(product.imageUrl) || "/placeholder.svg"}
                     alt={product?.name || "Product Image"}
                     className="object-fill rounded-[10px]"
                   />

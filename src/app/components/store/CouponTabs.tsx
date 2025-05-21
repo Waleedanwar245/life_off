@@ -38,7 +38,7 @@ export default function CouponTabs({ data }: { data: any }) {
     similarStores: false,
     latestStores: false,
   })
-const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, true).isValid();
+  const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, true).isValid();
 
 
 
@@ -138,7 +138,7 @@ const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, tr
           discount: coupon?.mainImage || "DEAL",
           codeorDeal: coupon?.codeimg3 || "",
           code: coupon?.code || "",
-          htmlCode: coupon?.htmlCodeUrl? coupon?.htmlCodeUrl: apiCoupons?.htmlCode || "",
+          htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : apiCoupons?.htmlCode || "",
           second_img: coupon?.secondaryImage,
           title: coupon.name,
           expiry: isExpired
@@ -159,59 +159,59 @@ const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, tr
   }
 
   // Map similar coupons with their different structure
-function mapSimilarCoupons(similarCouponsData: any) {
-  if (!similarCouponsData || !Array.isArray(similarCouponsData)) return [];
+  function mapSimilarCoupons(similarCouponsData: any) {
+    if (!similarCouponsData || !Array.isArray(similarCouponsData)) return [];
 
-  const today = new Date();
-  const currentStoreId = data?.store?.id;
+    const today = new Date();
+    const currentStoreId = data?.store?.id;
 
-  const seenStoreIds = new Set<string>();
+    const seenStoreIds = new Set<string>();
 
-  return similarCouponsData
-    .filter((coupon: any) => coupon?.store?.id && coupon?.store?.id !== currentStoreId)
-    .filter((coupon: any) => {
-      const storeId = coupon?.store?.id;
-      if (!storeId) return false; // skip if storeId is missing
-      if (seenStoreIds.has(storeId)) {
-        // Store already included, skip this coupon
-        return false;
-      } else {
-        // First coupon of this store, include it and mark store as seen
-        seenStoreIds.add(storeId);
-        return true;
-      }
-    })
-    .slice(0, 4)
-    .map((coupon: any) => {
-      const endDate = coupon?.endDate ? new Date(coupon.endDate) : null;
-      const isExpired = endDate ? endDate < today : false;
-      const storeInfo = coupon?.store || {};
+    return similarCouponsData
+      .filter((coupon: any) => coupon?.store?.id && coupon?.store?.id !== currentStoreId)
+      .filter((coupon: any) => {
+        const storeId = coupon?.store?.id;
+        if (!storeId) return false; // skip if storeId is missing
+        if (seenStoreIds.has(storeId)) {
+          // Store already included, skip this coupon
+          return false;
+        } else {
+          // First coupon of this store, include it and mark store as seen
+          seenStoreIds.add(storeId);
+          return true;
+        }
+      })
+      .slice(0, 4)
+      .map((coupon: any) => {
+        const endDate = coupon?.endDate ? new Date(coupon.endDate) : null;
+        const isExpired = endDate ? endDate < today : false;
+        const storeInfo = coupon?.store || {};
 
-      return {
-        storeName: storeInfo?.storeId || "",
-        logo: storeInfo?.logoUrl || "",
-        id: coupon?.id || "",
-        type: "Similar",
-        discount: coupon?.mainImage || "DEAL",
-        codeorDeal: coupon?.codeimg3 || "",
-        code: coupon?.code || "",
-        htmlCode: coupon?.htmlCodeUrl?coupon?.htmlCodeUrl :storeInfo?.htmlCode || "" ,
-        second_img: coupon?.secondaryImage || "",
-        title: coupon?.name || "",
-        expiry: isExpired
-          ? "Expired"
-          : coupon?.endDate
-          ? isValidDate(coupon.endDate as any)
-            ? `Expires ${dayjs(coupon.endDate).format("MMM D, YYYY")}`
-            : `Expires ${coupon.endDate}` // Show raw string if not a valid date
-          : "N/A",
-        verified: coupon?.isVerified || false,
-        isExclusive: coupon?.isExclusive,
-        description: coupon?.detail || "",
-        buttonText: isExpired ? "Expired" : coupon?.code ? "Reveal Code" : "Get Deal",
-      };
-    });
-}
+        return {
+          storeName: storeInfo?.storeId || "",
+          logo: storeInfo?.logoUrl || "",
+          id: coupon?.id || "",
+          type: "Similar",
+          discount: coupon?.mainImage || "DEAL",
+          codeorDeal: coupon?.codeimg3 || "",
+          code: coupon?.code || "",
+          htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : storeInfo?.htmlCode || "",
+          second_img: coupon?.secondaryImage || "",
+          title: coupon?.name || "",
+          expiry: isExpired
+            ? "Expired"
+            : coupon?.endDate
+              ? isValidDate(coupon.endDate as any)
+                ? `Expires ${dayjs(coupon.endDate).format("MMM D, YYYY")}`
+                : `Expires ${coupon.endDate}` // Show raw string if not a valid date
+              : "N/A",
+          verified: coupon?.isVerified || false,
+          isExclusive: coupon?.isExclusive,
+          description: coupon?.detail || "",
+          buttonText: isExpired ? "Expired" : coupon?.code ? "Reveal Code" : "Get Deal",
+        };
+      });
+  }
 
 
   const coupons = mapCoupons(data?.store || [])
@@ -288,14 +288,14 @@ function mapSimilarCoupons(similarCouponsData: any) {
     return (
       <Link
         href={`/coupons/${storeId || "no-slug"}`}
-        className="cursor-pointer bg-white rounded border border-[#7FA842] p-3 flex items-center justify-center h-24"
+        className="cursor-pointer bg-white rounded  flex items-center justify-center h-[120px] w-[120px] "
       >
         <div className="relative w-full h-full">
           <img
             src={convertToSecureUrl(logo) || "/placeholder.svg?height=64&width=96"}
             alt={`${name} logo`}
             // fill
-            className="object-contain h-[100%]"
+            className="object-contain h-[120px] w-[120px]"
             // unoptimized
             onError={(e) => {
               const target = e.target as HTMLImageElement
@@ -361,7 +361,7 @@ function mapSimilarCoupons(similarCouponsData: any) {
                     ) : (
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
-                        console.log("coupon:::::",coupon);
+                        console.log("coupon:::::", coupon);
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
                         return (
                           <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4">
@@ -517,17 +517,19 @@ function mapSimilarCoupons(similarCouponsData: any) {
 
               <div className="max-w-3xl mx-auto p-4 font-sans">
                 {/* Similar Stores Section */}
-                <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <div className="mb-6 bg-white rounded-lg shadow-sm border  border-[#14303B] p-4 ">
                   <h2 className="text-lg font-medium text-center mb-4">Similar Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {formattedSimilarStores?.length > 0 ? (
                       formattedSimilarStores.map((store: any, index: number) => (
+                        <div   className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]">
                         <StoreCard
                           key={`similar-${index}`}
                           name={store.name}
                           logo={store.logo}
                           storeId={store.storeId}
-                        />
+                          />
+                          </div>
                       ))
                     ) : (
                       <div className="text-center text-gray-500 py-4 flex justify-center w-[100%]">
@@ -538,30 +540,31 @@ function mapSimilarCoupons(similarCouponsData: any) {
                 </div>
 
                 {/* Latest Stores Section */}
-                <div className="bg-gray-100 rounded-lg shadow-sm border border-gray-200 p-4">
-                  <h2 className="text-lg font-medium text-center mb-4">Latest Stores</h2>
+                <div className="bg-gray-50 rounded-xl p-6 max-w-[500px] shadow">
+                  <h2 className="text-2xl font-bold text-center mb-6">Latest Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {latestStores?.length > 0 ? (
-                      latestStores.map((store: any, index: any) => (
-                        <StoreCard
+                      latestStores.map((store: any, index: number) => (
+                        <div
                           key={`latest-${index}`}
-                          name={store.name}
-                          logo={store.logoUrl}
-                          storeId={store?.slug}
-                        />
+                          className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]"
+                        >
+                          <StoreCard name={store.name} logo={store.logoUrl} storeId={store?.slug} />
+                        </div>
                       ))
                     ) : (
                       <p className="text-center text-sm text-gray-500 col-span-2">No recent stores found.</p>
                     )}
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
 
         <Row>
-          <Col xs={24} md={12}>
+          <Col xs={24} md={18}>
             {data?.store?.products?.length > 0 && (
               <div className="my-16">
                 <p className="text-[25px] md:text-[35px] font-bold mb-4">{data?.store?.name} Products</p>

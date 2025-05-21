@@ -5,7 +5,7 @@ import ProductGrid from "./ProductGrid"
 
 
 export default function ProductSlider({ data }: { data: any }) {
-  const products = data?.list?.store?.products || []
+  const products = data?.store?.products || []
 
   if (!products || products.length === 0) {
     return null
