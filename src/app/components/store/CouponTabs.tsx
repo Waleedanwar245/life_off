@@ -68,6 +68,7 @@ const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, tr
       setIsLoading((prev) => ({ ...prev, latestStores: true }))
       try {
         const response = await axios.get(`${API_URL}/store`)
+        // console.log("response::::",response);
         if (response.data) {
           const stores = response.data
             .filter((store: any) => store?.logoUrl && store?.createdAt)
@@ -120,7 +121,6 @@ const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, tr
 
   function mapCoupons(apiCoupons: any) {
     if (!apiCoupons) return []
-
     const today = new Date()
 
     return (
@@ -138,7 +138,7 @@ const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, tr
           discount: coupon?.mainImage || "DEAL",
           codeorDeal: coupon?.codeimg3 || "",
           code: coupon?.code || "",
-          htmlCode: apiCoupons?.htmlCode || "",
+          htmlCode: coupon?.htmlCodeUrl? coupon?.htmlCodeUrl: apiCoupons?.htmlCode || "",
           second_img: coupon?.secondaryImage,
           title: coupon.name,
           expiry: isExpired
@@ -195,7 +195,7 @@ function mapSimilarCoupons(similarCouponsData: any) {
         discount: coupon?.mainImage || "DEAL",
         codeorDeal: coupon?.codeimg3 || "",
         code: coupon?.code || "",
-        htmlCode: coupon?.htmlCodeUrl || storeInfo?.htmlCode || "",
+        htmlCode: coupon?.htmlCodeUrl?coupon?.htmlCodeUrl :storeInfo?.htmlCode || "" ,
         second_img: coupon?.secondaryImage || "",
         title: coupon?.name || "",
         expiry: isExpired
@@ -361,6 +361,7 @@ function mapSimilarCoupons(similarCouponsData: any) {
                     ) : (
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
+                        console.log("coupon:::::",coupon);
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
                         return (
                           <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4">

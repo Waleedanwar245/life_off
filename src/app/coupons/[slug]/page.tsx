@@ -52,14 +52,33 @@ export async function generateStaticParams() {
 }
 
 // Fetch store data
+// async function getStoreBySlug(slug: string): Promise<StoreData> {
+//   console.log("slug:::",slug);
+//   try {
+//     const response = await axios.get(`${API_URL}/store/coupon-product-by-slug/${slug}`)
+//     return response.data
+//   } catch (error) {
+//     console.error("Error fetching store data:", error)
+//     throw error
+//   }
+// }
 async function getStoreBySlug(slug: string): Promise<StoreData> {
-  console.log("slug:::",slug);
+  console.log("slug:::", slug);
   try {
-    const response = await axios.get(`${API_URL}/store/coupon-product-by-slug/${slug}`)
-    return response.data
+    const res = await fetch(`${API_URL}/store/coupon-product-by-slug/${slug}`, {
+      cache: "no-store", // this disables caching
+      next: { revalidate: 0 }, // optional, further disables ISR
+    })
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch store data for slug: ${slug}`);
+    }
+
+    const data = await res.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching store data:", error)
-    throw error
+    console.error("Error fetching store data:", error);
+    throw error;
   }
 }
 
