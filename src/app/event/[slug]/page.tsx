@@ -51,6 +51,7 @@ async function getEventBySlug(slug: string) {
     const response = await fetch(`${API_URL}/events/slug/${slug}`, {
       next: { revalidate: 10 } // Revalidate every hour
     })
+ 
     
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`)

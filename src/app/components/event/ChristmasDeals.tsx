@@ -5,22 +5,23 @@ export default function ChristmasDeals({ data }: any) {
 
   // Extract stores for the StoreGrid component
   const storeList = data?.coupons?.store?.map((store: any) => store.name) || []
-  console.log("storeList:::", storeList);
   // Transform coupons data to match the DealCard component format
   const dealsList =
-    data?.coupons?.map((coupon: any) => ({
+    data?.coupons?.map((coupon: any) => {
+      return({
+        slug:coupon?.store?.slug,
       discount: coupon?.mainImage || "",
       type: coupon?.secondaryImage || "OFF",
       brand: coupon?.name,
       description: coupon?.codeImage || "Coupon Code",
       verified: coupon?.isVerified,
       expiry: formatDate(coupon?.endDate),
-      logo: data?.coupons?.stores?.logoUrl || "/placeholder.svg?height=40&width=40",
+      logo: coupon?.store?.logoUrl || "/placeholder.svg?height=40&width=40",
       code: coupon?.code,
       htmlCodeUrl: coupon?.htmlCodeUrl,
       detail: coupon?.detail,
       btnText:coupon?.code? " View Coupon Code":" View Deal"
-    })) || []
+    })}) || []
 
 
   console.log("dealsList:::", dealsList);

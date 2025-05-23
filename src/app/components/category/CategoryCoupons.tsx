@@ -159,7 +159,8 @@ export default function CategoryCoupons({ data }: any) {
             <div className="text-center py-8">Loading coupons...</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {coupons.map((coupon: any) => (
+              {coupons.map((coupon: any) =>{
+                return(
                 <div
                   key={coupon.id}
                   className="border border-gray-200 rounded-md p-6 flex flex-col relative h-full group hover:shadow-md transition-shadow duration-300"
@@ -186,13 +187,14 @@ export default function CategoryCoupons({ data }: any) {
                         //   navigate(PATH.SINGLE_STORE.replace(":id", coupon?.store?.slug || "no-slug"))
                         // }
                         onClick={() => {
+                          console.log("coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode",coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,"====>",coupon?.htmlCodeUrl,"====>",coupon?.store );
                           // Open the link in a new tab
-                          window.open(coupon?.htmlCodeUrl, "_blank")
+                          window.open(coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode, "_blank")
                           setCouponCode({
                             code: coupon?.code,
                             couponName: coupon?.title,
                             logo: coupon.store?.logoUrl,
-                            storeName: coupon?.storeName,
+                            storeName: coupon?.store?.name,
                             htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,
                           })
 
@@ -212,7 +214,7 @@ export default function CategoryCoupons({ data }: any) {
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
 
               {coupons.length === 0 && !isLoading && (
                 <p className="text-center col-span-full text-gray-500">No coupons available for this category.</p>

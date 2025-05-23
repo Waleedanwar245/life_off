@@ -32,7 +32,7 @@ export default function FreeShippingContent() {
 
                 // Filter and format the coupons data
                 const couponData = data || []
-                console.log("couponData:::",couponData);
+                console.log("couponData:::", couponData);
                 const formattedData = couponData
                     ?.filter((coupon: any) => coupon?.isFreeShipping)
                     ?.map((item: any) => {
@@ -46,7 +46,7 @@ export default function FreeShippingContent() {
                             description: item.description || "No description available",
                             details: item.detail || "No additional details",
                             altText: item?.store?.name || "Brand logo",
-                            slug:item?.store?.slug||'no-slug'
+                            slug: item?.store?.slug || 'no-slug'
                         }
                     })
 
@@ -90,22 +90,22 @@ export default function FreeShippingContent() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {coupons.length > 0 ? (
                         coupons.map((coupon: any) => (
-                            <div key={coupon.id} className="border border-gray-200 rounded-lg p-4 flex flex-col">
-                                <div className="h-16 flex items-center justify-center mb-4">
-                                    <div className="relative w-[160px] h-[80px]">
+                            <div key={coupon.id} className="border border-gray-200 rounded-lg p-4 flex flex-col cursor-pointer" onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))}>
+                                <div className="flex items-center justify-center  mb-4  rounded overflow-hidden">
+                                    <div className="w-56 h-56 relative">
                                         <Image
                                             src={convertToSecureUrl(coupon.logo) || "/placeholder.svg"}
                                             alt={coupon.altText}
                                             fill
-                                            className="object-contain"
-                                            unoptimized // Use this for external images
+                                            className="object-contain p-2"
+                                            unoptimized
                                         />
                                     </div>
                                 </div>
 
                                 <div className="mb-2">
                                     <div className="font-bold text-lg">
-                                        {coupon.discount} {coupon.isCode ? "CODE" : "OFF"}{" "}
+                                        {coupon.discount} {coupon.isCode ? "CODE" : ""}{" "}
                                         {coupon.verified && (
                                             <span className="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                 <FaCheck className="mr-1" size={10} /> Verified
@@ -113,13 +113,15 @@ export default function FreeShippingContent() {
                                         )}
                                     </div>
                                     <div className="font-medium">
-                                        {coupon.brand} {coupon.description}
+                                        {coupon.brand} 
                                     </div>
-                                    <div className="text-xs text-gray-500 mt-1">{coupon.details}</div>
+                                    <div className="font-medium">
+                                         {coupon.description}
+                                    </div>
                                 </div>
 
                                 <div className="mt-auto">
-                                    <button onClick={()=> router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))} className="w-full bg-[#7FA842] text-white py-2 px-4 rounded text-sm transition-colors">
+                                    <button onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))} className="w-full bg-[#7FA842] text-white py-2 px-4 rounded text-sm transition-colors">
                                         Show Coupon Code
                                     </button>
                                 </div>
