@@ -33,7 +33,7 @@ export default function ChristmasDeals({ data }: any) {
       {/* <p>{data?.description}</p> */}
 
       {data?.description ? (
-        <div
+        <div className="custom-class"
           dangerouslySetInnerHTML={{ __html: data?.description }}
         />
       ) : (
@@ -65,7 +65,7 @@ export default function ChristmasDeals({ data }: any) {
         {/* <p>{data?.description2}</p> */}
 
         {data?.description2 ? (
-          <div
+          <div className="custom-class"
             dangerouslySetInnerHTML={{ __html: data?.description2 }}
           />
         ) : (

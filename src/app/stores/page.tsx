@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import Link from "next/link"
 import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl"
+import StoresContent from "../components/store/StoresContent"
 
 export const metadata: Metadata = {
   title: "Stores on Offers | LiveOffCoupon",
@@ -46,11 +47,12 @@ export default async function Page() {
         }}
       />
       
-      <div className="mt-[250px] md:mt-[110px] max-w-[1440px] mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2>
+      <div className="">
+        <StoresContent/>
+        {/* <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2> */}
         
         {/* Stores Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
           {stores.length > 0 ? (
             stores.slice(0, 30).map((store: any, index: number) => (
               <Link
@@ -80,33 +82,20 @@ export default async function Page() {
           ) : (
             <p className="text-center col-span-full">No stores available.</p>
           )}
-        </div>
+        </div> */}
         
         {/* Add this section to ensure ALL links are in the HTML */}
         <div className="hidden">
           {stores.map((store: any) => (
             store.slug && (
-              <Link key={store.id} href={`/store/${store.slug}`}>
+              <Link key={store.id} href={`/coupons/${store.slug}`}>
                 {store.name}
               </Link>
             )
           ))}
         </div>
         
-        {/* Description */}
-        <div className="space-y-4 text-gray-600 text-sm">
-          <p>
-            Here at liveoffcoupon, we strive to help you save on everything, from food and fashion to toys and
-            travel. This starts with sourcing the best coupon codes, promotions, and bargain shopping tips for you
-            to use at your favorite retailers.
-          </p>
-          <p>
-            From well-established big box stores, like Walmart and Target, to online shopping marketplaces, like
-            Etsy and eBay, to digital services, like Spotify and Netflix, to eateries, like Starbucks and Pizza Hut,
-            to travel institutions, like Hilton and Booking.com, you'll find almost every brand, retailer,
-            restaurant, and digital service under the sun featured here on liveoffcoupon.com.
-          </p>
-        </div>
+
       </div>
     </>
   )

@@ -8,7 +8,7 @@ type Props = {
 const SafeHtml = ({ html }: Props) => {
   return (
     <p
-      className="text-gray-500"
+      className="text-gray-500 custom-class"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

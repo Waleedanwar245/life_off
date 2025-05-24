@@ -24,3 +24,110 @@ body {
   font-family: var(--font-montserrat); /* ✅ Apply it correctly */
 }
 
+.custom-class .resizeable-image {
+  max-width: 100%;
+  height: auto;
+  margin: 16px;
+}
+
+.custom-class .float-left {
+  float: left;
+  margin-right: 16px;
+}
+
+.custom-class .float-right {
+  float: right;
+  margin-left: 16px;
+}
+
+.custom-class .float-none {
+  float: none;
+  display: block;
+  margin: 16px auto;
+}
+
+.custom-class ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.custom-class ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.custom-class li {
+  margin-bottom: 0.25rem;
+}
+
+.custom-class h1,
+.custom-class h2,
+.custom-class h3,
+.custom-class h4,
+.custom-class h5,
+.custom-class h6 {
+  font-family: var(--font-montserrat);
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem;
+  line-height: 1.3;
+  color: var(--foreground);
+}
+
+.custom-class h1 {
+  font-size: 2rem;
+}
+
+.custom-class h2 {
+  font-size: 1.5rem;
+}
+
+.custom-class h3 {
+  font-size: 1.25rem;
+}
+
+.custom-class h4 {
+  font-size: 1.125rem;
+}
+
+.custom-class h5 {
+  font-size: 1rem;
+}
+
+.custom-class h6 {
+  font-size: 0.875rem;
+}
+
+.custom-class p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0.75rem 0;
+  color: var(--foreground);
+  font-family: var(--font-montserrat);
+}
+
+.custom-class a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.custom-class a:hover {
+  color: #1e40af;
+}
+
+.custom-class blockquote {
+  border-left: 4px solid #d1d5db;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.custom-class img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+}
+

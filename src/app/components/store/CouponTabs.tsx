@@ -504,7 +504,7 @@ export default function CouponTabs({ data }: { data: any }) {
               </div>
 
               {/* Why Trust Us section */}
-              <div className="border rounded-lg p-5 mb-6 bg-white shadow-lg">
+              <div className="custom-class border rounded-lg p-5 mb-6 bg-white shadow-lg">
                 {data?.store?.storeDescription ? (
                   <p
                     className="text-sm text-gray-700 mb-4 leading-relaxed"
@@ -581,7 +581,7 @@ export default function CouponTabs({ data }: { data: any }) {
           <Col xs={24} md={16}>
             <div ref={storeInfoRef} className="pt-8 border-t">
               {/* Render Store Article */}
-              <div className="prose lg:prose-xl">
+              <div className="custom-class prose lg:prose-xl">
                 {data?.store?.storeArticle ? (
                   <div dangerouslySetInnerHTML={{ __html: data?.store?.storeArticle }} />
                 ) : (

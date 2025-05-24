@@ -68,7 +68,7 @@ export default function BlogBanner({ data }: any) {
         </div>
       </article>
 
-       <div className="w-full  mt-6">
+       <div className="w-full  mt-6 custom-class">
                 {data?.content &&  <div dangerouslySetInnerHTML={{ __html: data.content }} /> }
 
             </div>

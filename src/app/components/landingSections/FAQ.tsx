@@ -48,7 +48,7 @@ const FAQ = ({ data }: { data: any }) => {
           <div className="text-center text-gray-500">No FAQs available at the moment.</div>
         )}
       </div>
-      <div className="mt-8 text-[17.23px] font-medium leading-[27px] tracking-[0.8%] font-montserrat">
+      <div className="custom-class mt-8 text-[17.23px] font-medium leading-[27px] tracking-[0.8%] font-montserrat">
         {data?.description ? (
           <>
             <p dangerouslySetInnerHTML={{ __html: data?.description }} />
