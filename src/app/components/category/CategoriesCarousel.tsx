@@ -22,7 +22,7 @@ interface Category {
 export default function CategoriesCarousel({ data }: any) {
   const router = useRouter()
   const categories: Category[] =
-    data?.map((category: any) => ({
+    data?.filter((c: any) => c.id !== "92270548-c8fe-496f-aefb-4c948a4b6e23")?.map((category: any) => ({
       id: category.id,
       image: category.image,
       categoryName: category.categoryName,
@@ -96,9 +96,8 @@ export default function CategoriesCarousel({ data }: any) {
         <button
           onClick={nextSlide}
           disabled={isEnd} // Disable if at the end
-          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-2 shadow-md border border-gray-200 text-green-600 hover:text-green-700 transition-colors ${
-            isEnd ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-2 shadow-md border border-gray-200 text-green-600 hover:text-green-700 transition-colors ${isEnd ? "opacity-50 cursor-not-allowed" : ""
+            }`}
         >
           <FiChevronRight className="w-6 h-6" />
         </button>

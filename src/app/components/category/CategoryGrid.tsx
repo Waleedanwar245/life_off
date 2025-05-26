@@ -22,7 +22,7 @@ export default function CategoryGrid({ data }: any) {
   const router = useRouter()
 
   const categories =
-    data?.map(({ id, image, categoryTitle, categoryName, slug }: Category) => ({
+    data?.filter((c: any) => c.id !== "92270548-c8fe-496f-aefb-4c948a4b6e23")?.map(({ id, image, categoryTitle, categoryName, slug }: Category) => ({
       id,
       image,
       categoryTitle,

@@ -39,11 +39,12 @@ export default function FreeShippingContent() {
                         return {
                             id: item.id,
                             logo: item?.store?.logoUrl || "/images/placeholder.svg",
-                            discount: item.mainImage || "",
+                            mainImage: item.mainImage || "",
+                            secondImage: item.secondaryImage || "",
                             isCode: item.isCode,
                             verified: item.isVerified,
                             brand: item?.store?.name || "Unknown Brand",
-                            description: item.description || "No description available",
+                            name: item.name || "No description available",
                             details: item.detail || "No additional details",
                             altText: item?.store?.name || "Brand logo",
                             slug: item?.store?.slug || 'no-slug'
@@ -105,7 +106,7 @@ export default function FreeShippingContent() {
 
                                 <div className="mb-2">
                                     <div className="font-bold text-lg">
-                                        {coupon.discount} {coupon.isCode ? "CODE" : ""}{" "}
+                                        {coupon.mainImage} {coupon.secondImage}{" "}
                                         {coupon.verified && (
                                             <span className="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                 <FaCheck className="mr-1" size={10} /> Verified
@@ -116,7 +117,7 @@ export default function FreeShippingContent() {
                                         {coupon.brand} 
                                     </div>
                                     <div className="font-medium">
-                                         {coupon.description}
+                                         {coupon.name}
                                     </div>
                                 </div>
 
