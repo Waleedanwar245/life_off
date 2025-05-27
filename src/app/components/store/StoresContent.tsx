@@ -80,11 +80,11 @@ export default function StoresContent() {
                 <SplashScreen />
             ) : (
                 <>
-                    <div className="mt-[250px] md:mt-[110px] max-w-[1440px] mx-auto px-4 py-8">
+                    <div className="mt-[200px] md:mt-[110px] max-w-[1440px] mx-auto px-4 py-8">
                         {/* Header with Navigation */}
                         <div className="flex items-center justify-between mb-8 w-full">
-                            <h2 className="text-2xl font-bold flex-1 text-center">Stores on Offers</h2>
-                            <div className="flex gap-2">
+                            <h2 className="text-2xl font-bold flex-1 text-center ">Save Big with Coupons for Every Store!</h2>
+                            <div className=" gap-2 hidden md:flex">
                                 <button
                                     onClick={prevPage}
                                     className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
@@ -103,31 +103,29 @@ export default function StoresContent() {
                         </div>
 
                         {/* Stores Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+                        <div className=" grid grid-cols-2  sm:grid-cols-3  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6   gap-6 md:gap:4 mb-8">
                             {visibleStores.length > 0 ? (
                                 visibleStores.map((store: any, index: number) => (
                                     <div
                                         key={index}
                                         onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", store?.slug || "no-slug"))}
                                         className={`${store.bgColor || "bg-white"
-                                            } w-[206px] h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-6 transition-transform hover:scale-105 shadow-md`}
+                                            } w-[166px] md:w-[206px] h-[146px] md:h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-2 md:p-6 transition-transform hover:scale-105 shadow-md`}
                                     >
                                         {store?.logoUrl ? (
                                             <img
                                                 src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"}
                                                 alt={`${store.name} logo`}
-                                                width={150}
-                                                height={150}
-                                                className="w-full h-full object-contain"
-                                                // unoptimized // Use this for external images
+
+                                                className="w-[150px] h-[150px] object-contain"
+                                            // unoptimized // Use this for external images
                                             />
                                         ) : (
                                             <img
                                                 src="/images/default_store_img.png"
                                                 alt="Default store logo"
-                                                width={150}
-                                                height={150}
-                                                className="w-full h-full object-contain"
+
+                                                className="w-[150px] h-[150px] object-contain"
                                             />
                                         )}
                                     </div>
@@ -138,6 +136,22 @@ export default function StoresContent() {
                         </div>
 
                         {/* Alphabet Navigation */}
+                        <div className=" w-[100%] justify-center my-4 gap-2 flex md:hidden">
+                            <button
+                                onClick={prevPage}
+                                className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
+                                aria-label="Previous page"
+                            >
+                                <MdChevronLeft className="w-6 h-6" />
+                            </button>
+                            <button
+                                onClick={nextPage}
+                                className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
+                                aria-label="Next page"
+                            >
+                                <MdChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
                         <div className="flex flex-wrap justify-center gap-2 mb-8">
                             {alphabet.map((letter) => (
                                 <button
@@ -153,17 +167,20 @@ export default function StoresContent() {
 
                         {/* Description */}
                         <div className="space-y-4 text-gray-600 text-sm">
-                            <p>
-                                Here at liveoffcoupon, we strive to help you save on everything, from food and fashion to toys and
-                                travel. This starts with sourcing the best coupon codes, promotions, and bargain shopping tips for you
-                                to use at your favorite retailers.
+                            <p className="text-[14px] md:text-[16px] leading-6">
+                                Browse our directory of discounts, promo codes, and coupons for your favorite stores! Whether you're shopping for fashion, electronics, groceries, pet supplies, baby products, or travel, we’ve gathered the best money-saving coupons in one place. With new deals added daily, you will always find fresh ways to save on top brands.
+                                Our team constantly updates this list to ensure you get working, verified offers for hundreds of brands. We manually test each code and remove expired deals so you never face checkout frustration. Explore these stores to find the most suitable discount on your preferred category and product!
+
                             </p>
-                            <p>
-                                From well-established big box stores, like Walmart and Target, to online shopping marketplaces, like
-                                Etsy and eBay, to digital services, like Spotify and Netflix, to eateries, like Starbucks and Pizza Hut,
-                                to travel institutions, like Hilton and Booking.com, you'll find almost every brand, retailer,
-                                restaurant, and digital service under the sun featured here on liveoffcoupon.com.
-                            </p>
+                            <h2 className="text-[20px] md:text-[24px] font-bold leading-8">Why Check Our Store Coupons List?
+                            </h2>
+                            <ul className="list-disc pl-5 space-y-2 text-[14px] md:text-[16px] leading-6">
+                                <li>All stores have 100% verified promo codes, which we update regularly.</li>
+                                <li>We have coupons from a wide variety of stores where you can find discounts for every shopping need.</li>
+                                <li>Some promo codes are available only through our website, which gives you extra savings.</li>
+                                <li>We also share holiday sales, time-limited discounts, or flash promotions offered by different stores.</li>
+                            </ul>
+
                         </div>
                     </div>
                 </>

@@ -5,8 +5,8 @@ import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl"
 import StoresContent from "../components/store/StoresContent"
 
 export const metadata: Metadata = {
-  title: "Stores on Offers | LiveOffCoupon",
-  description: "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon. Shop smart and save more!",
+  title: "Coupons and Discounts on Your Favorite Stores | LiveOff Coupon",
+  description: "Find the best promo codes, discounts, and coupons for your favorite stores! Browse our complete list of brands and save big on every purchase you make.",
   // Rest of your metadata stays the same
 }
 

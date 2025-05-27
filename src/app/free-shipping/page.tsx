@@ -4,7 +4,7 @@ import FreeShippingContent from "../components/freeShipping/FreeShippingContent"
 export const metadata: Metadata = {
   title: "Free Shipping Coupons & Deals | LiveOffCoupon",
   description:
-    "Find the best free shipping coupon codes and deals on LiveOffCoupon. Save more on your online shopping with exclusive offers.",
+    "Save instantly with the best free shipping codes and coupons from top brands. Verified, updated, and always 100% free. Shop now and skip the delivery fees!",
   openGraph: {
     title: "Free Shipping Coupons & Deals | LiveOffCoupon",
     description:

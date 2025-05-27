@@ -170,7 +170,7 @@ const Navbar = () => {
 
   return (
     <nav className="max-w-[5500px] mx-auto fixed top-0 left-0 right-0 z-50 bg-white">
-      <div className="bg-[#96C121] text-white text-sm py-2 text-center flex justify-center items-center space-x-6">
+      <div className="bg-[#96C121] text-white text-sm py-2 text-center flex justify-start md:justify-center items-center space-x-4 md:space-x-6">
         <span className="hidden md:block">🚀 Join our community for exclusive offers:</span>
         <span className="block md:hidden">🚀 Join us</span>
 
@@ -178,7 +178,7 @@ const Navbar = () => {
           href="https://www.facebook.com/groups/682522187479639"
           target="_blank"
           rel="noopener noreferrer"
-          className="cursor-pointer flex items-center space-x-2 underline hover:text-[#000] transition-colors"
+          className="cursor-pointer flex items-center space-x-1 md:space-x-2 underline hover:text-[#000] transition-colors"
           aria-label="Join our Facebook group"
         >
           <Image src="/fb_icon.svg" alt="Facebook icon" width={20} height={20} className="w-5 h-5" />
@@ -191,7 +191,7 @@ const Navbar = () => {
           href="https://whatsapp.com/channel/0029VbAVudTBvvscwNFt253w"
           target="_blank"
           rel="noopener noreferrer"
-          className="cursor-pointer flex items-center space-x-2 underline hover:text-[#000] transition-colors"
+          className="cursor-pointer flex items-center space-x-1 md:space-x-2 underline hover:text-[#000] transition-colors"
           aria-label="Join our WhatsApp group"
         >
           <Image src="/whatapp-icon.svg" alt="WhatsApp icon" width={20} height={20} className="w-5 h-5" />
