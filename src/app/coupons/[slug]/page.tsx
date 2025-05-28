@@ -26,14 +26,10 @@ interface StoreData {
 }
 
 // Define Props type
-// type Props = {
-//   params: Promise<{ slug: string }>
-//   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-// }
 type Props = {
-  params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
 
 export async function generateStaticParams() {
   try {
@@ -89,10 +85,9 @@ async function getStoreBySlug(slug: string): Promise<StoreData> {
 
 // Generate metadata for the page
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
-// export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   try {
     // Await the params to get the id
-    const { slug } = params;
+    const { slug } = await params
     console.log("params:::::", params);
     const data = await getStoreBySlug(slug)
     const store = data?.store
@@ -155,7 +150,7 @@ function generateJsonLd(store: Store) {
 export default async function StorePage({ params }: Props) {
   try {
     // Await the params to get the id
-    const { slug } =  params
+    const { slug } = await params
     const data = await getStoreBySlug(slug)
 
     if (!data || !data?.store) {
