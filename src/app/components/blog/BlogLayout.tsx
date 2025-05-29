@@ -52,7 +52,7 @@ export default function BlogLayout({ data }: any) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Author Profile Section */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12">
+      {/* <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12">
         <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 relative">
           <img
             src={convertToSecureUrl(authorDetails?.imageUrl) || "/images/placeholder.svg?height=100&width=100"}
@@ -69,7 +69,7 @@ export default function BlogLayout({ data }: any) {
               "MARIA LALONDE A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Latest Posts Section */}
       <div className="my-8">

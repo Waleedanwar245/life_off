@@ -13,16 +13,17 @@ interface DealCardProps {
   logo: string
   btnText: string
   slug: string
+  code:any
 }
 
-export default function DealCard({ discount, type, brand, description, verified, expiry, logo, btnText, slug }: DealCardProps) {
+export default function DealCard({ discount, type, brand, description, verified, expiry, logo, btnText, slug ,code}: DealCardProps) {
   console.log("logo:::", logo);
   return (
     <div className="border rounded-lg overflow-hidden" onClick={() => window.open(PATH.SINGLE_STORE.replace(":id", slug || "no-slug"))}>
       <div className="p-4 bg-white">
         <div className="flex items-center justify-between mb-2">
           <div className="w-full flex items-center justify-center   rounded overflow-hidden">
-            <div className="w-56 h-56 relative">
+            <div className="min-w-56 min-h-56 relative">
               <Image
                 src={convertToSecureUrl(logo) || "/placeholder.svg"}
                 alt={logo}
@@ -35,7 +36,7 @@ export default function DealCard({ discount, type, brand, description, verified,
 
         </div>
         <div className="mb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-h-[60px]">
             <span className="font-bold text-xl">
               {discount} {type}
             </span>
@@ -50,7 +51,7 @@ export default function DealCard({ discount, type, brand, description, verified,
           </div>
           {/* <div className="text-xs text-gray-500 mt-1">Valid till {expiry}</div> */}
         </div>
-        <button className="w-full bg-[#789A1A] hover:bg-[#789A1A] text-white py-2 rounded text-sm font-medium">
+        <button className={`w-full ${code? 'bg-[#789A1A]':'bg-[#10262F]'}   text-white py-2 rounded text-sm font-medium`}>
           {btnText}
         </button>
       </div>

@@ -403,7 +403,7 @@ export default function CouponTabs({ data }: { data: any }) {
                                   <div className="h-[] self-stretch w-px bg-gray-300 mx-2"></div>
                                   <div className="flex-1 pl-2 py-4">
                                     <div className="text-[9.32px] md:text-[13px] text-[#7FA842] font-[800] ">{coupon?.codeorDeal} {coupon.isExclusive && <span> <Tag className="text-[10px] md:text-[14px] " style={{marginLeft:'10px', background: '#789A1A', color: 'white', height: '22px', lineHeight: '18px',  }} color="success" >Exclusive</Tag></span>}</div>
-                                    <div className=" text-[12.9px] md:text-[18px]  ">{coupon.title}</div>
+                                    <div className=" text-[12.9px] md:text-[16px]  ">{coupon.title}</div>
 
                                     <div className="flex items-center text-xs mt-1">
                                       <FiClock className="text-gray-400 mr-1" />

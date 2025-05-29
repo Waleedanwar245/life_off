@@ -44,7 +44,7 @@ export default function BlogsContent({ initialBlogData }: BlogsContentProps) {
         <SplashScreen />
       ) : (
         <>
-          <div className="mt-[250px] md:mt-[100px]">
+          <div className="mt-[200px] md:mt-[100px]">
             <BlogFeaturedSection data={blogData} />
           </div>
           <BlogLayout data={blogData} />

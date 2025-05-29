@@ -48,9 +48,11 @@ export async function generateStaticParams() {
 // Fetch single event data
 async function getEventBySlug(slug: string) {
   try {
-    const response = await fetch(`${API_URL}/seasonal/slug/${slug}`, {
+    const response = await fetch(`${API_URL}/events/slug/${slug}`, {
       next: { revalidate: 10 } // Revalidate every hour
     })
+    console.log("response::::::",response);
+    
  
     
     if (!response.ok) {
@@ -75,6 +77,8 @@ export async function generateMetadata(
     const { slug } = await params
     const data = await getEventBySlug(slug)
     const event = data
+    console.log("data:::::::::::",data);
+    
     
     if (!event) {
       return {

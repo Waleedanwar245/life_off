@@ -41,7 +41,7 @@ export default function FreeShippingContent() {
                             logo: item?.store?.logoUrl || "/images/placeholder.svg",
                             mainImage: item.mainImage || "",
                             secondImage: item.secondaryImage || "",
-                            isCode: item.isCode,
+                            isCode: item.code,
                             verified: item.isVerified,
                             brand: item?.store?.name || "Unknown Brand",
                             name: item.name || "No description available",
@@ -90,7 +90,9 @@ export default function FreeShippingContent() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {coupons.length > 0 ? (
-                        coupons.map((coupon: any) => (
+                        coupons.map((coupon: any) =>{
+                            console.log("coupon:::",coupon);
+                            return (
                             <div key={coupon.id} className="border border-gray-200 rounded-lg p-4 flex flex-col cursor-pointer" onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))}>
                                 <div className="flex items-center justify-center  mb-4  rounded overflow-hidden">
                                     <div className="w-56 h-56 relative">
@@ -122,12 +124,12 @@ export default function FreeShippingContent() {
                                 </div>
 
                                 <div className="mt-auto">
-                                    <button onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))} className="w-full bg-[#7FA842] text-white py-2 px-4 rounded text-sm transition-colors">
-                                        Show Coupon Code
+                                    <button onClick={() => router.push(PATH.SINGLE_STORE.replace(":id", coupon?.slug || "no-slug"))} className={`w-full ${coupon.isCode ? 'bg-[#7FA842]':"bg-[#0E222A]"}  text-white py-2 px-4 rounded text-sm transition-colors`}>
+                                       {coupon.isCode ? `Reveal Code` : "Get Deal"}
                                     </button>
                                 </div>
                             </div>
-                        ))
+                        )})
                     ) : (
                         <div className="text-center col-span-full text-gray-500">No coupons available at the moment.</div>
                     )}

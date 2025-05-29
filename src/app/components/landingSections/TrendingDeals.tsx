@@ -73,7 +73,7 @@ export default function TrendingDeals() {
                     >
                         {/* Logo Container - Reduced height */}
                         <div
-                            className={`relative ${deal.bgColor} h-[140px] flex items-center justify-center p-4 border-b border-gray-100`}
+                            className={`relative ${deal.bgColor}  flex items-center justify-center p-4 border-b border-gray-100`}
                         >
                             {/* Discount Badge - Improved styling */}
                             {deal.offer && deal.offer !== "0% Percentage" && (
@@ -84,16 +84,25 @@ export default function TrendingDeals() {
                             )}
 
                             {/* Logo - Better sizing */}
+                            <div className="w-56 h-56 ">
+                                {/* <Image
+                                                                        src={convertToSecureUrl(coupon.logo) || "/placeholder.svg"}
+                                                                        alt={coupon.altText}
+                                                                        fill
+                                                                        className="object-contain p-2"
+                                                                        unoptimized
+                                                                    /> */}
                                 <img
                                     src={convertToSecureUrl(deal?.logo) || "/placeholder.svg"}
                                     alt={`${deal.name} logo`}
-                                    className="max-w-[80%] max-h-[80px] object-contain"
+                                    className="object-contain p-2 mb-4"
                                     onError={(e) => {
                                         const target = e.target as HTMLImageElement
                                         target.onerror = null
                                         target.src = "/placeholder.svg"
                                     }}
                                 />
+                            </div>
                         </div>
 
                         {/* Content - Optimized spacing */}

@@ -44,7 +44,7 @@ export default function HeroBanner({ data }: { data: any }) {
           {slides.map((slide: any, index: number) => (
             <div
               key={index}
-              className="min-w-full h-[400px] sm:h-[500px] bg-cover bg-center"
+              className="min-w-full h-[340px] md:h-[500px]  bg-cover bg-center"
               style={{ backgroundImage: `url(${slide.imageUrl})` }}
             >
               {/* Overlay */}

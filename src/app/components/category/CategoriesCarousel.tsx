@@ -116,7 +116,10 @@ export default function CategoriesCarousel({ data }: any) {
                 onClick={() => router.push(PATH.SINGLE_CATEGORY.replace(":id", category?.slug || "no-slug"))}
               >
                 <div className="flex flex-col items-center gap-3">
-                  <div className="relative w-full pt-[100%] rounded-full overflow-hidden border-2 border-gray-100">
+                  {/* <div className="relative w-full pt-[100%] rounded-full overflow-hidden border-2 border-gray-100"> */
+                  }
+                  <div className="relative w-full pt-[96%] xs:pt-[80%] sm:pt-[100%] rounded-full overflow-hidden border-2 border-gray-100">
+
                     <div className="absolute inset-0">
                       <Image
                         src={convertToSecureUrl(category.image) || "/images/placeholder.svg"}

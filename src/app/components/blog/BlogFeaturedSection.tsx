@@ -84,7 +84,7 @@ const formatDate = (date: string) => {
                 <img
                   src={convertToSecureUrl(blog?.featuredImage) || `/placeholder.svg?height=150&width=150`}
                   alt={blog?.title}
-                  className="w-full h-full object-cover min-h-[120px]"
+                  className="w-full h-full object-cover min-h-[110px] md:h-[100px]"
                 />
                 {/* <div className="absolute top-0 right-0 bg-[#7FA842] text-white rounded-[10px] w-6 h-6 flex flex-col items-center justify-center text-center">
                   <span className="text-[10px]">{formatDate(blog.createdAt)}</span>

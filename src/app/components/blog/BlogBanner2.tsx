@@ -19,11 +19,13 @@ interface BlogBannerProps {
 
 export default function BlogBanner({ data }: any) {
   const formattedDate = data?.createdAt ? formatDate(data?.createdAt) : "February 28, 2025"
-  
+
   // Fallback static data
   const defaultTitle = "11 Size-Inclusive Fashion Brands That Should Be on Your Radar"
   const defaultAuthor = "Maria Lalonde"
   const defaultDate = "February 28, 2025"
+  
+  const authorDetails = data?.__author__ || null
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       <article className="space-y-6">
@@ -53,7 +55,7 @@ export default function BlogBanner({ data }: any) {
             <img
               src={convertToSecureUrl(data?.featuredImage) || "/placeholder.svg"}
               alt={data?.title || "Blog Image"}
-              
+
               className="object-cover rounded-md"
               sizes="(max-width: 768px) 100vw, 1200px"
             />
@@ -68,10 +70,29 @@ export default function BlogBanner({ data }: any) {
         </div>
       </article>
 
-       <div className="w-full  mt-6 custom-class">
-                {data?.content &&  <div dangerouslySetInnerHTML={{ __html: data.content }} /> }
+      <div className="w-full  mt-6 custom-class">
+        {data?.content && <div dangerouslySetInnerHTML={{ __html: data.content }} />}
 
-            </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mt-6">
+        <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+          <img
+            src={convertToSecureUrl(authorDetails?.imageUrl) || "/placeholder.svg?height=100&width=100"}
+            alt="Author profile"
+            // fill
+            className="object-cover"
+            sizes="96px"
+          />
+        </div>
+        <div>
+          <h2 className="text-green-600 font-medium text-lg mb-1">{authorDetails?.name || "MARIA LALONDE"}</h2>
+          <p className="text-gray-800 leading-relaxed">
+            {authorDetails?.description ||
+              "A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 export default function CategoryBanner({ data }: any) {
   const category = data || {}; // Use `list` as primary source
   return (
-    <div className="max-w-[70%] mx-auto p-4 mt-6">
+    <div className="md:max-w-[70%] mx-auto p-4 mt-[250px] md:mt-6">
       <div className="flex items-center gap-6">
         <div className="relative flex-shrink-0">
           <div style={{width:'clamp(119px, 18vw, 119px)',height:'clamp(119px, 18vw, 119px)'}} className="w-[200px] h-[200px] rounded-full border-4 border-[#a3e635] flex items-center justify-center bg-[#232F3E]">

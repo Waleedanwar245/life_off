@@ -76,7 +76,7 @@ export default function Categories({ data }: { data: any }) {
 
             {/* Mobile Categories - Horizontal Layout */}
             <div className="lg:hidden mb-8">
-                <div className="flex overflow-x-auto pb-4 gap-4">
+                <div className="flex overflow-visible overflow-x-auto pb-4 gap-4">
                     {categories.slice(0, displayedCategoriesCount).map((category, index) => (
                         <div
                             key={index}
@@ -151,28 +151,29 @@ export default function Categories({ data }: { data: any }) {
                                 {selectedCategory.deals.slice(0, 10).map((deal: any, index: number) => (
                                     <div
                                         key={index}
-                                        className="flex items-start cursor-pointer"
+                                        className="flex items-stretch cursor-pointer"  // changed from items-start to items-stretch
                                         onClick={() => {
                                             router.push(`/coupons/${deal?.store?.slug || "no-slug"}`)
                                         }}
                                     >
-                                        {/* Left side - Logo with gray background */}
-                                        <div className="bg-white flex items-center border border-[#96C121] justify-center w-[120px] lg:w-[160px] h-[60px]  rounded-l-lg shadow-sm relative z-10">
+                                        {/* Left side - Logo container without fixed height, will stretch */}
+                                        <div className="bg-white flex items-center justify-center w-[120px] md:w-[120px] shrink-0 border border-[#96C121] rounded-l-lg shadow-sm relative z-10">
                                             <img
                                                 src={convertToSecureUrl(deal.logo) || "/placeholder.svg"}
                                                 alt={`${deal.offer} logo`}
-                                                //   fill
-                                                className="w-[90%] h-[90%] object-contain"
-                                            //   unoptimized
+                                                className="max-w-[120px] h-[40px] max-h-full object-contain"
+                                                style={{ maxHeight: '100%' }}
                                             />
                                         </div>
+
                                         {/* Right side - Offer Text with green border */}
-                                        <div className="bg-white flex-1 flex items-center border border-l-0 border-[#96C121] rounded-r-lg pl-4 pr-3 py-4 mt-[4px]">
+                                        <div className="bg-white flex-1 flex items-center border border-l-0 border-[#96C121] rounded-r-lg pl-4 pr-3 py-4 my-[4px]">
                                             <p className="text-sm text-gray-700" style={{ fontSize: "clamp(12px, 1vw, 18px)" }}>
                                                 {deal.offer}
                                             </p>
                                         </div>
                                     </div>
+
                                 ))}
                             </>
                         ) : (

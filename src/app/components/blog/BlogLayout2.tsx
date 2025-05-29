@@ -44,10 +44,10 @@ export default async function BlogLayout({ data }: { data: any }) {
   const authorDetails = data?.__author__ || null
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 ">
       {/* Author Profile Section */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 my-12">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start  ">
+        {/* <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
           <img
             src={convertToSecureUrl(authorDetails?.imageUrl) || "/placeholder.svg?height=100&width=100"}
             alt="Author profile"
@@ -62,7 +62,7 @@ export default async function BlogLayout({ data }: { data: any }) {
             {authorDetails?.description ||
               "A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
           </p>
-        </div>
+        </div> */}
       </div>
 
       {/* Latest Posts Section */}

@@ -40,7 +40,7 @@ const FavoriteDeal = () => {
 
   const handleNavigateToTrending = () => {
     if (trendingDeal?.slug) {
-      router.push(`/events/${trendingDeal.slug}`)
+      router.push(`/seasonal/${trendingDeal.slug}`)
     }
   }
 
@@ -65,11 +65,11 @@ const FavoriteDeal = () => {
         {/* Trending Deal Image */}
         {trendingDeal && trendingDeal?.bannerImage && (
           <div className="md:col-span-2 relative group cursor-pointer" onClick={handleNavigateToTrending}>
-            <div className="relative w-full h-[420px]">
+            <div className="relative w-full md:h-[420px]">
               <img
                 src={convertToSecureUrl(trendingDeal.bannerImage) || "/placeholder.svg"}
                 alt={trendingDeal?.title || "Trending Deal"}
-                 className="w-full h-[420px] object-cover rounded-lg"
+                 className="w-full h-[270px] md:h-[420px] object-cover rounded-lg"
                 // unoptimized
               />
             </div>

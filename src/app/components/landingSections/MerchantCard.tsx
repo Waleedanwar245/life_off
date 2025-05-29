@@ -4,11 +4,21 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
 
 const MerchantCard = ({ data }: { data: any }) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const merchants = [
+    { name: "Adidas", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "1800contacts", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "ASOS", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "OOFOS", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "JCPenney", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "Nike", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "Target", logo: "/placeholder.svg?height=60&width=120" },
+  ]
   const [duplicatedMerchants, setDuplicatedMerchants] = useState<any[]>([])
   const sliderRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
 
   // Memoize to avoid recomputing every render
   const topMerchants = useMemo(() => {
@@ -28,7 +38,7 @@ const MerchantCard = ({ data }: { data: any }) => {
     if (!slider) return
 
     let animationFrame: number
-    const scrollSpeed = 0.5 // pixels per frame (adjust for smoothness)
+    const scrollSpeed = 0 // pixels per frame (adjust for smoothness)
 
     const scroll = () => {
       slider.scrollLeft += scrollSpeed
@@ -45,60 +55,79 @@ const MerchantCard = ({ data }: { data: any }) => {
     return () => cancelAnimationFrame(animationFrame)
   }, [duplicatedMerchants])
 
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % Math.max(1, merchants.length - 4))
+  }
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + Math.max(1, merchants.length - 4)) % Math.max(1, merchants.length - 4))
+  }
+
+  console.log("duplicatedMerchants:::", duplicatedMerchants);
+
+
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 overflow-hidden">
-      {/* Heading */}
-      <h2
-        className="text-3xl font-bold text-center text-gray-900 mb-10"
-        style={{ fontSize: "clamp(20px, 2vw, 51.2px)" }}
-      >
-        Our Favorite Merchants
-      </h2>
 
-      {/* States */}
-      {!data && <p className="text-center text-gray-500 text-lg">Loading merchants...</p>}
-      {!data && <p className="text-center text-red-500 text-lg">Failed to load merchants.</p>}
-      {data && topMerchants.length === 0 && (
-        <p className="text-center text-gray-500 text-lg">No merchants available.</p>
-      )}
-
-      {/* Slider */}
-      {data && duplicatedMerchants.length > 0 && (
-        <div
-          ref={sliderRef}
-          className="flex gap-4 overflow-x-hidden scroll-smooth"
-          style={{ width: "100%", height: "125px" }}
-        >
-          {duplicatedMerchants.map((merchant: any, index: number) => (
-            <div key={index} className="flex-shrink-0 w-[25%]">
-              <button
-                onClick={() => router.push(`/coupons/${merchant?.slug || "no-slug"}`)}
-                className="bg-[#ffffff] shadow-md hover:shadow-lg !h-[120px] w-full min-h-[60px] sm:min-h-[80px] lg:min-h-[100px] text-black flex items-center justify-center px-4 py-3 rounded-[10px] transition-all duration-300 ease-in-out transform hover:scale-105"
-              >
-                <div className="flex items-center justify-center space-x-2">
-                  {merchant?.logoUrl ? (
-                    <div className="relative w-auto h-[76px] sm:h-[40px] lg:h-[50px]">
-                      <Image
-                        src={convertToSecureUrl(merchant.logoUrl) || "/placeholder.svg"}
-                        alt={`${merchant?.name} logo`}
-                        width={100}
-                        height={50}
-                        className="w-auto h-[76px] sm:h-[40px] lg:h-[50px] object-contain"
-                        unoptimized
-                      />
-                    </div>
-                  ) : (
-                    <span className="text-sm sm:text-base lg:text-lg font-medium px-2 text-center">
-                      {merchant?.name || "Unknown Merchant"}
-                    </span>
-                  )}
+    <div className="max-w-[1440px] mx-auto w-full py-16 px-4" style={{ backgroundColor: "#F5F5F5" }}>
+      <div className="">
+        {/* Heading */}
+        <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12">Our Favorite Merchants</h2>
+        {/* Merchants Container */}
+        <div className="relative flex items-center justify-center">
+          {/* Left Arrow */}
+          {/* <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#96C121] p-[5px] md:p-2">
+            <IoIosArrowBack className="w-[14px] h-[14px] md:w-6 md:h-6 text-white" />
+          </button> */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 z-10 p-[5px] md:p-2  shadow-lg transition-all duration-200 hover:shadow-xl"
+            style={{ backgroundColor: "#96C121" }}
+          >
+            <IoIosArrowBack className="w-[14px] h-[14px] md:w-6 md:h-6 text-white" />
+          </button>
+          {/* Merchants Grid */}
+          <div className="overflow-hidden mx-16">
+            <div
+              className="flex transition-transform duration-300 ease-in-out gap-6"
+              style={{ transform: `translateX(-${currentIndex * (100 / 5)}%)` }}
+            >
+              {duplicatedMerchants.map((merchant, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex items-center justify-center p-6"
+                >
+                  <div className="text-center">
+                    {/* <div className="text-lg font-semibold text-gray-800">{merchant.name}</div> */}
+                    {/* Placeholder for actual logos */}
+                    <img src={merchant?.logoUrl} alt="" />
+                    {/* <div className="mt-2 text-sm text-gray-500">Logo</div> */}
+                  </div>
                 </div>
-              </button>
+              ))}
             </div>
+          </div>
+          {/* Right Arrow */}
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 z-10 p-[5px] md:p-2  shadow-lg transition-all duration-200 hover:shadow-xl"
+            style={{ backgroundColor: "#96C121" }}
+          >
+            <IoIosArrowForward className="w-[14px] h-[14px] md:w-6 md:h-6 text-white" />
+          </button>
+        </div>
+        {/* Dots Indicator */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {Array.from({ length: Math.max(1, merchants.length - 4) }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentIndex ? "bg-gray-600" : "bg-gray-300 hover:bg-gray-400"
+                }`}
+            />
           ))}
         </div>
-      )}
+      </div>
     </div>
+
   )
 }
 

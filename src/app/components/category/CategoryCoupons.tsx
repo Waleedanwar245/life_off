@@ -165,15 +165,15 @@ export default function CategoryCoupons({ data }: any) {
                   key={coupon.id}
                   className="border border-gray-200 rounded-md p-6 flex flex-col relative h-full group hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="flex flex-col items-start">
+                  <div className="flex justify-between items-start mb-8 rlative">
+                    <div className="flex flex-col items-center w-full">
                       <img
                         src={convertToSecureUrl(coupon.store?.logoUrl) || "/placeholder.svg"}
                         alt={coupon.store?.name || "Store logo"}
-                        className="h-12 w-auto object-contain"
+                        className="h-56 w-auto object-contain"
                       />
                     </div>
-                    <div className="border border-gray-300 rounded px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
+                    <div className="absolute right-0 top-0 border border-gray-300 rounded px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
                       {coupon?.mainImage + " " + coupon?.secondaryImage}
                     </div>
                   </div>

@@ -89,9 +89,9 @@ async function getCategoriesData() {
 // Generate metadata
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "LiveOffCoupon - Get Best Deals, Coupons & Discounts Online",
+    title: "LiveOff Coupon - Free Online Coupon Codes & Discounts",
     description:
-      "Find the latest coupons, discounts, and top deals on LiveOffCoupon. Save money on your favorite brands every day!",
+      "Browse our free online coupon codes to get amazing discounts on a wide range of products. Save money with the latest deals, discounts, and promo codes!",
     alternates: {
       canonical: "https://liveoffcoupon.com/",
     },

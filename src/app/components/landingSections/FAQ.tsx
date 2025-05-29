@@ -9,8 +9,8 @@ const FAQItem = ({ item }: { item: any }) => {
     <div className="border-b border-gray-200 ">
       <button className="w-full py-6 flex items-center justify-between text-left" onClick={() => setIsOpen(!isOpen)}>
         <span
-          className="text-[20px] font-medium text-gray-900"
-          style={{ fontSize: "clamp(12px, 1vw, 20px)", fontWeight: 700 }}
+          className="text-[16px] font-medium text-gray-900"
+          style={{ fontSize: "clamp(12px, 1vw,16px)", fontWeight: 700 }}
         >
           {item.question}
         </span>
@@ -23,7 +23,7 @@ const FAQItem = ({ item }: { item: any }) => {
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-48 mb-6" : "max-h-0"}`}
       >
-        <p className="text-gray-600" style={{ fontSize: "clamp(14px, 1vw, 20px)" }}>
+        <p className="text-gray-600" style={{ fontSize: "clamp(14px, 1vw, 16px)" }}>
           {item.answer}
         </p>
       </div>

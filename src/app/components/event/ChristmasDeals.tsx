@@ -8,26 +8,28 @@ export default function ChristmasDeals({ data }: any) {
   // Transform coupons data to match the DealCard component format
   const dealsList =
     data?.coupons?.map((coupon: any) => {
-      return({
-        slug:coupon?.store?.slug,
-      discount: coupon?.mainImage || "",
-      type: coupon?.secondaryImage || "OFF",
-      brand: coupon?.name,
-      description: coupon?.codeImage || "Coupon Code",
-      verified: coupon?.isVerified,
-      expiry: formatDate(coupon?.endDate),
-      logo: coupon?.store?.logoUrl || "/placeholder.svg?height=40&width=40",
-      code: coupon?.code,
-      htmlCodeUrl: coupon?.htmlCodeUrl,
-      detail: coupon?.detail,
-      btnText:coupon?.code? " View Coupon Code":" View Deal"
-    })}) || []
+ 
+      return ({
+        slug: coupon?.store?.slug,
+        discount: coupon?.mainImage || "",
+        type: coupon?.secondaryImage || "OFF",
+        brand: coupon?.name,
+        description: coupon?.codeImage || "Coupon Code",
+        verified: coupon?.isVerified,
+        expiry: formatDate(coupon?.endDate),
+        logo: coupon?.store?.logoUrl || "/placeholder.svg?height=40&width=40",
+        code: coupon?.code,
+        htmlCodeUrl: coupon?.htmlCodeUrl,
+        detail: coupon?.detail,
+        btnText: coupon?.code ? " View Coupon Code" : " View Deal"
+      })
+    }) || []
 
 
   console.log("dealsList:::", dealsList);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-[1400px] mx-auto px-4 py-8">
       {/* Header */}
       <h1 className="text-3xl font-bold mb-4">{data?.heading1 || "Christmas Deals 2025"}</h1>
       {/* <p>{data?.description}</p> */}
@@ -43,12 +45,12 @@ export default function ChristmasDeals({ data }: any) {
 
       {/* Feature Stores */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Feature Stores</h2>
-        <StoreGrid stores={storeList.length > 0 ? storeList :[]} />
+        {storeList.length > 0 && <h2 className="text-xl font-semibold mb-4">Feature Stores</h2>}
+        <StoreGrid stores={storeList.length > 0 ? storeList : []} />
       </div>
 
       {/* Deals Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
         {dealsList && dealsList.length > 0 ? (
           dealsList.map((deal: any, index: any) => (
             <DealCard key={index} {...deal} />
@@ -69,7 +71,7 @@ export default function ChristmasDeals({ data }: any) {
             dangerouslySetInnerHTML={{ __html: data?.description2 }}
           />
         ) : (
-          <p className="text-gray-500">            "What is in your list of New Year's resolutions? If savings are on it, we predict that you will succeed. Since you are already here and we have been committed to coupons and fashion, it will be perfect if we get together. Christmas is time for you to prepare for endless party, sweet gifts and now savings too. Because we are arranging plenty of them! Sign up with us, take our discount deals and shopping advice that will feel like perfect Christmas treat. Retailers may have set records of earning millions over a holiday season, you can set new ones. By saving your money with up to 90% off coupons that stores offer at special occasions like Christmas, you can essentially control your budgets for months. Forget about the good ones! These's accessories, Daniel Wellington watches and The Tie Bar deals may make you pretty happy, as soon as you click them.</p>
+          <p className="text-gray-500"> </p>
         )}
       </div>
     </div>

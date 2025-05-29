@@ -86,7 +86,7 @@ function Blogs() {
               <div
                 onClick={() => router.push(`/blog/${post.slug || "no-slug"}`)}
                 key={post.id}
-                className="cursor-pointer flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                className="cursor-pointer sha flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
                 {/* Image Container */}
                 {/* <div className="w-1/3 bg-purple-100 relative">
@@ -98,7 +98,7 @@ function Blogs() {
                     // unoptimized
                   />
                 </div> */}
-                  <div className="w-1/3 bg-purple-100 relative">
+                  <div className=" bg-purple-100 relative w-[125px] h-[110px]">
                   <img
                     src={convertToSecureUrl(post.image)}
                     alt={post.title}
