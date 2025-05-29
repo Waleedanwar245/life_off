@@ -15,7 +15,7 @@ const PATH = {
   ALL_CATEGORY: "/categories",
   SHIPPING_PAGE: "/free-shipping",
   ALL_BLOG: "/blogs",
-  SINGLE_EVENT: "/event/:id",
+  SINGLE_EVENT: "/seasonal/:id",
   COUPON_REQUREST_OFFER: "/submit",
   ABOUT_US: "/about-us",
   PRIVACY_POLICY_LANDING: "/privacy-policy",

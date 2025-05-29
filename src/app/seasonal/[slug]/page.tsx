@@ -48,7 +48,7 @@ export async function generateStaticParams() {
 // Fetch single event data
 async function getEventBySlug(slug: string) {
   try {
-    const response = await fetch(`${API_URL}/events/slug/${slug}`, {
+    const response = await fetch(`${API_URL}/seasonal/slug/${slug}`, {
       next: { revalidate: 10 } // Revalidate every hour
     })
  
@@ -93,7 +93,7 @@ export async function generateMetadata(
       openGraph: {
         title: eventTitle,
         description: eventDescription,
-        url: `https://liveoffcoupon.com/event/${slug}`,
+        url: `https://liveoffcoupon.com/seasonal/${slug}`,
         type: "website",
         images: [
           {
@@ -105,7 +105,7 @@ export async function generateMetadata(
         ],
       },
       alternates: {
-        canonical: `https://liveoffcoupon.com/event/${slug}`,
+        canonical: `https://liveoffcoupon.com/seasonal/${slug}`,
       },
       other: {
         "google-site-verification": "jun25llOGzjnJpsoK3-Qvha-gL5rLMR73W68lVU-h6M",
@@ -144,7 +144,7 @@ export default async function EventPage({ params }: Props) {
               "@context": "https://schema.org",
               "@type": "Event",
               "name": eventTitle,
-              "url": `https://liveoffcoupon.com/event/${slug}`,
+              "url": `https://liveoffcoupon.com/seasonal/${slug}`,
               "description": eventDescription,
               "image": event.bannerImage || "https://liveoffcoupon.com/default-event-banner.jpg",
               "startDate": "2025-11-27", // Assuming the date for Black Friday

@@ -74,7 +74,7 @@ export default async function EventsPage() {
             validEvents.map((event: any) => (
               <Link 
                 key={event.id} 
-                href={`/event/${event.slug}`}
+                href={`/seasonal/${event.slug}`}
                 className="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="relative h-48">
