@@ -98,7 +98,7 @@ const MerchantCard = ({ data }: { data: any }) => {
                   <div className="text-center">
                     {/* <div className="text-lg font-semibold text-gray-800">{merchant.name}</div> */}
                     {/* Placeholder for actual logos */}
-                    <img src={merchant?.logoUrl} alt="" />
+                    <img src={convertToSecureUrl(merchant?.logoUrl)} alt="" />
                     {/* <div className="mt-2 text-sm text-gray-500">Logo</div> */}
                   </div>
                 </div>
