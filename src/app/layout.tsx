@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "../context/ThemeContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -40,9 +41,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased`}
       >
+       <ThemeProvider>
         <Toaster />
         <Navbar />
         {children}
+        </ThemeProvider> 
         <Footer />
       </body>
     </html>

@@ -7,6 +7,7 @@ import { BiSearch, BiMenu, BiX } from "react-icons/bi"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import Image from "next/image"
+import { useTheme } from "@/context/ThemeContext"
 
 // Define paths object to replace the imported PATH
 const PATH = {
@@ -40,6 +41,7 @@ const Navbar = () => {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const pathname = usePathname()
+  const { theme, toggleTheme } = useTheme();
 
   // Check if we're on mobile
   useEffect(() => {
@@ -105,7 +107,7 @@ const Navbar = () => {
       setStoreLoading(true)
       try {
         // Direct API call to the external endpoint
-         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
         // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
         const response = await fetch(
           `${apiUrl}/store/search?name=${encodeURIComponent(debouncedSearchTerm)}&page=1&pageSize=10`,
@@ -215,6 +217,12 @@ const Navbar = () => {
             <NavLink href={PATH.SHIPPING_PAGE}>Free Shipping</NavLink>
             <NavLink href={PATH.ALL_BLOG}>Savings Tips</NavLink>
           </div>
+          {/* <button onClick={toggleTheme}>
+            {theme === 'light' ? '🌞 Light Mode' : '🌙 Dark Mode'}
+          </button>
+          <div className="bg-white text-black dark:bg-black dark:text-white">
+            Hello Theme!
+          </div> */}
 
           {/* Right side - Search */}
           <div className="flex items-center space-x-4 ml-auto">
