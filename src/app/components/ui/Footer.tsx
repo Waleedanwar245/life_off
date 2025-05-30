@@ -120,25 +120,28 @@ const FooterSection = () => {
             <h3 className="font-semibold mb-4">Seasonal Deals</h3>
             <ul className="space-y-2 text-[16px]">
               <li>
-                <a href="#" className="hover:text-[#95C959] transition-colors" target="_blank" rel="noreferrer">
+                <a href={PATH.SINGLE_EVENT.replace(":id", "cyber-monday-deals")} target="_blank"
+                  rel="noopener noreferrer" className="hover:text-[#95C959] transition-colors" >
                   Cyber Monday
                 </a>
               </li>
               <li>
                 <Link
-                  href={PATH.SINGLE_EVENT.replace(":id", "black-friday-deals")}
+                  href={PATH.SINGLE_EVENT.replace(":id", "black-friday-deals")} target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-[#95C959] transition-colors"
                 >
                   Black Friday
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <a href="#" className="hover:text-[#95C959] transition-colors">
                   Christmas
                 </a>
-              </li>
+              </li> */}
               <li>
-                <a href="#" className="hover:text-[#95C959] transition-colors">
+                <a href={PATH.SINGLE_EVENT.replace(":id", "halloween-deals")} target="_blank"
+                  rel="noopener noreferrer" className="hover:text-[#95C959] transition-colors">
                   Halloween
                 </a>
               </li>

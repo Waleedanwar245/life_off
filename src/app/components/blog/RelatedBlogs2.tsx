@@ -47,7 +47,7 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
     const featuredArticles =
         data
             ?.filter((item: any) => item?.isTrending)
-            ?.slice(0,4).map((item: any) => ({
+            ?.slice(0, 4).map((item: any) => ({
                 id: item?.id || "",
                 title: item?.title || "Untitled",
                 image: item?.featuredImage || "/placeholder.svg?height=96&width=96",
@@ -56,40 +56,40 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
             })) || []
 
     return (
-        <div className="mx-auto px-4 py-8 mt-56 ">
+        <div className="mx-auto px-4 py-8 md:mt-56 sticky top-20">
 
-                <h2 className="text-xl font-bold mb-4 ">TRENDING</h2>
+            <h2 className="text-xl font-bold mb-4 ">TRENDING</h2>
 
-                <div className="space-y-4">
-                    {featuredArticles.length > 0 ? (
-                        featuredArticles.map((article: any) => (
-                            <Link
-                                href={`/blog/${article.slug}`}
-                                key={article.id}
-                                className="cursor-pointer flex gap-3 border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-                            >
-                                <div className="relative w-24 h-24">
-                                    <img
-                                        src={convertToSecureUrl(article.image) || "/placeholder.svg"}
-                                        alt={article.title}
-                                        // fill
-                                        className="object-cover"
-                                        sizes="96px"
-                                    />
+            <div className="space-y-4">
+                {featuredArticles.length > 0 ? (
+                    featuredArticles.map((article: any) => (
+                        <Link
+                            href={`/blog/${article.slug}`}
+                            key={article.id}
+                            className="cursor-pointer flex gap-3 border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                        >
+                            <div className="relative w-1/3">
+                                <img
+                                    src={convertToSecureUrl(article.image) || "/placeholder.svg"}
+                                    alt={article.title}
+                                    // fill
+                                    className="w-full h-full object-cover min-h-[110px] md:h-[100px]"
+
+                                />
+                            </div>
+                            <div className="p-2 w-2/3">
+                                <h3 className="font-medium text-sm">{article.title}</h3>
+                                <div className="flex items-center text-xs text-gray-500 mt-1">
+                                    <FaCalendarAlt className="mr-1" />
+                                    <span>Published {article.publishedDate}</span>
                                 </div>
-                                <div className="p-2">
-                                    <h3 className="font-medium text-sm">{article.title}</h3>
-                                    <div className="flex items-center text-xs text-gray-500 mt-1">
-                                        <FaCalendarAlt className="mr-1" />
-                                        <span>Published {article.publishedDate}</span>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))
-                    ) : (
-                        <p className="text-center text-gray-500">No trending articles found.</p>
-                    )}
-                </div>
+                            </div>
+                        </Link>
+                    ))
+                ) : (
+                    <p className="text-center text-gray-500">No trending articles found.</p>
+                )}
+            </div>
         </div>
     )
 }

@@ -29,7 +29,7 @@ export default function ChristmasDeals({ data }: any) {
   console.log("dealsList:::", dealsList);
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
       <h1 className="text-3xl font-bold mb-4">{data?.heading1 || "Christmas Deals 2025"}</h1>
       {/* <p>{data?.description}</p> */}

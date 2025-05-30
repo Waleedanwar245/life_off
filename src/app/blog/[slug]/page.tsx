@@ -183,14 +183,14 @@ export default async function BlogPage({ params, searchParams }: Props) {
         />
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={24} md={16}>
-            <div className="mt-[200px] md:mt-[100px]">
+            <div className="mt-[175px] md:mt-[50px]">
               <BlogBanner data={data} />
             </div>
 
           </Col>
           <Col xs={24} sm={24} md={8}>
             <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8 text-center">Loading related blogs...</div>}>
-              <div className="mt-[200px] md:mt-[120px]"> <RelatedBlogs blogData={data} /></div>
+              <div className=" md:mt-[120px] sticky top-20"> <RelatedBlogs blogData={data} /></div>
             </Suspense>
           </Col>
         </Row>

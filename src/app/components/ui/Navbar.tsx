@@ -170,6 +170,11 @@ const Navbar = () => {
     setShowDropdown(false)
   }
 
+useEffect(() => {
+  setMenuOpen(false);
+  setShowDropdown(false); // Also close the dropdown, if needed
+}, [pathname]);
+
   return (
     <nav className="max-w-[5500px] mx-auto fixed top-0 left-0 right-0 z-50 bg-white">
       <div className="bg-[#96C121] text-white text-sm py-2 text-center flex justify-start md:justify-center items-center space-x-4 md:space-x-6">

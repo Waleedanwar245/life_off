@@ -13,8 +13,10 @@ import CouponDialog from "./CouponDialog"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 import { Col, Row, Tag } from "antd"
 import dayjs from "dayjs"
+import { usePathname } from "next/navigation"
 
 export default function CouponTabs({ data }: { data: any }) {
+  console.log("data::::", data);
   const couponsRef = useRef<HTMLDivElement>(null)
   const storeInfoRef = useRef<HTMLDivElement>(null)
   const faqsRef = useRef<HTMLDivElement>(null)
@@ -27,6 +29,19 @@ export default function CouponTabs({ data }: { data: any }) {
     storeName: "",
     htmlCode: "",
   })
+
+  const pathname = usePathname()
+
+  useEffect(() => {
+    // Read coupon data from localStorage
+    const data = localStorage.getItem('couponData');
+    if (data) {
+      setCouponCode(JSON.parse(data));
+      setIsModalOpen(true);
+      // Optionally clear localStorage if you want to prevent reuse
+      localStorage.removeItem('couponData');
+    }
+  }, []);
 
   // State for API data
   const [latestStores, setLatestStores] = useState<any[]>([])
@@ -359,12 +374,20 @@ export default function CouponTabs({ data }: { data: any }) {
                     ) : (
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
+
                         console.log("coupon:::::", coupon);
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
                         return (
                           <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 cursor-pointer" onClick={() => {
                             // Open the link in a new tab
-                            window.open(coupon?.htmlCode, "_blank")
+                            localStorage.setItem('couponData', JSON.stringify({
+                              code: coupon.code,
+                              couponName: coupon.title,
+                              logo: coupon.logo,
+                              storeName: coupon.storeName,
+                              htmlCode: coupon.htmlCode,
+                            }));
+
                             setCouponCode({
                               code: coupon?.code,
                               couponName: coupon?.title,
@@ -375,6 +398,9 @@ export default function CouponTabs({ data }: { data: any }) {
 
                             // Show the modal
                             showModal()
+                            window.open(`${window.location.origin}/coupons/${data?.store?.slug}`, "_blank");
+                            window.location.href = coupon?.htmlCode;
+                            //  window.open(coupon?.htmlCode, "_blank");
                           }}>
                             <div className="flex flex-col md:flex-row md:items-center">
                               <div className="flex-1">
@@ -402,7 +428,7 @@ export default function CouponTabs({ data }: { data: any }) {
 
                                   <div className="h-[] self-stretch w-px bg-gray-300 mx-2"></div>
                                   <div className="flex-1 pl-2 py-4">
-                                    <div className="text-[9.32px] md:text-[13px] text-[#7FA842] font-[800] ">{coupon?.codeorDeal} {coupon.isExclusive && <span> <Tag className="text-[10px] md:text-[14px] " style={{marginLeft:'10px', background: '#789A1A', color: 'white', height: '22px', lineHeight: '18px',  }} color="success" >Exclusive</Tag></span>}</div>
+                                    <div className="text-[9.32px] md:text-[13px] text-[#7FA842] font-[800] ">{coupon?.codeorDeal} {coupon.isExclusive && <span> <Tag className="text-[10px] md:text-[14px] " style={{ marginLeft: '10px', background: '#789A1A', color: 'white', height: '22px', lineHeight: '18px', }} color="success" >Exclusive</Tag></span>}</div>
                                     <div className=" text-[12.9px] md:text-[16px]  ">{coupon.title}</div>
 
                                     <div className="flex items-center text-xs mt-1">
@@ -438,7 +464,14 @@ export default function CouponTabs({ data }: { data: any }) {
                                     }`}
                                   onClick={() => {
                                     // Open the link in a new tab
-                                    window.open(coupon?.htmlCode, "_blank")
+                                    localStorage.setItem('couponData', JSON.stringify({
+                                      code: coupon.code,
+                                      couponName: coupon.title,
+                                      logo: coupon.logo,
+                                      storeName: coupon.storeName,
+                                      htmlCode: coupon.htmlCode,
+                                    }));
+
                                     setCouponCode({
                                       code: coupon?.code,
                                       couponName: coupon?.title,
@@ -449,10 +482,86 @@ export default function CouponTabs({ data }: { data: any }) {
 
                                     // Show the modal
                                     showModal()
+                                    window.open(`${window.location.origin}/coupons/${data?.store?.slug}`, "_blank");
+                                    window.location.href = coupon?.htmlCode;
                                   }}
                                 >
                                   {coupon.buttonText}
                                 </button>
+                              </div>
+                              <div className="mt-3 md:mt-0 relative block md:hidden ">
+                                <div className="absolute bottom-[-55px] right-[25px]">
+                                </div>
+                                {/* <button
+                                  style={{
+                                    width: "105px",
+                                    height: "35px",
+                                    borderRadius: "26.7px",
+                                    fontFamily: "Montserrat, sans-serif",
+                                    fontWeight: 700,
+                                    fontSize: "14px",
+                                    lineHeight: "100%",
+                                    letterSpacing: "0%",
+                                    textAlign: "center",
+                                    bottom: '0px',
+                                    right:'-10px',
+                                    position: 'absolute',
+                                  }}
+                                  className={`text-white border px-4 py-1.5 ${section === "Expired" ? "bg-gray-400 " : "bg-gray-800 hover:bg-gray-700"
+                                    }`}
+                                  onClick={() => {
+                                    // Open the link in a new tab
+                                    localStorage.setItem('couponData', JSON.stringify({
+                                      code: coupon.code,
+                                      couponName: coupon.title,
+                                      logo: coupon.logo,
+                                      storeName: coupon.storeName,
+                                      htmlCode: coupon.htmlCode,
+                                    }));
+
+                                    setCouponCode({
+                                      code: coupon?.code,
+                                      couponName: coupon?.title,
+                                      logo: coupon?.logo,
+                                      storeName: coupon?.storeName,
+                                      htmlCode: coupon?.htmlCode,
+                                    })
+
+                                    // Show the modal
+                                    showModal()
+                                    window.open(`${window.location.origin}/coupons/${data?.store?.slug}`, "_blank");
+                                    window.location.href = coupon?.htmlCode;
+                                  }}
+                                >
+                                  {coupon.code?"Get Code" : "Get Deal"}
+                                </button> */}
+                                <Tag onClick={() => {
+                                  // Open the link in a new tab
+                                  localStorage.setItem('couponData', JSON.stringify({
+                                    code: coupon.code,
+                                    couponName: coupon.title,
+                                    logo: coupon.logo,
+                                    storeName: coupon.storeName,
+                                    htmlCode: coupon.htmlCode,
+                                  }));
+
+                                  setCouponCode({
+                                    code: coupon?.code,
+                                    couponName: coupon?.title,
+                                    logo: coupon?.logo,
+                                    storeName: coupon?.storeName,
+                                    htmlCode: coupon?.htmlCode,
+                                  })
+
+                                  // Show the modal
+                                  showModal()
+                                  window.open(`${window.location.origin}/coupons/${data?.store?.slug}`, "_blank");
+                                  window.location.href = coupon?.htmlCode;
+                                }} style={{
+                                  bottom: '10px', fontSize: '13px',
+                                  right: '-10px',
+                                  position: 'absolute', marginLeft: '10px', color: 'white', background:"#10262F",paddingInline:'4px', height: '28px', lineHeight: '24px',borderRadius:"4px"
+                                }}  >{coupon.code ? "Get Code" : "Get Deal"}</Tag>
                               </div>
                             </div>
 

@@ -55,15 +55,30 @@ const MerchantCard = ({ data }: { data: any }) => {
     return () => cancelAnimationFrame(animationFrame)
   }, [duplicatedMerchants])
 
+  const CARD_WIDTH = 192
+  const CARD_GAP = 24
+  const SLIDE_WIDTH = CARD_WIDTH + CARD_GAP
+  const visibleCardsCount = 5 // Number of cards visible in the viewport
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % Math.max(1, merchants.length - 4))
+    if (currentIndex >= duplicatedMerchants.length - visibleCardsCount) {
+      setCurrentIndex(0)
+    } else {
+      setCurrentIndex((prev) => prev + 1)
+    }
   }
+
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + Math.max(1, merchants.length - 4)) % Math.max(1, merchants.length - 4))
+    if (currentIndex <= 0) {
+      setCurrentIndex(duplicatedMerchants.length - visibleCardsCount)
+    } else {
+      setCurrentIndex((prev) => prev - 1)
+    }
   }
+
 
   console.log("duplicatedMerchants:::", duplicatedMerchants);
-
+  const router = useRouter()
 
   return (
 
@@ -88,12 +103,13 @@ const MerchantCard = ({ data }: { data: any }) => {
           <div className="overflow-hidden mx-16">
             <div
               className="flex transition-transform duration-300 ease-in-out gap-6"
-              style={{ transform: `translateX(-${currentIndex * (100 / 5)}%)` }}
+              style={{ transform: `translateX(-${currentIndex * SLIDE_WIDTH}px)` }}
             >
               {duplicatedMerchants.map((merchant, index) => (
                 <div
+                  onClick={() => { router.push(`/coupons/${merchant?.slug}`) }}
                   key={index}
-                  className="flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex items-center justify-center p-6"
+                  className="cursor-pointer flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex items-center justify-center p-6"
                 >
                   <div className="text-center">
                     {/* <div className="text-lg font-semibold text-gray-800">{merchant.name}</div> */}
