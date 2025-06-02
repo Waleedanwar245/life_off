@@ -42,13 +42,22 @@ const globalSchema = {
       url: "https://liveoffcoupon.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://liveoffcoupon.com/logo.png",
+        url: "https://liveoffcoupon.com/logo.png"
       },
       sameAs: [
         "https://www.facebook.com/liveoffcoupon",
         "https://twitter.com/liveoffcoupon",
         "https://www.instagram.com/liveoffcoupon"
       ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://liveoffcoupon.com/#website",
+      url: "https://liveoffcoupon.com",
+      name: "LiveOffCoupon",
+      publisher: {
+        "@id": "https://liveoffcoupon.com/#organization"
+      }
     },
     {
       "@type": "WebPage",
@@ -58,11 +67,12 @@ const globalSchema = {
       description: "Find the latest coupons, discounts, and top deals on LiveOffCoupon.",
       inLanguage: "en-US",
       isPartOf: {
-        "@id": "https://liveoffcoupon.com/#organization"
+        "@id": "https://liveoffcoupon.com/#website"
       }
     }
   ]
-};
+}
+
 
 
 export default function RootLayout({
