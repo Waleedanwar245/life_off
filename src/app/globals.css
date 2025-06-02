@@ -10,6 +10,11 @@
   --font-montserrat: 'Montserrat', sans-serif; /* ✅ Define the font variable */
 }
 
+.ant-message {
+  z-index: 9999 !important;
+  top: 80px !important;
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {

@@ -30,6 +30,8 @@ export const metadata: Metadata = {
   },
 }
 
+
+
 // Server-side data fetching
 async function getBlogs() {
   try {
@@ -55,9 +57,66 @@ async function getBlogs() {
 export default async function Page() {
   // Fetch data on the server
   const blogData = await getBlogs()
-  
+
+  const jsonLdWebPage = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Blogs | Latest Money-Saving Tips & Coupon Updates | LiveOffCoupon",
+    description:
+      "Stay updated with LiveOffCoupon's latest blogs featuring expert shopping tips, discount hacks, and trending promo code news.",
+    url: "https://liveoffcoupon.com/blogs",
+  }
+
+  const jsonLdBlog = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "LiveOffCoupon Blog",
+    url: "https://liveoffcoupon.com/blogs",
+    description:
+      "Explore expert shopping tips, saving guides, and insider coupon updates in the LiveOffCoupon blog section.",
+    blogPost: blogData?.slice(0, 10).map((blog: any) => ({
+      "@type": "BlogPosting",
+      headline: blog.title,
+      url: `https://liveoffcoupon.com/blog/${blog.slug}`,
+      datePublished: blog.createdAt,
+      description: blog.metaDescription || blog.description || "",
+      image: blog.image || "https://liveoffcoupon.com/logo.svg",
+    })),
+  }
+
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://liveoffcoupon.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blogs",
+        item: "https://liveoffcoupon.com/blogs",
+      },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebPage) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBlog) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
+      />
       {/* Add hidden links for SEO crawling */}
       <div className="hidden">
         {blogData && blogData.map((blog: any) => (
@@ -68,7 +127,7 @@ export default async function Page() {
           )
         ))}
       </div>
-      
+
       {/* Pass the pre-fetched data to your client component */}
       <BlogsContent initialBlogData={blogData} />
     </>

@@ -8,7 +8,7 @@ import axios from "axios"
 // import RelatedBlogs from '@/app/components/blog/RelatedBlogs2'
 // import SplashScreen from '@/app/components/utils/SplashSvreen'
 import type { Metadata, ResolvingMetadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 
 
@@ -162,6 +162,44 @@ function generateJsonLd(blogPost: any) {
     datePublished: blogPost.createdAt,
   }
 }
+function generateBreadcrumbList(blogPost: BlogPost) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://liveoffcoupon.com/"
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: "https://liveoffcoupon.com/blogs"
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: blogPost.title,
+        item: `https://liveoffcoupon.com/blog/${blogPost.slug}`
+      }
+    ]
+  }
+}
+
+function generateViewActionSchema(blogPost: BlogPost) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ViewAction",
+    name: `Read blog: ${blogPost.title}`,
+    target: `https://liveoffcoupon.com/blog/${blogPost.slug}`,
+    description: blogPost.metaDescription || blogPost.content?.slice(0, 160) || "Read the blog post"
+  }
+}
+
+
 
 export default async function BlogPage({ params, searchParams }: Props) {
   try {
@@ -170,7 +208,7 @@ export default async function BlogPage({ params, searchParams }: Props) {
     const data = await getBlogBySlug(slug)
 
     if (!data) {
-      notFound()
+      redirect('/')
     }
 
     return (
@@ -179,6 +217,18 @@ export default async function BlogPage({ params, searchParams }: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(generateJsonLd(data)),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateBreadcrumbList(data)),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateViewActionSchema(data)),
           }}
         />
         <Row gutter={[16, 16]}>
@@ -201,6 +251,6 @@ export default async function BlogPage({ params, searchParams }: Props) {
     )
   } catch (error) {
     console.error("Error rendering blog page:", error)
-    return <>loading</>
+    return redirect('/')
   }
 }

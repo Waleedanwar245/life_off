@@ -26,6 +26,17 @@ export default function CategoryCoupons({ data }: any) {
   })
   //   const navigate = useNavigate()
 
+    // useEffect(() => {
+    //   // Read coupon data from localStorage
+    //   const data = localStorage.getItem('couponData');
+    //   if (data) {
+    //     setCouponCode(JSON.parse(data));
+    //     setIsModalOpen(true);
+    //     // Optionally clear localStorage if you want to prevent reuse
+    //     localStorage.removeItem('couponData');
+    //   }
+    // }, []);
+
   // Fetch all categories using Axios
   const fetchCategories = async () => {
     try {
@@ -118,8 +129,8 @@ export default function CategoryCoupons({ data }: any) {
                       <button
                         onClick={() => handleCategoryClick(category.id)}
                         className={`w-full text-left px-4 py-3 rounded-md transition-colors ${selectedCategory === category.id
-                            ? "bg-blue-50 text-blue-700 font-medium"
-                            : "hover:bg-gray-100"
+                          ? "bg-blue-50 text-blue-700 font-medium"
+                          : "hover:bg-gray-100"
                           }`}
                       >
                         <div className="flex items-center">
@@ -159,62 +170,72 @@ export default function CategoryCoupons({ data }: any) {
             <div className="text-center py-8">Loading coupons...</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {coupons.map((coupon: any) =>{
-                return(
-                <div
-                  key={coupon.id}
-                  className="border border-gray-200 rounded-md p-6 flex flex-col relative h-full group hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="flex justify-between items-start mb-8 rlative">
-                    <div className="flex flex-col items-center w-full">
-                      <img
-                        src={convertToSecureUrl(coupon.store?.logoUrl) || "/placeholder.svg"}
-                        alt={coupon.store?.name || "Store logo"}
-                        className="h-56 w-auto object-contain"
-                      />
+              {coupons.map((coupon: any) => {
+                console.log("coupon====",coupon);
+                
+                return (
+                  <div
+                    key={coupon.id}
+                    className="border border-gray-200 rounded-md p-6 flex flex-col relative h-full group hover:shadow-md transition-shadow duration-300"
+                  >
+                    <div className="flex justify-between items-start mb-8 rlative">
+                      <div className="flex flex-col items-center w-full">
+                        <img
+                          src={convertToSecureUrl(coupon.store?.logoUrl) || "/placeholder.svg"}
+                          alt={coupon.store?.name || "Store logo"}
+                          className="h-56 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="absolute right-0 top-0 border border-gray-300 rounded px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
+                        {coupon?.mainImage + " " + coupon?.secondaryImage}
+                      </div>
                     </div>
-                    <div className="absolute right-0 top-0 border border-gray-300 rounded px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
-                      {coupon?.mainImage + " " + coupon?.secondaryImage}
+
+                    <h3 className="text-lg font-bold mb-2 min-h-[3rem] line-clamp-2">{coupon.name}</h3>
+
+                    <div className="mt-auto flex justify-center">
+                      <div className="w-[60%]">
+                        <button
+                          // onClick={() =>
+                          //   navigate(PATH.SINGLE_STORE.replace(":id", coupon?.store?.slug || "no-slug"))
+                          // }
+                          onClick={() => {
+                            localStorage.setItem('couponData', JSON.stringify({
+                               code: coupon?.code,
+                              couponName: coupon?.title,
+                              logo: coupon.store?.logoUrl,
+                              storeName: coupon?.store?.name,
+                              htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,
+                            }));
+
+                            setCouponCode({
+                               code: coupon?.code,
+                              couponName: coupon?.title,
+                              logo: coupon.store?.logoUrl,
+                              storeName: coupon?.store?.name,
+                              htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,
+                            })
+
+                            // Show the modal
+                            showModal()
+                            window.open(`${window.location.origin}/coupons/${coupon?.store?.slug}`, "_blank");
+                            window.location.href = coupon?.htmlCode;
+                          }}
+                          className="bg-[#7FA842] hover:bg-[#6a8e38] text-white font-bold py-3 px-1 rounded w-full mb-4 transition-colors duration-300"
+                        >
+                          {coupon.code ? `Reveal Code` : "Get Deal"}
+                        </button>
+
+                        {coupon.endDate && (
+                          <p className="text-sm text-gray-500 text-center">
+                            Expires On: {new Date(coupon.endDate).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
-
-                  <h3 className="text-lg font-bold mb-2 min-h-[3rem] line-clamp-2">{coupon.name}</h3>
-
-                  <div className="mt-auto flex justify-center">
-                    <div className="w-[60%]">
-                      <button
-                        // onClick={() =>
-                        //   navigate(PATH.SINGLE_STORE.replace(":id", coupon?.store?.slug || "no-slug"))
-                        // }
-                        onClick={() => {
-                          console.log("coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode",coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,"====>",coupon?.htmlCodeUrl,"====>",coupon?.store );
-                          // Open the link in a new tab
-                          window.open(coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode, "_blank")
-                          setCouponCode({
-                            code: coupon?.code,
-                            couponName: coupon?.title,
-                            logo: coupon.store?.logoUrl,
-                            storeName: coupon?.store?.name,
-                            htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : coupon?.store?.htmlCode,
-                          })
-
-                          // Show the modal
-                          showModal()
-                        }}
-                        className="bg-[#7FA842] hover:bg-[#6a8e38] text-white font-bold py-3 px-1 rounded w-full mb-4 transition-colors duration-300"
-                      >
-                        {coupon.code ? `Reveal Code` : "Get Deal"}
-                      </button>
-
-                      {coupon.endDate && (
-                        <p className="text-sm text-gray-500 text-center">
-                          Expires On: {new Date(coupon.endDate).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )})}
+                )
+              })}
 
               {coupons.length === 0 && !isLoading && (
                 <p className="text-center col-span-full text-gray-500">No coupons available for this category.</p>

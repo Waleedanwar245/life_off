@@ -29,6 +29,46 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+  {/* JSON-LD: WebPage Schema */ }
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Free Shipping Coupons & Deals | LiveOffCoupon",
+        description:
+          "Find the latest free shipping coupon codes and save on every order. LiveOffCoupon offers verified free delivery deals daily.",
+        url: "https://liveoffcoupon.com/free-shipping",
+      }),
+    }}
+  />
+
+  {/* JSON-LD: Breadcrumb Schema */ }
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://liveoffcoupon.com",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Free Shipping",
+            item: "https://liveoffcoupon.com/free-shipping",
+          },
+        ],
+      }),
+    }}
+  />
+
   return <FreeShippingContent />
 }
 

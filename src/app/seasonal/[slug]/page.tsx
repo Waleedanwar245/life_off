@@ -2,21 +2,78 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import Link from 'next/link'
 import ChristmasDeals from '@/app/components/event/ChristmasDeals'
+import { redirect } from 'next/navigation'
 
 type Props = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+function generateEventJsonLd(event: any, url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": url,
+        "url": url,
+        "name": event.metaTitle || event.heading1 || "Event | LiveOffCoupon",
+        "description": event.metaDescription || event.description || "Discover exclusive deals and discounts for special events."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://liveoffcoupon.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Seasonal Events",
+            "item": "https://liveoffcoupon.com/seasonal"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": event.metaTitle || event.heading1 || "Event",
+            "item": url
+          }
+        ]
+      },
+      {
+        "@type": "ViewAction",
+        "target": url,
+        "name": `View event ${event.metaTitle || event.heading1 || ''} on LiveOffCoupon`,
+        "description": `Explore deals and discounts for the ${event.metaTitle || event.heading1 || ''} event.`
+      },
+      {
+        "@type": "Event",
+        "name": event.metaTitle || event.heading1 || "Event | LiveOffCoupon",
+        "url": url,
+        "description": event.metaDescription || event.description || "Discover exclusive deals and discounts for special events.",
+        "image": event.bannerImage || "https://liveoffcoupon.com/default-event-banner.jpg",
+        "startDate": event.startDate || "2025-11-27", // Adjust as necessary
+        "endDate": event.endDate || "2025-11-28",     // Adjust as necessary
+        "eventStatus": "EventScheduled",
+        "eventAttendanceMode": "OnlineEventAttendanceMode"
+      }
+    ]
+  }
+}
+
+
 // Fetch all events for generateStaticParams
 async function getAllEvents() {
   try {
     const response = await fetch(`${API_URL}/events`)
-    
+
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`)
     }
-    
+
     const data = await response.json()
     return data
   } catch (error) {
@@ -29,12 +86,12 @@ async function getAllEvents() {
 export async function generateStaticParams() {
   try {
     const events = await getAllEvents()
-    
+
     // Filter out events with null slugs
     const validEvents = events.filter((event: any) => event.slug !== null)
-    
+
     console.log(`Found ${validEvents.length} events with valid slugs out of ${events.length} total`)
-    
+
     // Return an array of objects with the slug parameter
     return validEvents.map((event: any) => ({
       slug: event.slug,
@@ -51,14 +108,14 @@ async function getEventBySlug(slug: string) {
     const response = await fetch(`${API_URL}/events/slug/${slug}`, {
       next: { revalidate: 10 } // Revalidate every hour
     })
-    console.log("response::::::",response);
-    
- 
-    
+    console.log("response::::::", response);
+
+
+
     if (!response.ok) {
       throw new Error(`API responded with status: ${response.status}`)
     }
-    
+
     const data = await response.json()
     return data
   } catch (error) {
@@ -77,20 +134,20 @@ export async function generateMetadata(
     const { slug } = await params
     const data = await getEventBySlug(slug)
     const event = data
-    console.log("data:::::::::::",data);
-    
-    
+    console.log("data:::::::::::", data);
+
+
     if (!event) {
       return {
         title: "Event Not Found | LiveOffCoupon",
         description: "The requested event could not be found.",
       }
     }
-    
+
     const eventTitle = event.metaTitle || event.heading1 || 'Black Friday Deals 2025 | LiveOffCoupon'
-    const eventDescription = event.metaDescription || event.description || 
+    const eventDescription = event.metaDescription || event.description ||
       "Maximize savings with Black Friday discount codes in 2025. Get exclusive coupons for electronics, fashion, home goods, and more this Black Friday season!"
-    
+
     return {
       title: eventTitle,
       description: eventDescription,
@@ -129,18 +186,26 @@ export default async function EventPage({ params }: Props) {
     // Await the params to get the slug
     const { slug } = await params
     const data = await getEventBySlug(slug)
-    
+
     if (!data) {
       throw new Error("No data returned from API")
     }
-    
+
     const event = data
     const eventTitle = event.metaTitle || event.heading1 || 'Black Friday Deals 2025 | LiveOffCoupon'
-    const eventDescription = event.metaDescription || event.description || 
+    const eventDescription = event.metaDescription || event.description ||
       "Maximize savings with Black Friday discount codes in 2025. Get exclusive coupons for electronics, fashion, home goods, and more this Black Friday season!"
-    
+
+    const url = `https://liveoffcoupon.com/seasonal/${slug}`
+
     return (
       <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateEventJsonLd(event, url)),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -158,7 +223,7 @@ export default async function EventPage({ params }: Props) {
             }),
           }}
         />
-        
+
         <div className='mt-[100px]'>
           <ChristmasDeals data={event} />
         </div>
@@ -166,13 +231,6 @@ export default async function EventPage({ params }: Props) {
     )
   } catch (error) {
     console.error("Error rendering event page:", error)
-    return (
-      <>
-        <div className="mt-[100px] p-4 text-center">
-          <h1>Event not found</h1>
-          <p>Sorry, we couldn't find the event you're looking for.</p>
-        </div>
-      </>
-    )
+    return redirect('/')
   }
 }

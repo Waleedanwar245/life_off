@@ -5,6 +5,7 @@ import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "../context/ThemeContext";
+import 'antd/dist/reset.css'
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -31,6 +32,39 @@ export const metadata: Metadata = {
   },
 };
 
+const globalSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://liveoffcoupon.com/#organization",
+      name: "LiveOffCoupon",
+      url: "https://liveoffcoupon.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://liveoffcoupon.com/logo.png",
+      },
+      sameAs: [
+        "https://www.facebook.com/liveoffcoupon",
+        "https://twitter.com/liveoffcoupon",
+        "https://www.instagram.com/liveoffcoupon"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://liveoffcoupon.com/#webpage",
+      url: "https://liveoffcoupon.com",
+      name: "LiveOffCoupon",
+      description: "Find the latest coupons, discounts, and top deals on LiveOffCoupon.",
+      inLanguage: "en-US",
+      isPartOf: {
+        "@id": "https://liveoffcoupon.com/#organization"
+      }
+    }
+  ]
+};
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,14 +72,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={montserrat.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(globalSchema),
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased`}
       >
-       <ThemeProvider>
-        <Toaster />
-        <Navbar />
-        {children}
-        </ThemeProvider> 
+        <ThemeProvider>
+          <Toaster />
+          <Navbar />
+          {children}
+        </ThemeProvider>
         <Footer />
       </body>
     </html>

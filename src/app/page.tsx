@@ -19,7 +19,7 @@ async function getLandingPageData() {
     const res = await fetch(`${API_URL}/landings/1`, {
       next: { revalidate: 10 }, // Revalidate every hour
     })
-    console.log("data====res:::",res);
+    console.log("data====res:::", res);
 
     if (!res.ok) {
       throw new Error("Failed to fetch landing page data")
@@ -38,7 +38,7 @@ async function getStoresData() {
     const res = await fetch(`${API_URL}/store`, {
       next: { revalidate: 10 },
     })
-console.log("stireDAta::::",res);
+    console.log("stireDAta::::", res);
     if (!res.ok) {
       throw new Error("Failed to fetch stores")
     }
@@ -108,6 +108,47 @@ export default async function Home() {
   ])
 
   // Generate JSON-LD schema
+  const jsonLdWebsite = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "LiveOffCoupon",
+    url: "https://liveoffcoupon.com/",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://liveoffcoupon.com/search?query={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  }
+
+  const jsonLdWebPage = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "LiveOff Coupon - Free Online Coupon Codes & Discounts",
+    description:
+      "Browse our free online coupon codes to get amazing discounts on a wide range of products. Save money with the latest deals, discounts, and promo codes!",
+    url: "https://liveoffcoupon.com/",
+  }
+
+  const jsonLdBreadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://liveoffcoupon.com/",
+      },
+    ],
+  }
+
+  const jsonLdViewAction = {
+    "@context": "https://schema.org",
+    "@type": "ViewAction",
+    target: "https://liveoffcoupon.com/",
+    name: "View the homepage of LiveOffCoupon",
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -129,6 +170,22 @@ export default async function Home() {
           __html: JSON.stringify(jsonLd),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebsite) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebPage) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumbList) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdViewAction) }}
+      />
 
       {/* Google verification */}
       <meta name="google-site-verification" content="jun25llOGzjnJpsoK3-Qvha-gL5rLMR73W68lVU-h6M" />
@@ -138,14 +195,14 @@ export default async function Home() {
       </div>
 
       <Suspense fallback={<SplashScreen />}>
-      <MerchantCard data={allStores} />
-      <CouponTabs data={allCoupons} />
-      <Categories data={categoryData} /> 
-      <TrendingDeals />
-      <FavoriteDeal />
-      <TopDealsSlider />
-      <Blogs />
-      <FAQ data={bannerData} /> 
+        <MerchantCard data={allStores} />
+        <CouponTabs data={allCoupons} />
+        <Categories data={categoryData} />
+        <TrendingDeals />
+        <FavoriteDeal />
+        <TopDealsSlider />
+        <Blogs />
+        <FAQ data={bannerData} />
       </Suspense>
     </>
   )

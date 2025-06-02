@@ -52,7 +52,7 @@ async function getCategories() {
 export default async function Page() {
   // Fetch data on the server
   const categoriesData = await getCategories()
-  
+
   return (
     <>
       <script
@@ -63,16 +63,60 @@ export default async function Page() {
             "@type": "WebPage",
             name: "All Categories | LiveOffCoupon",
             description: "Explore all categories and find exclusive deals and discounts on LiveOffCoupon.",
-            url: "https://liveoffcoupon.com/category/all",
+            url: "https://liveoffcoupon.com/categories",
           }),
         }}
       />
-      
+
+      {/* Breadcrumb Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://liveoffcoupon.com",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Categories",
+                item: "https://liveoffcoupon.com/categories",
+              },
+            ],
+          }),
+        }}
+      />
+
+      {/* Optional: CollectionPage Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "All Categories | LiveOffCoupon",
+            url: "https://liveoffcoupon.com/categories",
+            description: "Explore categories to find promo codes and deals across products and services.",
+            hasPart: categoriesData.map((cat: any) => ({
+              "@type": "WebPage",
+              name: cat.categoryTitle || cat.categoryName,
+              url: `https://liveoffcoupon.com/category/${cat.slug}`,
+            })),
+          }),
+        }}
+      />
+
       <div className="mt-[100px]">
         {/* Pass data directly to your components */}
         <CategoriesCarousel data={categoriesData} />
         <CategoryGrid data={categoriesData} />
-        
+
         {/* Add this section to ensure links are in the HTML */}
         <div className="hidden">
           {categoriesData.map((category: any) => (

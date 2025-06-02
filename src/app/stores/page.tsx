@@ -31,10 +31,10 @@ async function getStores() {
 export default async function Page() {
   // Fetch data on the server
   const stores = await getStores()
-  
+
   return (
     <>
-      <script
+      {/* <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -46,11 +46,65 @@ export default async function Page() {
           }),
         }}
       />
-      
+       */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Stores on Offers | LiveOffCoupon",
+            "description": "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
+            "url": "https://liveoffcoupon.com/stores",
+
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://liveoffcoupon.com"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Stores",
+                  "item": "https://liveoffcoupon.com/stores"
+                }
+              ]
+            },
+
+            "potentialAction": {
+              "@type": "ViewAction",
+              "target": "https://liveoffcoupon.com/stores",
+              "name": "Browse All Stores with Coupons"
+            },
+
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListElement": stores.map((store: any, index: number) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+                "item": {
+                  "@type": "Store",
+                  "name": store.name,
+                  "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+                  "image": convertToSecureUrl(store.logoUrl || "/images/default_store_img.png"),
+                  "identifier": store.id,
+                  "sameAs": store.websiteUrl || "", // if available
+                }
+              }))
+            }
+          })
+        }}
+      />
+
       <div className="">
-        <StoresContent/>
+        <StoresContent />
         {/* <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2> */}
-        
+
         {/* Stores Grid */}
         {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
           {stores.length > 0 ? (
@@ -83,7 +137,7 @@ export default async function Page() {
             <p className="text-center col-span-full">No stores available.</p>
           )}
         </div> */}
-        
+
         {/* Add this section to ensure ALL links are in the HTML */}
         <div className="hidden">
           {stores.map((store: any) => (
@@ -94,7 +148,7 @@ export default async function Page() {
             )
           ))}
         </div>
-        
+
 
       </div>
     </>

@@ -374,34 +374,10 @@ export default function CouponTabs({ data }: { data: any }) {
                     ) : (
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
-
-                        console.log("coupon:::::", coupon);
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
                         return (
-                          <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 cursor-pointer" onClick={() => {
-                            // Open the link in a new tab
-                            localStorage.setItem('couponData', JSON.stringify({
-                              code: coupon.code,
-                              couponName: coupon.title,
-                              logo: coupon.logo,
-                              storeName: coupon.storeName,
-                              htmlCode: coupon.htmlCode,
-                            }));
-
-                            setCouponCode({
-                              code: coupon?.code,
-                              couponName: coupon?.title,
-                              logo: coupon?.logo,
-                              storeName: coupon?.storeName,
-                              htmlCode: coupon?.htmlCode,
-                            })
-
-                            // Show the modal
-                            showModal()
-                            window.open(`${window.location.origin}/coupons/${data?.store?.slug}`, "_blank");
-                            window.location.href = coupon?.htmlCode;
-                            //  window.open(coupon?.htmlCode, "_blank");
-                          }}>
+                          <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 " 
+                          >
                             <div className="flex flex-col md:flex-row md:items-center">
                               <div className="flex-1">
                                 <div className="flex items-start">

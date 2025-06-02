@@ -1,12 +1,13 @@
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 import type { Metadata, ResolvingMetadata } from "next"
-import { notFound } from "next/navigation"
 import { Suspense } from "react"
 import axios from "axios"
 import StoreHeader from "@/app/components/store/StoreHeader"
 import CouponTabs from "@/app/components/store/CouponTabs"
 import dayjs from "dayjs"
+import { notFound, redirect } from "next/navigation" // ✅ server-side redirect
+
 
 // Types
 interface Store {
@@ -104,7 +105,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       store.metaDescription?.trim() ||
       store.storeDescription?.trim() ||
       `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOffCoupon.`
-    console.log("=====>",`${dayjs().format('MMMM YYYY')}`);
+    console.log("=====>", `${dayjs().format('MMMM YYYY')}`);
     return {
       title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOffCoupon`,
       description: storeDescription,
@@ -137,6 +138,8 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
 // Generate JSON-LD schema
 function generateJsonLd(store: Store) {
+  console.log("store:::", store);
+  
   return {
     "@context": "https://schema.org",
     "@type": "Store",
@@ -147,6 +150,44 @@ function generateJsonLd(store: Store) {
   }
 }
 
+function generateBreadcrumbList(store: Store) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://liveoffcoupon.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Coupons",
+        "item": "https://liveoffcoupon.com/coupons"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": store.storeTitle || store.name || "Store",
+        "item": `https://liveoffcoupon.com/coupons/${store.slug}`
+      }
+    ]
+  }
+}
+
+function generateViewActionSchema(store: Store) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ViewAction",
+    "target": `https://liveoffcoupon.com/coupons/${store.slug}`,
+    "name": `View coupons for ${store.storeTitle || store.name}`,
+    "description": store.metaDescription || store.storeDescription || "Explore deals and offers from this store"
+  }
+}
+
+
 export default async function StorePage({ params }: Props) {
   try {
     // Await the params to get the id
@@ -154,7 +195,7 @@ export default async function StorePage({ params }: Props) {
     const data = await getStoreBySlug(slug)
 
     if (!data || !data?.store) {
-      notFound()
+      redirect('/')
     }
 
     return (
@@ -163,6 +204,18 @@ export default async function StorePage({ params }: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(generateJsonLd(data.store)),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateBreadcrumbList(data.store)),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateViewActionSchema(data.store)),
           }}
         />
         <Suspense fallback={<SplashScreen />}>
@@ -176,6 +229,6 @@ export default async function StorePage({ params }: Props) {
     )
   } catch (error) {
     console.error("Error rendering store page:", error)
-    return <SplashScreen />
+    return redirect('/')
   }
 }
