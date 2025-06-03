@@ -174,7 +174,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       </>
     )
   } catch (error) {
-    console.error("Error fetching category data:", error)
+    // console.error("Error fetching category data:", error)
     return redirect('/categories') // Redirect to categories page if there's an error
   }
 }

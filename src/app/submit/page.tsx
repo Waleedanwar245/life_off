@@ -174,8 +174,8 @@ export default function SubmitOfferForm() {
 
   return (
     <>
-      <div className="mt-[100px] max-w-3xl mx-auto p-6">
-        <h1 className="text-4xl font-bold text-center mb-6">Submit An Offer</h1>
+      <div className="mt-[200px] md:mt-[100px] max-w-3xl mx-auto p-6">
+        <h1 className="text-2xl md:text-4xl font-bold text-center mb-6">Submit An Offer</h1>
 
         {showSuccess && (
           <div className="bg-gray-100 p-4 mb-6 rounded relative flex items-center">
@@ -220,13 +220,13 @@ export default function SubmitOfferForm() {
             {errors.store && <p className="text-red-500 text-sm mt-1">{errors.store}</p>}
           </div>
 
-          <div className="flex mb-4 space-x-6">
+          <div className="flex mb-4 space-x-2 md:space-x-6 ">
             <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={formData.offerType === 'Online Code'}
                 onChange={() => handleCheckboxChange('Online Code')}
-                className="mr-2 h-5 w-5 accent-green-600"
+                className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
               <span>Online Code</span>
             </label>
@@ -236,7 +236,7 @@ export default function SubmitOfferForm() {
                 type="checkbox"
                 checked={formData.offerType === 'In-Store Offer'}
                 onChange={() => handleCheckboxChange('In-Store Offer')}
-                className="mr-2 h-5 w-5 accent-green-600"
+                className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
               <span>In-Store Offer</span>
             </label>
@@ -246,7 +246,7 @@ export default function SubmitOfferForm() {
                 type="checkbox"
                 checked={formData.offerType === 'Sale'}
                 onChange={() => handleCheckboxChange('Sale')}
-                className="mr-2 h-5 w-5 accent-green-600"
+                className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
               <span>Sale</span>
             </label>

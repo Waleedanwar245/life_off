@@ -54,8 +54,6 @@ export default function CouponTabs({ data }: { data: any }) {
   })
   const isValidDate = (dateStr: string) => dayjs(dateStr, undefined, undefined, true).isValid();
 
-
-
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -137,7 +135,13 @@ export default function CouponTabs({ data }: { data: any }) {
     const today = new Date()
 
     return (
-      apiCoupons?.coupons?.map((coupon: any) => {
+      apiCoupons?.coupons?.sort((a: any, b: any) => {
+        if (a.rank == null) return 1
+        if (b.rank == null) return -1
+        return a.rank - b.rank
+      }).map((coupon: any) => {
+        console.log("coupons::::,coupons", coupon);
+
         const endDate = coupon.endDate ? new Date(coupon.endDate) : null
         const isExpired = endDate ? endDate < today : false
         const isActive = !isExpired
@@ -154,6 +158,7 @@ export default function CouponTabs({ data }: { data: any }) {
           htmlCode: coupon?.htmlCodeUrl ? coupon?.htmlCodeUrl : apiCoupons?.htmlCode || "",
           second_img: coupon?.secondaryImage,
           title: coupon.name,
+          rank: coupon?.rank,
           expiry: isExpired
             ? "Expired"
             : coupon.endDate
@@ -231,7 +236,12 @@ export default function CouponTabs({ data }: { data: any }) {
   const mappedSimilarCoupons = mapSimilarCoupons(similarCoupons)
 
   // Get only active coupons
-  const activeCoupons = coupons.filter((coupon: any) => coupon.type === "Active")
+  const activeCoupons = coupons
+    .filter((coupon: any) => coupon.type === "Active")
+    .sort((a: any, b: any) => a.rank - b.rank);
+
+  console.log("activeCoupons:::", activeCoupons);
+
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     if (ref.current) {
@@ -374,9 +384,10 @@ export default function CouponTabs({ data }: { data: any }) {
                     ) : (
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
+                        console.log("coupon::::",coupon?.code );
                         const hasDescription = coupon.description && coupon.description.trim() !== ""
                         return (
-                          <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 " 
+                          <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 "
                           >
                             <div className="flex flex-col md:flex-row md:items-center">
                               <div className="flex-1">
@@ -408,8 +419,8 @@ export default function CouponTabs({ data }: { data: any }) {
                                     <div className=" text-[12.9px] md:text-[16px]  ">{coupon.title}</div>
 
                                     <div className="flex items-center text-xs mt-1">
-                                      <FiClock className="text-gray-400 mr-1" />
-                                      <span className="text-gray-500 mr-2">{coupon.expiry}</span>
+                                      <FiClock className="text-gray-400 mr-1 hidden md:block" />
+                                      <span className="text-gray-500 mr-2 hidden md:block">{coupon.expiry}</span>
                                       {coupon.verified && (
                                         <span className="flex items-center">
                                           <FiCheck className="text-green-500 mr-1" />
@@ -436,8 +447,8 @@ export default function CouponTabs({ data }: { data: any }) {
                                     letterSpacing: "0%",
                                     textAlign: "center",
                                   }}
-                                  className={`text-white border px-4 py-1.5 ${section === "Expired" ? "bg-gray-400 " : "bg-gray-800 hover:bg-gray-700"
-                                    }`}
+                                  className={`border px-4 py-1.5  text-white  ${section === "Expired" ? "bg-gray-400" :coupon.code ?"bg-[#7FA842]": "bg-gray-800 hover:bg-gray-700"}`}
+
                                   onClick={() => {
                                     // Open the link in a new tab
                                     localStorage.setItem('couponData', JSON.stringify({
@@ -536,7 +547,7 @@ export default function CouponTabs({ data }: { data: any }) {
                                 }} style={{
                                   bottom: '10px', fontSize: '13px',
                                   right: '-10px',
-                                  position: 'absolute', marginLeft: '10px', color: 'white', background:"#10262F",paddingInline:'4px', height: '28px', lineHeight: '24px',borderRadius:"4px"
+                                  position: 'absolute', marginLeft: '10px', color: 'white', background: "#10262F", paddingInline: '4px', height: '28px', lineHeight: '24px', borderRadius: "4px"
                                 }}  >{coupon.code ? "Get Code" : "Get Deal"}</Tag>
                               </div>
                             </div>

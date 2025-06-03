@@ -1,11 +1,12 @@
 'use client';
 
 import { Form, Input, Select, Checkbox, Button, message, notification } from "antd"
-import { FaTwitter, FaLinkedin, FaInstagram, FaPhone, FaEnvelope } from "react-icons/fa"
+import { FaTwitter, FaLinkedin, FaInstagram, FaPhone, FaEnvelope, FaFacebook, FaTiktok, FaPinterest } from "react-icons/fa"
 import PATH from "../utils/path"
 import GenericButton from "../GenericButton";
 import { API_URL } from "../utils/BASE_URL";
 import { toast } from "react-hot-toast"
+import { FaMeta, FaX, FaXTwitter } from "react-icons/fa6";
 
 const { TextArea } = Input
 
@@ -90,7 +91,7 @@ const ContactForm = () => {
                                 <Input className="w-full p-2 border rounded" />
                             </Form.Item>
 
-                            <Form.Item
+                            {/* <Form.Item
                                 name="service"
                                 label="Choose a service"
                                 rules={[{ required: true, message: "Please select a service" }]}
@@ -100,7 +101,7 @@ const ContactForm = () => {
                                     <Select.Option value="meeting-rooms">Meeting Rooms</Select.Option>
                                     <Select.Option value="coworking">Coworking Spaces</Select.Option>
                                 </Select>
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <Form.Item
                                 name="message"
@@ -158,34 +159,33 @@ const ContactForm = () => {
                         </div>
 
                         <div className="space-y-6">
-                            <div className="flex items-center space-x-3">
-                                <FaPhone className="text-[#7FA842] text-xl" />
-                                <div>
-                                    <p className="font-semibold">+1 (716) 000-000</p>
-                                    <p className="text-gray-600 text-sm">
-                                        Available from 10:00AM - 6:00PM EST
-                                        <br />
-                                        Monday to Friday
-                                    </p>
-                                </div>
-                            </div>
 
-                            <div className="flex items-center space-x-3">
-                                <FaEnvelope className="text-[#7FA842] text-xl" />
-                                <p className="font-semibold">info@LiveOffCoupon.com</p>
+
+                            <div className="flex items-center  space-x-3">
+                                <div>
+
+                                    <FaEnvelope className="text-[#7FA842] text-xl" />
+                                </div>
+                                <p className="font-semibold mb-[0px]">info@LiveOffCoupon.com</p>
                             </div>
 
                             <div>
                                 <p className="text-gray-600 mb-3">Follow us</p>
                                 <div className="flex space-x-4">
-                                    <a href="#" className="text-gray-400 hover:text-[#7FA842]">
-                                        <FaTwitter className="text-xl" />
+                                    <a href="https://x.com/liveoff_coupon" target="_blank" className="text-[#7FA842] hover:text-[#7FA842]">
+                                        <FaXTwitter  className="text-xl" />
                                     </a>
-                                    <a href="#" className="text-gray-400 hover:text-[#7FA842]">
-                                        <FaLinkedin className="text-xl" />
+                                    <a href="https://www.facebook.com/liveoffcoupons/" target="_blank" className="text-[#7FA842] hover:text-[#7FA842]">
+                                        <FaMeta className="text-xl" />
                                     </a>
-                                    <a href="https://www.instagram.com/liveoffcoupon/" className="text-gray-400 hover:text-[#7FA842]">
+                                    <a href="https://www.instagram.com/liveoffcoupon/" target="_blank" className="text-[#7FA842] hover:text-[#7FA842]">
                                         <FaInstagram className="text-xl" />
+                                    </a>
+                                    <a href="https://www.tiktok.com/@liveoffcoupon" target="_blank" className="text-[#7FA842] hover:text-[#7FA842]">
+                                        <FaTiktok className="text-xl" />
+                                    </a>
+                                    <a href="https://www.pinterest.com/liveoffcoupon/" target="_blank" className="text-[#7FA842] hover:text-[#7FA842]">
+                                        <FaPinterest className="text-xl" />
                                     </a>
                                 </div>
                             </div>
