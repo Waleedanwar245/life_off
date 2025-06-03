@@ -96,7 +96,7 @@ export default function CouponTabs({ data }: { data: any }) {
               </div>
 
               {/* Logo */}
-              <div className="h-16 flex items-center justify-center mb-4">
+              <div className="h-32 flex items-center justify-center mb-4">
                   <img
                     src={convertToSecureUrl(coupon.logo) || "/placeholder.svg"}
                     alt={`${coupon.name} logo`}

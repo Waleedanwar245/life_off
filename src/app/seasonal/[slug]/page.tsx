@@ -224,7 +224,7 @@ export default async function EventPage({ params }: Props) {
           }}
         />
 
-        <div className='mt-[100px]'>
+        <div className='mt-[200px] md:mt-[180px]  lg:mt-[120px]'>
           <ChristmasDeals data={event} />
         </div>
       </>

@@ -20,6 +20,7 @@ const PATH = {
   ABOUT_US: "/about-us",
   PRIVACY_POLICY_LANDING: "/privacy-policy",
   TERM_AND_CONDITIONS: "/terms-conditions",
+  CONTACT_US: "/contact-us",
 }
 
 // Helper function to get error message
@@ -209,6 +210,11 @@ const FooterSection = () => {
                   TermsOfUse
                 </Link>
               </li>
+              <li>
+                <Link href={PATH.CONTACT_US} className="hover:text-[#95C959] transition-colors">
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -233,24 +239,16 @@ const FooterSection = () => {
               <Image src="/instagram-logo.svg" alt="Instagram" width={24} height={24} className="w-6 h-6" />
             </a>
             {/* Commented out social links preserved from original */}
-            {/* <a href="#" className="hover:text-[#95C959] transition">
+           
+            <a href="https://x.com/liveoff_coupon" target="blank" className="hover:text-[#95C959] transition">
               <Image 
-                src="/images/linkedin-footer-logo.png" 
-                alt="LinkedIn" 
-                width={24} 
-                height={24} 
-                className="w-6 h-6" 
-              />
-            </a>
-            <a href="https://www.pinterest.com/liveoffcoupon/" target="blank" className="hover:text-[#95C959] transition">
-              <Image 
-                src="/images/tw-footer-logo.png" 
+                src="/twitter.png" 
                 alt="Twitter" 
                 width={24} 
                 height={24} 
                 className="w-6 h-6" 
               />
-            </a> */}
+            </a>
           </div>
 
           <div className="text-sm text-gray-400 flex flex-wrap justify-center gap-4">

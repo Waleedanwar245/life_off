@@ -14,10 +14,12 @@ interface Store {
   id: string
   storeTitle: string
   name: string
+  secondaryName: string
   slug: string
   storeDescription: string
   metaDescription: string
   logoUrl: string
+  coupons: any
 }
 
 interface StoreData {
@@ -100,17 +102,17 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       }
     }
 
-    const storeTitle = store.storeTitle?.trim() || store.name?.trim() || store.slug?.trim() || "Featured Store"
+    const storeTitle = store?.storeTitle || (store?.coupons?.[0]?.mainImage + " " + store?.coupons?.[0]?.secondaryImage + " " + store.name?.trim() + " " + store?.secondaryName) || store.name?.trim() || store.slug?.trim() || "Featured Store"
     const storeDescription =
-      store.metaDescription?.trim() ||
+      `Get` + " " + storeTitle +". "+ "LiveOff Coupon offers updated coupon codes and exclusive savings. Updated regularly to help you save more." ||
       store.storeDescription?.trim() ||
-      `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOffCoupon.`
+      `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOff Coupon.`
     console.log("=====>", `${dayjs().format('MMMM YYYY')}`);
     return {
-      title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOffCoupon`,
+      title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOff Coupon`,
       description: storeDescription,
       openGraph: {
-        title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOffCoupon`,
+        title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOff Coupon`,
         description: storeDescription,
         url: `https://liveoffcoupon.com/coupons/${store.slug}`,
         type: "website",
@@ -139,11 +141,11 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 // Generate JSON-LD schema
 function generateJsonLd(store: Store) {
   console.log("store:::", store);
-  
+
   return {
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": store.storeTitle?.trim() || store.name?.trim() || "LiveOffCoupon Store",
+    "name": store.storeTitle?.trim() || store.name?.trim() || "LiveOff Coupon Store",
     "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
     "description": store.metaDescription?.trim() || store.storeDescription?.trim() || "Find the best deals and coupons.",
     "image": store.logoUrl || "https://liveoffcoupon.com/default-store-image.jpg",
