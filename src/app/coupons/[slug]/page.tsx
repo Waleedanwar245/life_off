@@ -7,7 +7,7 @@ import StoreHeader from "@/app/components/store/StoreHeader"
 import CouponTabs from "@/app/components/store/CouponTabs"
 import dayjs from "dayjs"
 import { notFound, redirect } from "next/navigation" // ✅ server-side redirect
-
+export const dynamic = "force-dynamic";
 
 // Types
 interface Store {
