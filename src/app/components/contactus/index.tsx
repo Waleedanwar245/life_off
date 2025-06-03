@@ -5,6 +5,7 @@ import { FaTwitter, FaLinkedin, FaInstagram, FaPhone, FaEnvelope } from "react-i
 import PATH from "../utils/path"
 import GenericButton from "../GenericButton";
 import { API_URL } from "../utils/BASE_URL";
+import { toast } from "react-hot-toast"
 
 const { TextArea } = Input
 
@@ -28,18 +29,15 @@ const ContactForm = () => {
             if (response.ok) {
                 console.log("Showing success toast");
                 // message.success("✅ Email sent successfully!");
-                notification.success({
-                    message: 'Success!',
-                    description: 'Email sent successfully!',
-                    placement: 'bottomRight', // 👈 bottomRight, bottomLeft, topRight, topLeft
-                });
+                toast.success('Your contact request has been sent to the administration.',
+                );
                 form.resetFields();
             } else {
-                message.error("❌ Failed to send email. Please try again.");
+                toast.error("❌ Failed to send email. Please try again.");
                 console.error("Failed to send email:", result);
             }
         } catch (error) {
-            message.error("❌ Error submitting contact form. Please try again.");
+            toast.error("❌ Error submitting contact form. Please try again.");
             console.error("Error submitting contact form:", error);
         }
     };
@@ -51,20 +49,9 @@ const ContactForm = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Left Column - Form */}
                     <div>
-                        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                            Ready to{" "}
-                            <span className="relative">
-                                Leap Forward
-                                <span className="absolute bottom-1 left-0 w-full h-1 bg-[#7FA842]"></span>
-                            </span>
-                            ?
+                        <h1 className="text-3xl md:text-4xl font-bold text-gray-800  mt-[80px] md:mt-0 mb-8 text-center md:text-left">
+                            Contact Us
                         </h1>
-
-                        <p className="text-gray-600 mb-8">
-                            At Kangaroo Ventures, we're here to support your business journey every step of the way. Whether you're
-                            looking for answers, need support, or are ready to get started, our team is eager to connect with you.
-                        </p>
-
                         <Form form={form} layout="vertical" onFinish={onFinish} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Form.Item

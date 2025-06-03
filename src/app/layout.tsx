@@ -6,6 +6,8 @@ import Footer from "./components/ui/Footer";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "../context/ThemeContext";
 import 'antd/dist/reset.css'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -96,6 +98,7 @@ export default function RootLayout({
         <ThemeProvider>
           <Toaster />
           <Navbar />
+          <ToastContainer position="bottom-right" autoClose={3000} />
           {children}
         </ThemeProvider>
         <Footer />

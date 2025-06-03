@@ -41,14 +41,20 @@ export const metadata: Metadata = {
 // Server-side data fetching
 async function getCategories() {
   try {
-    const response = await axios.get(`${API_URL}/categories`)
-    return response.data
+    const response = await fetch(`${API_URL}/categories`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch categories");
+    }
+
+    return await response.json();
   } catch (error) {
-    console.error("Error fetching categories:", error)
-    return []
+    console.error("Error fetching categories:", error);
+    return [];
   }
 }
-
 export default async function Page() {
   // Fetch data on the server
   const categoriesData = await getCategories()

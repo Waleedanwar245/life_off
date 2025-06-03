@@ -40,8 +40,10 @@ export async function generateMetadata(
   try {
     // Fetch data
     // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
-    const res = await axios.get(`${API_URL}/categories/slug/by/${slug}`)
-    const data = res.data
+    const res = await fetch(`${API_URL}/categories/slug/by/${slug}`, {
+      cache: 'no-store',
+    });
+    const data = await res.json();
 
     // Optionally access and extend parent metadata
     const previousImages = (await parent).openGraph?.images || []
@@ -146,11 +148,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
 
   try {
-    const res = await axios.get(`${API_URL}/categories/slug/by/${slug}`)
-    const data = res.data
+    const res = await fetch(`${API_URL}/categories/slug/by/${slug}`, {
+      cache: 'no-store',
+    });
+    const data = await res.json()
 
     if (!data) {
-      throw new Error("No data returned from API")
+      return redirect('/categories')
     }
     const url = `https://liveoffcoupon.com/category/${data.slug}`
     return (
@@ -171,6 +175,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     )
   } catch (error) {
     console.error("Error fetching category data:", error)
-    return redirect('/')
+    return redirect('/categories') // Redirect to categories page if there's an error
   }
 }

@@ -208,7 +208,7 @@ export default async function BlogPage({ params, searchParams }: Props) {
     const data = await getBlogBySlug(slug)
 
     if (!data) {
-      redirect('/')
+      redirect('/blogs')
     }
 
     return (
@@ -251,6 +251,6 @@ export default async function BlogPage({ params, searchParams }: Props) {
     )
   } catch (error) {
     console.error("Error rendering blog page:", error)
-    return redirect('/')
+    return redirect('/blogs')
   }
 }

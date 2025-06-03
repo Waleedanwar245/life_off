@@ -195,7 +195,7 @@ export default async function StorePage({ params }: Props) {
     const data = await getStoreBySlug(slug)
 
     if (!data || !data?.store) {
-      redirect('/')
+      redirect('/stores')
     }
 
     return (
@@ -229,6 +229,6 @@ export default async function StorePage({ params }: Props) {
     )
   } catch (error) {
     console.error("Error rendering store page:", error)
-    return redirect('/')
+    return redirect('/stores')
   }
 }
