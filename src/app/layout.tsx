@@ -85,6 +85,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.variable}>
       <head>
+         <meta name='impact-site-verification' value='b3c2df1a-6452-410f-9559-d6778508cca3'>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
