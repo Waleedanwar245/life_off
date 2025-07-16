@@ -11,8 +11,8 @@ import { ToastContainer } from 'react-toastify';
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"], // Choose required weights
-  variable: "--font-montserrat", // Creates a CSS variable
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-montserrat",
 });
 
 const geistSans = Geist({
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   description:
     "Find the latest coupons, discounts, and top deals on LiveOffCoupon. Save money on your favorite brands every day!",
   icons: {
-    icon: "/logo1.svg", // ✅ Add your favicon here
+    icon: "/logo1.svg",
   },
 };
 
@@ -73,9 +73,7 @@ const globalSchema = {
       }
     }
   ]
-}
-
-
+};
 
 export default function RootLayout({
   children,
@@ -85,6 +83,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.variable}>
       <head>
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-K33DHQPK');`,
+          }}
+        />
+        {/* End Google Tag Manager */}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -92,9 +102,18 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased`}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-K33DHQPK"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          ></iframe>
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
         <ThemeProvider>
           <Toaster />
           <Navbar />
