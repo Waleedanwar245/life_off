@@ -83,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.variable}>
       <head>
+      
         {/* Impact Site Verification */}
           <meta
             name="impact-site-verification"
