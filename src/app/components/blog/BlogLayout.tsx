@@ -80,35 +80,34 @@ export default function BlogLayout({ data }: any) {
             <div className="w-12 h-12 border-4 border-[#7FA842] border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {posts.slice(0, 3).map((post: any) => (
-              <div
-                key={post.id}
-                onClick={() => navigateToBlog(post?.slug || "no-slug")}
-                className="cursor-pointer border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="overflow-hidden relative h-48">
-                  <img
-                    src={convertToSecureUrl(post.featuredImage) || "/images/placeholder.svg"}
-                    alt={post.title}
-                    // fill
-                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-                    // unoptimized // Use this for external images
-                  />
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {posts.map((post: any) => (
+                    <div
+                      key={post.id}
+                      onClick={() => navigateToBlog(post?.slug || "no-slug")}
+                      className="cursor-pointer border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="overflow-hidden relative h-48">
+                        <img
+                          src={convertToSecureUrl(post.featuredImage) || "/images/placeholder.svg"}
+                          alt={post.title}
+                          className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">{post.title}</h3>
+                        <div className="text-sm font-medium mb-2 text-[#7FA842]">
+                          {post?.category?.categoryTitle || "General"}
+                        </div>
+                        <div className="flex items-center text-gray-500 text-sm">
+                          <FaCalendarAlt className="mr-2" />
+                          <span>Published {new Date(post.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">{post.title}</h3>
-                  <div className="text-sm font-medium mb-2 text-[#7FA842]">
-                    {post?.category?.categoryTitle || "General"}
-                  </div>
-                  <div className="flex items-center text-gray-500 text-sm">
-                    <FaCalendarAlt className="mr-2" />
-                    <span>Published {new Date(post.createdAt).toLocaleDateString()}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+
         )}
       </div>
     </div>
