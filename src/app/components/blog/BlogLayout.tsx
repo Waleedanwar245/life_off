@@ -81,7 +81,7 @@ export default function BlogLayout({ data }: any) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {posts.slice(0, 3).map((post: any) => (
+            {posts.slice(0, 100).map((post: any) => (
               <div
                 key={post.id}
                 onClick={() => navigateToBlog(post?.slug || "no-slug")}
