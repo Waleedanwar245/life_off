@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { FaCalendarAlt } from "react-icons/fa"
-// import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 import { API_URL } from "../utils/BASE_URL"
 
-// Define paths object to replace the imported PATH
 const PATH = {
   SINGLE_BLOG: "/blog/:id",
 }
@@ -22,10 +20,10 @@ export default function BlogLayout({ data }: any) {
     const fetchLatestBlogs = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch(${API_URL}/blogs/latest)
+        const response = await fetch(`${API_URL}/blogs/latest`)
 
         if (!response.ok) {
-          throw new Error(API responded with status: ${response.status})
+          throw new Error(`API responded with status: ${response.status}`)
         }
 
         const data = await response.json()
@@ -51,29 +49,11 @@ export default function BlogLayout({ data }: any) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Author Profile Section */}
-      {/* <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12">
-        <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 relative">
-          <img
-            src={convertToSecureUrl(authorDetails?.imageUrl) || "/images/placeholder.svg?height=100&width=100"}
-            alt="Author profile"
-            // fill
-            className="object-cover"
-            // unoptimized // Use this for external images
-          />
-        </div>
-        <div>
-          <h2 className="text-green-600 font-medium text-lg mb-1">{authorDetails?.name || "MARIA LALONDE"}</h2>
-          <p className="text-gray-800 leading-relaxed">
-            {authorDetails?.description ||
-              "MARIA LALONDE A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
-          </p>
-        </div>
-      </div> */}
-
       {/* Latest Posts Section */}
       <div className="my-8">
-        <h2 className="text-center text-[19.03px] font-semibold uppercase tracking-wider mb-8">Latest Posts</h2>
+        <h2 className="text-center text-[19.03px] font-semibold uppercase tracking-wider mb-8">
+          Latest Posts
+        </h2>
 
         {isLoading ? (
           <div className="flex justify-center">
@@ -91,13 +71,13 @@ export default function BlogLayout({ data }: any) {
                   <img
                     src={convertToSecureUrl(post.featuredImage) || "/images/placeholder.svg"}
                     alt={post.title}
-                    // fill
                     className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-                    // unoptimized // Use this for external images
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">{post.title}</h3>
+                  <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">
+                    {post.title}
+                  </h3>
                   <div className="text-sm font-medium mb-2 text-[#7FA842]">
                     {post?.category?.categoryTitle || "General"}
                   </div>
