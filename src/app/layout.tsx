@@ -85,7 +85,7 @@ export default function RootLayout({
       <head>
       
         {/* Impact Site Verification */}
-          <meta name='impact-site-verification' value='47b37500-6e3b-4133-bc79-7c7df13acb89' />
+          <meta name='impact-site-verification' content="47b37500-6e3b-4133-bc79-7c7df13acb89" />
         <meta name="lhverifycode" content="32dc01246faccb7f5b3cad5016dd5033" />
         {/* Google Tag Manager */}
         <script
