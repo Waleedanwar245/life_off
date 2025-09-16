@@ -34,7 +34,7 @@ export default function HeroBanner({ data }: { data: any }) {
   }
 
   return (
-    <div className="max-w-[1440px] mx-auto -mt-10">
+    <div className="w-full mx-auto -mt-10">
       {/* Main Slider */}
       <div className="relative overflow-hidden">
         <div

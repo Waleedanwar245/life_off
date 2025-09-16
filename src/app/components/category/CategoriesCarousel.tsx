@@ -81,7 +81,7 @@ export default function CategoriesCarousel({ data }: any) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-8 text-center">Top Coupons & Deals Categories</h2>
+      <h2 className="text-2xl text-gray-800 font-bold mb-8 text-center">Top Coupons & Deals Categories</h2>
 
       <div className="relative">
         {/* Navigation Buttons */}

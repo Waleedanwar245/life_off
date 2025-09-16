@@ -69,7 +69,7 @@ export default function Categories({ data }: { data: any }) {
     }
 
     return (
-        <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#7FA8421F] mt-4">
+        <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#7EA842] mt-4">
             <h2 className="text-[35px] font-bold mb-8" style={{ fontSize: "clamp(30px, 2vw, 35px)" }}>
                 Categories
             </h2>
@@ -80,7 +80,7 @@ export default function Categories({ data }: { data: any }) {
                     {categories.slice(0, displayedCategoriesCount).map((category, index) => (
                         <div
                             key={index}
-                            className={`flex flex-col items-center min-w-[80px] cursor-pointer ${selectedCategory?.name === category.name ? "text-[#96C121]" : ""
+                            className={`flex flex-col items-center min-w-[80px] cursor-pointer ${selectedCategory?.name === category.name ? "text-[#14303b]" : ""
                                 }`}
                             onClick={() => setSelectedCategory(category)}
                         >
@@ -94,7 +94,7 @@ export default function Categories({ data }: { data: any }) {
                         <div className="pl-4 mt-4">
                             <button
                                 onClick={handleViewMore}
-                                className="text-[#96C121] text-sm font-medium flex items-center gap-1 hover:text-[#7da01b] transition-colors"
+                                className="text-[#14303b] text-sm font-medium flex items-center gap-1 hover:text-[#7da01b] transition-colors"
                             >
                                 View More
                                 <MdChevronRight className="w-4 h-4" />
@@ -115,7 +115,7 @@ export default function Categories({ data }: { data: any }) {
                         {categories.slice(0, displayedCategoriesCount).map((category, index) => (
                             <div
                                 key={index}
-                                className={`flex items-center gap-4 cursor-pointer ${selectedCategory?.name === category.name ? "text-[#96C121]" : ""
+                                className={`flex items-center gap-4 cursor-pointer ${selectedCategory?.name === category.name ? "text-[#14303b]" : ""
                                     }`}
                                 onClick={() => setSelectedCategory(category)}
                             >
@@ -133,7 +133,7 @@ export default function Categories({ data }: { data: any }) {
                             <div className="pl-12">
                                 <button
                                     onClick={handleViewMore}
-                                    className="text-[#96C121] text-sm font-medium flex items-center gap-1 hover:text-[#7da01b] transition-colors"
+                                    className="text-[#14303b] text-sm font-medium flex items-center gap-1 hover:text-[#7da01b] transition-colors"
                                 >
                                     View More
                                     <MdChevronRight className="w-4 h-4" />
@@ -157,7 +157,7 @@ export default function Categories({ data }: { data: any }) {
                                         }}
                                     >
                                         {/* Left side - Logo container without fixed height, will stretch */}
-                                        <div className="bg-white flex items-center justify-center w-[120px] md:w-[120px] shrink-0 border border-[#96C121] rounded-l-lg shadow-sm relative z-10">
+                                        <div className="bg-white flex items-center justify-center w-[120px] md:w-[120px] shrink-0 border border-[#14303b] rounded-l-lg shadow-sm relative z-10">
                                             <img
                                                 src={convertToSecureUrl(deal.logo) || "/placeholder.svg"}
                                                 alt={`${deal.offer} logo`}
@@ -167,7 +167,7 @@ export default function Categories({ data }: { data: any }) {
                                         </div>
 
                                         {/* Right side - Offer Text with green border */}
-                                        <div className="bg-white flex-1 flex items-center border border-l-0 border-[#96C121] rounded-r-lg pl-4 pr-3 py-4 my-[4px]">
+                                        <div className="bg-white flex-1 flex items-center border border-l-0 border-[#14303b] rounded-r-lg pl-4 pr-3 py-4 my-[4px]">
                                             <p className="text-sm text-gray-700" style={{ fontSize: "clamp(12px, 1vw, 18px)" }}>
                                                 {deal.offer}
                                             </p>

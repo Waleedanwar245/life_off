@@ -1,5 +1,5 @@
+// BlogLayout2.tsx
 import Link from "next/link"
-import Image from "next/image"
 import { FaCalendarAlt } from "react-icons/fa"
 import { convertToSecureUrl } from "../utils/convertToSecureUrl"
 
@@ -8,69 +8,60 @@ interface BlogPost {
   id: string
   title: string
   slug: string
-  featuredImage: string
+  featuredImage?: string
   createdAt: string
   category?: {
     categoryTitle: string
   }
 }
 
-interface BlogsResponse {
-  list: BlogPost[]
-}
+type ApiResult = BlogPost[] | { list?: BlogPost[] } | any
 
-// Fetch latest blogs
-async function getLatestBlogs(): Promise<any> {
+// Fetch latest blogs (server-side)
+async function getLatestBlogs(): Promise<BlogPost[]> {
   try {
-     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://liveoffcoupon.com/api"
     const res = await fetch(`${apiUrl}/blogs/latest`, {
-      next: { revalidate: 10 }, // Revalidate every hour
+      // adjust revalidate as needed (seconds)
+      next: { revalidate: 60 },
     })
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch latest blogs")
-    }
+    if (!res.ok) throw new Error("Failed to fetch latest blogs")
 
-    return res.json()
-  } catch (error) {
-    console.error("Error fetching latest blogs:", error)
-    return { list: [] }
+    const data: ApiResult = await res.json()
+    // Accept both array or { list: [...] } shapes:
+    const posts: BlogPost[] = Array.isArray(data) ? data : data?.list ?? []
+    return posts
+  } catch (err) {
+    console.error("Error fetching latest blogs:", err)
+    return []
   }
 }
 
 export default async function BlogLayout({ data }: { data: any }) {
   const latestBlogData = await getLatestBlogs()
-  const posts = latestBlogData || []
+  // normalize
+  const posts: BlogPost[] = latestBlogData || []
+
+  // Sort newest -> oldest by createdAt just to be safe
+  posts.sort((a, b) => {
+    const da = new Date(a.createdAt).getTime()
+    const db = new Date(b.createdAt).getTime()
+    return db - da
+  })
+
   const authorDetails = data?.__author__ || null
 
   return (
-    <div className="max-w-6xl mx-auto px-4 ">
-      {/* Author Profile Section */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start  ">
-        {/* <div className="relative w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
-          <img
-            src={convertToSecureUrl(authorDetails?.imageUrl) || "/placeholder.svg?height=100&width=100"}
-            alt="Author profile"
-            // fill
-            className="object-cover"
-            sizes="96px"
-          />
-        </div>
-        <div>
-          <h2 className="text-green-600 font-medium text-lg mb-1">{authorDetails?.name || "MARIA LALONDE"}</h2>
-          <p className="text-gray-800 leading-relaxed">
-            {authorDetails?.description ||
-              "A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
-          </p>
-        </div> */}
-      </div>
+    <div className="max-w-6xl mx-auto px-4">
+      {/* (Optional) Author section could go here */}
 
-      {/* Latest Posts Section */}
       <div className="my-8">
-        <h2 className="text-center text-[19.03px] font-semibold uppercase tracking-wider mb-8">Latest Posts</h2>
+        <h2 className="text-center text-[19.03px] text-gray-800 font-semibold uppercase tracking-wider mb-8">Latest Posts</h2>
 
+        {/* Grid: 3 per row on md+ */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {posts.slice(0, 3).map((post: BlogPost) => (
+          {posts.map((post) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug || "no-slug"}`}
@@ -80,11 +71,10 @@ export default async function BlogLayout({ data }: { data: any }) {
                 <img
                   src={convertToSecureUrl(post.featuredImage) || "/placeholder.svg?height=192&width=384"}
                   alt={post.title}
-                  // fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 384px"
+                  className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
+
               <div className="p-4">
                 <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">{post.title}</h3>
                 <div className="text-sm font-medium mb-2 text-[#7FA842]">

@@ -125,7 +125,7 @@ export default function CouponTabs() {
                                                                 </div>
                                                                 <div className="flex-1">
                                                                     <div className="text-xs text-gray-500">DEAL</div>
-                                                                    <div className="font-medium">{coupon.title}</div>
+                                                                    <div className="font-medium text-gray-800">{coupon.title}</div>
                                                                     <div className="flex items-center text-xs mt-1">
                                                                         <FiClock className="text-gray-400 mr-1" />
                                                                         <span className="text-gray-500 mr-2">{coupon.expiry}</span>

@@ -46,7 +46,7 @@ const FavoriteDeal = () => {
 
   if (loading) {
     return (
-      <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#7FA8421F] my-8">
+      <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#14303B] my-8">
         <h2 className="text-[35px] font-bold text-center mb-8" style={{ fontSize: "clamp(24px, 5vw, 35px)" }}>
           Favorite Deal
         </h2>
@@ -56,7 +56,7 @@ const FavoriteDeal = () => {
   }
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#7FA8421F] my-8">
+    <div className="max-w-[1440px] mx-auto px-4 py-8 bg-[#14303B] my-8">
       <h2 className="text-[35px] font-bold text-center mb-8" style={{ fontSize: "clamp(24px, 5vw, 35px)" }}>
         Favorite Deal
       </h2>
@@ -96,12 +96,12 @@ const FavoriteDeal = () => {
               )}
               <div className="w-1/2 px-3 flex flex-col justify-center">
                 <span
-                  className="text-sm font-semibold text-black pt-1 rounded w-fit"
+                  className="text-sm font-semibold pt-1 rounded w-fit"
                   style={{ fontSize: "clamp(14px, 1vw, 20px)" }}
                 >
                   {product?.name || ""}
                 </span>
-                <p className="text-sm font-medium text-gray-800" style={{ fontSize: "clamp(14px, 1vw, 20px)" }}>
+                <p className="text-sm font-medium" style={{ fontSize: "clamp(14px, 1vw, 20px)" }}>
                   {product?.detail || ""}
                 </p>
               </div>
@@ -122,7 +122,7 @@ const FavoriteDeal = () => {
           </h2>
           <p
             onClick={handleNavigateToTrending}
-            className="text-gray-600 text-[17.23px] cursor-pointer"
+            className="text-[17.23px] cursor-pointer"
             style={{ fontSize: "clamp(14px, 1vw, 17.23px)" }}
           >
             {trendingDeal?.description3 || ""}

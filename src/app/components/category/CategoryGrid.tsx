@@ -32,7 +32,7 @@ export default function CategoryGrid({ data }: any) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-8">All Coupons & Deals Categories</h2>
+      <h2 className="text-2xl text-gray-800 font-bold mb-8">All Coupons & Deals Categories</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
         {categories.map(({ id, image, categoryTitle, categoryName, slug }: any) => (

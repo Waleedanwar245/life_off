@@ -50,7 +50,7 @@ export default function TrendingDeals() {
         return (
             <div className="max-w-[1440px] mx-auto px-4 py-6">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold">Trending Deals</h2>
+                    <h2 className="text-2xl text-gray-800 font-bold">Trending Deals</h2>
                 </div>
                 <p className="text-center py-8">Loading trending deals...</p>
             </div>
@@ -60,7 +60,7 @@ export default function TrendingDeals() {
     return (
         <div className="max-w-[1440px] mx-auto px-4 py-6">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Trending Deals</h2>
+                <h2 className="text-2xl text-gray-800 font-bold">Trending Deals</h2>
                 <button className="text-sm text-[#7FA842] font-medium hover:underline">View All</button>
             </div>
 

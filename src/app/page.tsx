@@ -2,15 +2,34 @@ import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 import { Suspense } from "react"
 import type { Metadata } from "next"
-import HeroBanner from "./components/landingSections/HeroBanner"
-import MerchantCard from "./components/landingSections/MerchantCard"
-import CouponTabs from "./components/landingSections/CouponTabs"
-import Categories from "./components/landingSections/Categories"
-import TrendingDeals from "./components/landingSections/TrendingDeals"
-import TopDealsSlider from "./components/landingSections/TopDealsSlider"
-import Blogs from "./components/landingSections/Blogs"
-import FAQ from "./components/landingSections/FAQ"
-import FavoriteDeal from "./components/landingSections/FavoriteDeal"
+// import HeroBanner from "./components/landingSections/HeroBanner"
+import HeroBanner from "./components/landingSections/HeroBanner.server"
+import HeroBannerClient from "./components/landingSections/HeroBanner.client"
+// import MerchantCard from "./components/landingSections/MerchantCard"
+import MerchantCard from "./components/landingSections/MerchantCard.server"
+import MerchantCardClient from "./components/landingSections/MerchantCard.client"
+// import CouponTabs from "./components/landingSections/CouponTabs"
+import CouponTabs from "./components/landingSections/CouponTabs.server";
+import CouponTabsClient from "./components/landingSections/CouponTabs.client";
+// import Categories from "./components/landingSections/Categories"
+import Categories from "./components/landingSections/Categories.server";
+import CategoriesClient from "./components/landingSections/Categories.client";
+// import TrendingDeals from "./components/landingSections/TrendingDeals"
+import TrendingDeals from "./components/landingSections/TrendingDeals.server";
+import TrendingDealsClient from "./components/landingSections/TrendingDeals.client";
+// import TopDealsSlider from "./components/landingSections/TopDealsSlider"
+import TopDealsSlider from "./components/landingSections/TopDealsSlider.server";
+import TopDealsSliderClient from "./components/landingSections/TopDealsSlider.client";
+// import Blogs from "./components/landingSections/Blogs"
+import Blogs from "./components/landingSections/Blogs.server";
+import BlogsClient from "./components/landingSections/Blogs.client";
+// import FAQ from "./components/landingSections/FAQ";
+import FAQ from "./components/landingSections/FAQ.server";
+import FAQClient from "./components/landingSections/FAQ.client";
+// import FavoriteDeal from "./components/landingSections/FavoriteDeal"
+import FavoriteDeal from "./components/landingSections/FavoriteDeal.server";
+import FavoriteDealClient from "./components/landingSections/FavoriteDeal.client";
+
 
 
 // Fetch landing page data
@@ -192,17 +211,26 @@ export default async function Home() {
 
       <div className="mt-[220px] md:mt-[140px]">
         <HeroBanner data={bannerData} />
+        <HeroBannerClient />
       </div>
 
       <Suspense fallback={<SplashScreen />}>
         <MerchantCard data={allStores} />
+        <MerchantCardClient />
         <CouponTabs data={allCoupons} />
+        <CouponTabsClient />
         <Categories data={categoryData} />
+        <CategoriesClient />
         <TrendingDeals />
+        <TrendingDealsClient />
         <FavoriteDeal />
+        <FavoriteDealClient />
         <TopDealsSlider />
+        <TopDealsSliderClient />
         <Blogs />
+        <BlogsClient />
         <FAQ data={bannerData} />
+        <FAQClient />
       </Suspense>
     </>
   )

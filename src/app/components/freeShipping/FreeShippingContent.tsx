@@ -81,7 +81,7 @@ export default function FreeShippingContent() {
             </Script>
 
             <div className="mt-[170px] md:mt-[100px] max-w-7xl mx-auto px-4 py-8">
-                <h1 className="text-[22px] md:text-[24px] font-bold mb-4 custom-class">Free Shipping Coupons for Top Brands Today</h1>
+                <h1 className="text-[22px] md:text-[24px] text-gray-800 font-bold mb-4 custom-class">Free Shipping Coupons for Top Brands Today</h1>
                 <p className="text-gray-700 mb-8 text-[14px] md:text-[16px] custom-class">
                     Stop Wasting Money on Shipping! Every dollar counts, and LiveOffCoupons is here to help you save. Grab free shipping coupons now and get your orders delivered without paying a penny extra! No tricks, just real deals from your favorite brands. Don’t miss these limited-time opportunities to shop smarter and keep more of your money.
                     Whether picking up everyday essentials, sending a gift, or treating yourself to something new, shipping fees shouldn’t stand in the way. Our free shipping coupons help you cut those extra costs so your budget goes further. Enjoy the satisfaction of checkout totals that don’t include surprise delivery fees. Shop smart, save big!
@@ -113,12 +113,12 @@ export default function FreeShippingContent() {
                                             <span className="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                                                 <FaCheck className="mr-1" size={10} /> Verified
                                             </span>
-                                        )}
+                                        )}  
                                     </div>
-                                    <div className="font-medium">
+                                    <div className="font-medium text-gray-800">
                                         {coupon.brand}
                                     </div>
-                                    <div className="font-medium">
+                                    <div className="font-medium text-gray-800">
                                         {coupon.name}
                                     </div>
                                 </div>

@@ -30,7 +30,7 @@ export default function BlogBanner({ data }: any) {
     <div className="max-w-7xl mx-auto px-2 md:px-4 pt-0 md:pt-12">
       <article className="space-y-4 md:space-y-6">
         {/* Title */}
-        <h1 className="text-[25px] text-3xl md:text-4xl font-bold tracking-tight">
+        <h1 className="text-[25px] text-3xl text-gray-800 md:text-4xl font-bold tracking-tight">
           {data?.title || defaultTitle}
         </h1>
 

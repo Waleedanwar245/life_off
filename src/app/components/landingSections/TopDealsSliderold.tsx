@@ -127,7 +127,7 @@ export default function TopDealsSlider() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none bg-white border border-gray-200 rounded-lg py-2.5 pl-4 pr-10 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#7FA842] shadow-sm w-full"
+                className="appearance-none bg-white border text-gray-800 border-gray-200 rounded-lg py-2.5 pl-4 pr-10 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#7FA842] shadow-sm w-full"
               >
                 <option value="featured">Featured</option>
                 <option value="price-low">Price: Low to High</option>

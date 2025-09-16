@@ -64,7 +64,7 @@ export default function CouponTabs({ data }: { data: any }) {
     <div className="max-w-[1440px] mx-auto px-4 pt-12">
       {/* Title */}
       <h2
-        className="text-2xl font-bold mb-10 md:text-start text-center"
+        className="text-2xl font-bold mb-10 md:text-start text-gray-800 text-center"
         style={{ fontSize: "clamp(20px, 2vw, 51.2px)" }}
       >
         Today's Offers and Coupons

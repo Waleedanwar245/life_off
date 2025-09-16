@@ -371,7 +371,7 @@ export default function CouponTabs({ data }: { data: any }) {
 
                 return (
                   <div key={section}>
-                    <h2 className="text-xl font-bold mb-4">{section} Coupons</h2>
+                    <h2 className="text-xl font-bold mb-4 text-gray-800">{section} Coupons</h2>
 
                     {/* Loading state for similar coupons */}
                     {section.toLowerCase() === "similar" && isLoading.similarCoupons && (

@@ -83,7 +83,7 @@ export default function StoresContent() {
                     <div className="mt-[200px] md:mt-[110px] max-w-[1440px] mx-auto px-4 py-8">
                         {/* Header with Navigation */}
                         <div className="flex items-center justify-between mb-8 w-full">
-                            <h2 className="text-2xl font-bold flex-1 text-center ">Save Big with Coupons for Every Store!</h2>
+                            <h2 className="text-2xl font-bold flex-1 text-gray-800 text-center ">Save Big with Coupons for Every Store!</h2>
                             <div className=" gap-2 hidden md:flex">
                                 <button
                                     onClick={prevPage}
@@ -131,7 +131,7 @@ export default function StoresContent() {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-center col-span-full">No stores available.</p>
+                                <p className="text-center text-gray-600 col-span-full">No stores available.</p>
                             )}
                         </div>
 

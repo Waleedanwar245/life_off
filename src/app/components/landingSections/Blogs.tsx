@@ -62,7 +62,7 @@ function Blogs() {
   if (loading) {
     return (
       <div className="max-w-[1440px] mx-auto p-4 md:p-8">
-        <h1 className="text-[35px] font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
+        <h1 className="text-[35px] text-gray-800 font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
           Blogs
         </h1>
         <p className="text-center py-8">Loading blogs...</p>
@@ -73,7 +73,7 @@ function Blogs() {
   return (
     <div className="max-w-[1440px] mx-auto p-4 md:p-8">
       <div className="h-full mx-auto">
-        <h1 className="text-[35px] font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
+        <h1 className="text-[35px] text-gray-800 font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
           Blogs
         </h1>
 
@@ -87,6 +87,7 @@ function Blogs() {
                 onClick={() => router.push(`/blog/${post.slug || "no-slug"}`)}
                 key={post.id}
                 className="cursor-pointer sha flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                style={{ border: "2px solid #8BC34B" }}
               >
                 {/* Image Container */}
                 {/* <div className="w-1/3 bg-purple-100 relative">
@@ -98,7 +99,8 @@ function Blogs() {
                     // unoptimized
                   />
                 </div> */}
-                  <div className=" bg-purple-100 relative w-[125px] h-[110px]">
+                  {/* <div className=" bg-purple-100 relative w-[125px] h-[110px]"> */}
+                  <div className="w-1/3 bg-purple-100 relative">
                   <img
                     src={convertToSecureUrl(post.image)}
                     alt={post.title}
@@ -109,7 +111,7 @@ function Blogs() {
                 {/* Content Container */}
                 <div className="w-2/3 p-6">
                   <h2
-                    className="text-[18.18px] font-semibold mb-2 line-clamp-2"
+                    className="text-[18.18px] text-gray-800 font-semibold mb-2 line-clamp-2"
                     style={{ fontSize: "clamp(14px, 1vw, 18.18px)" }}
                   >
                     {post.title}

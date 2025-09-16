@@ -37,7 +37,7 @@ export default function DealCard({ discount, type, brand, description, verified,
         </div>
         <div className="mb-4">
           <div className="flex items-center gap-2 min-h-[60px]">
-            <span className="font-bold text-xl">
+            <span className="font-bold text-xl text-gray-800">
               {discount} {type}
             </span>
             {verified && (
@@ -46,7 +46,7 @@ export default function DealCard({ discount, type, brand, description, verified,
               </span>
             )}
           </div>
-          <div className="text-sm font-medium">
+          <div className="text-sm font-medium text-gray-800">
             {brand} {description}
           </div>
           {/* <div className="text-xs text-gray-500 mt-1">Valid till {expiry}</div> */}

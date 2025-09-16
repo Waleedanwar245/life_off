@@ -82,7 +82,8 @@ const MerchantCard = ({ data }: { data: any }) => {
 
   return (
 
-    <div className="max-w-[1440px] mx-auto w-full py-16 px-4" style={{ backgroundColor: "#F5F5F5" }}>
+    
+    <div className="mx-auto w-full py-16 px-4" style={{ backgroundColor: "#F5F5F5" }}>
       <div className="">
         {/* Heading */}
         <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12">Our Favorite Merchants</h2>
@@ -102,7 +103,7 @@ const MerchantCard = ({ data }: { data: any }) => {
           {/* Merchants Grid */}
           <div className="overflow-hidden mx-16">
             <div
-              className="flex transition-transform duration-300 ease-in-out gap-6"
+              className="flex transition-transform duration-300 ease-in-out gap-9" 
               style={{ transform: `translateX(-${currentIndex * SLIDE_WIDTH}px)` }}
             >
               {duplicatedMerchants.map((merchant, index) => (
