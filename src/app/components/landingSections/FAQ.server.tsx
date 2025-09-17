@@ -1,6 +1,7 @@
 // components/landingSections/FAQ.server.tsx
 import React from "react";
 import { API_URL } from "../utils/BASE_URL";
+import { removeNofollow } from "@/app/components/utils/removeNofollow"; // <- new util
 
 type FAQItem = {
   question?: string;
@@ -19,11 +20,16 @@ async function fetchLandingFallback() {
 }
 
 export default async function FAQ({ data }: { data?: any }) {
-  // If data wasn't passed, try fetching landing data as a fallback
   const source = data ?? (await fetchLandingFallback());
   const faqs: FAQItem[] = Array.isArray(source?.faqs) ? source.faqs : [];
-
   const descriptionHtml = source?.description ?? "";
+
+  // Pre-process: remove nofollow from answers + description
+  const processedFaqs = faqs.map((item) => ({
+    ...item,
+    safeAnswerHtml: removeNofollow(item.answer ?? ""),
+  }));
+  const safeDescriptionHtml = removeNofollow(descriptionHtml ?? "");
 
   return (
     <section id="faq-section" className="mx-auto px-4 py-12 max-w-[1440px]" aria-labelledby="faq-heading">
@@ -32,13 +38,11 @@ export default async function FAQ({ data }: { data?: any }) {
       </h2>
 
       <div className="space-y-1" role="list">
-        {faqs.length === 0 ? (
+        {processedFaqs.length === 0 ? (
           <div className="text-center py-8 text-gray-500">No FAQs available at the moment.</div>
         ) : (
-          faqs.map((item: FAQItem, index: number) => (
+          processedFaqs.map((item, index) => (
             <div key={index} className="border-b border-gray-200" role="listitem">
-              {/* NOTE: server component must not attach onClick handlers.
-                  We include data attributes and accessibility attributes so client can enhance. */}
               <div className="w-full py-4">
                 <button
                   type="button"
@@ -47,13 +51,11 @@ export default async function FAQ({ data }: { data?: any }) {
                   aria-expanded="false"
                   aria-controls={`faq-answer-${index}`}
                   className="w-full text-left flex items-center justify-between py-4 focus:outline-none"
-                  // no onClick here
                 >
                   <span className="text-[16px] font-medium text-gray-900" style={{ fontSize: "clamp(12px, 1vw, 16px)", fontWeight: 700 }}>
                     {item.question ?? "Untitled question"}
                   </span>
 
-                  {/* simple plus icon — client may rotate when open */}
                   <svg
                     className="w-5 h-5 text-gray-400 transform transition-transform duration-300"
                     viewBox="0 0 24 24"
@@ -70,8 +72,7 @@ export default async function FAQ({ data }: { data?: any }) {
                   data-index={index}
                   className="overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-0"
                 >
-                  {/* answers may contain html; render safely */}
-                  <div className="py-2 text-gray-600" dangerouslySetInnerHTML={{ __html: item.answer ?? "" }} />
+                  <div className="py-2 text-gray-600" dangerouslySetInnerHTML={{ __html: item.safeAnswerHtml }} />
                 </div>
               </div>
             </div>
@@ -80,7 +81,7 @@ export default async function FAQ({ data }: { data?: any }) {
       </div>
 
       <div className="custom-class mt-8 text-[17.23px] font-medium leading-[27px] tracking-[0.8%] font-montserrat">
-        {descriptionHtml ? <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} /> : "no description"}
+        {safeDescriptionHtml ? <div dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }} /> : "no description"}
       </div>
     </section>
   );

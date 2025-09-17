@@ -58,7 +58,7 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
     return (
         <div className="mx-auto px-4 py-8 md:mt-56 sticky top-20">
 
-            <h2 className="text-xl font-bold mb-4 ">TRENDING</h2>
+            <h2 className="text-xl font-bold mb-4 text-gray-800">TRENDING</h2>
 
             <div className="space-y-4">
                 {featuredArticles.length > 0 ? (
@@ -77,7 +77,7 @@ export default async function RelatedBlogs({ blogData }: { blogData: any }) {
 
                                 />
                             </div>
-                            <div className="p-2 w-2/3">
+                            <div className="p-2 w-2/3 text-gray-800">
                                 <h3 className="font-medium text-sm">{article.title}</h3>
                                 <div className="flex items-center text-xs text-gray-500 mt-1">
                                     <FaCalendarAlt className="mr-1" />

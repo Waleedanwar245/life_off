@@ -82,7 +82,16 @@ export default async function BlogLayout({ data }: { data: any }) {
                 </div>
                 <div className="flex items-center text-gray-500 text-sm">
                   <FaCalendarAlt className="mr-2" />
-                  <span>Published {new Date(post.createdAt).toLocaleDateString()}</span>
+                  <span>
+                    Published{" "}
+                    {post.createdAt
+                      ? new Date(post.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
+                      : "Unknown"}
+                  </span>
                 </div>
               </div>
             </Link>

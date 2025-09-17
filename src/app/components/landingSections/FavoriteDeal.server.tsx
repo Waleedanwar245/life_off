@@ -40,7 +40,7 @@ export default async function FavoriteDeal() {
     <section id="favorite-deal-section" className="max-w-[1440px] mx-auto px-4 py-8 bg-[#14303B] my-8">
       <h2
         className="text-[35px] font-bold text-center mb-8"
-        style={{ fontSize: "clamp(24px, 5vw, 35px)" }}
+        style={{ fontSize: "clamp(24px, 5vw, 35px)", color: "#ffffff" }}
       >
         Favorite Deal
       </h2>

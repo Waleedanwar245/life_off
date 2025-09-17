@@ -16,7 +16,6 @@ type Blog = {
 
 function decodeHtmlEntities(str: string): string {
   if (!str) return "";
-  // quick named entity map (expand if you need more)
   const namedEntities: Record<string, string> = {
     nbsp: " ",
     lt: "<",
@@ -26,13 +25,11 @@ function decodeHtmlEntities(str: string): string {
     apos: "'",
   };
 
-  // replace named (e.g. &nbsp; &lt;)
   str = str.replace(/&([a-zA-Z]+);/g, (_m, name) => {
     if (namedEntities[name]) return namedEntities[name];
-    return `&${name};`; // leave unknown named entity as-is for now
+    return `&${name};`;
   });
 
-  // replace decimal entities (e.g. &#123;)
   str = str.replace(/&#(\d+);/g, (_m, dec) => {
     try {
       return String.fromCharCode(parseInt(dec, 10));
@@ -41,7 +38,6 @@ function decodeHtmlEntities(str: string): string {
     }
   });
 
-  // replace hex entities (e.g. &#x1F600;)
   str = str.replace(/&#x([0-9a-fA-F]+);/g, (_m, hex) => {
     try {
       return String.fromCharCode(parseInt(hex, 16));
@@ -55,15 +51,9 @@ function decodeHtmlEntities(str: string): string {
 
 function stripHtmlTags(input: string): string {
   if (!input) return "";
-  // First decode entities (in case string is encoded HTML like &lt;p&gt;...)
   let s = decodeHtmlEntities(input);
-
-  // Remove any HTML tags
   s = s.replace(/<[^>]*>/g, "");
-
-  // Normalize whitespace
   s = s.replace(/\s+/g, " ").trim();
-
   return s;
 }
 
@@ -72,18 +62,14 @@ async function fetchBlogs(): Promise<Blog[]> {
     const res = await fetch(`${API_URL}/blogs`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
-    // Normalize: accept array or { list: [] } or { data: [] }
     const list: RawBlog[] = Array.isArray(json) ? json : json?.list ?? json?.data ?? [];
 
     const blogs = (list || [])
       .map((b: RawBlog, i: number) => {
-        // Some APIs return encoded HTML inside strings (e.g. "&lt;p&gt;..."), others return raw HTML.
-        // We'll decode and strip tags to create a plain-text excerpt.
         const rawContent = b?.content ?? b?.excerpt ?? b?.description ?? "";
         const decoded = typeof rawContent === "string" ? decodeHtmlEntities(rawContent) : "";
         const plain = stripHtmlTags(decoded);
 
-        // create truncated excerpt
         const excerpt =
           plain.length > 300 ? plain.slice(0, 200).trimEnd().replace(/\s+\S*$/, "") + "..." : plain;
 
@@ -97,7 +83,6 @@ async function fetchBlogs(): Promise<Blog[]> {
           excerpt,
         } as Blog;
       })
-      // Sort newest -> oldest
       .sort((a, b) => {
         const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -113,8 +98,6 @@ async function fetchBlogs(): Promise<Blog[]> {
 
 export default async function Blogs() {
   const blogs = await fetchBlogs();
-
-  // adjust limit if you want all blogs; currently keeping first 6 for layout
   const visible = blogs.slice(0, 6);
 
   return (
@@ -150,7 +133,15 @@ export default async function Blogs() {
                     <div className="flex items-center gap-2 text-[12.73px] text-gray-600 mb-3" style={{ fontSize: "clamp(10px, 1vw, 12px)" }}>
                       <span className="capitalize">{post.author ?? "Author"}</span>
                       <span>•</span>
-                      <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown Date"}</span>
+                      <span>
+                        {post.createdAt
+                          ? new Date(post.createdAt).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })
+                          : "Unknown Date"}
+                      </span>
                     </div>
 
                     {post.excerpt && <p className="text-sm text-gray-700 line-clamp-3">{post.excerpt}</p>}

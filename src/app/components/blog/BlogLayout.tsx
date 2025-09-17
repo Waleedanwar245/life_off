@@ -1,6 +1,7 @@
+// BlogLayout.tsx  (client)
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
@@ -10,82 +11,78 @@ const PATH = {
   SINGLE_BLOG: "/blog/:id",
 };
 
+function normalize(raw: any) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  if (raw.list && Array.isArray(raw.list)) return raw.list;
+  if (raw.data && Array.isArray(raw.data)) return raw.data;
+  return [];
+}
+
 export default function BlogLayout({ data }: any) {
   const [latestPosts, setLatestPosts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Helper: normalize API response to an array of posts
-  const normalize = (raw: any) => {
-    if (!raw) return [];
-    if (Array.isArray(raw)) return raw;
-    if (raw.list && Array.isArray(raw.list)) return raw.list;
-    // if API returns { data: [...] } or other shapes, try to find an array
-    if (raw.data && Array.isArray(raw.data)) return raw.data;
-    return [];
-  };
+  // If parent passed initial data (server-side fetched), use it immediately.
+  const initialPosts = useMemo(() => normalize(data), [data]);
 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    const fetchAllBlogs = async () => {
+    // If we already have posts from props, use them and skip fetching.
+    if (initialPosts && initialPosts.length > 0) {
+      // sort newest -> oldest just in case
+      const ps = [...initialPosts].sort((a: any, b: any) => {
+        const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return tb - ta;
+      });
+      setLatestPosts(ps);
+      setIsLoading(false);
+      return () => controller.abort();
+    }
+
+    // otherwise fetch from the API endpoint
+    const fetchLatest = async () => {
       setIsLoading(true);
       try {
-        // Try the "all blogs" endpoint first
-        const endpoints = [`${API_URL}/blogs`, `${API_URL}/blogs/latest`];
-
-        let responseData: any = null;
-        for (const url of endpoints) {
-          try {
-            const res = await fetch(url, { signal });
-            if (!res.ok) {
-              // try next endpoint
-              continue;
-            }
-            responseData = await res.json();
-            break;
-          } catch (err) {
-            // fetch failed (network/abort or 4xx/5xx) — try next endpoint
-            if (signal.aborted) throw err;
-            continue;
-          }
+        const res = await fetch(`${API_URL}/blogs/latest`, { signal });
+        if (!res.ok) {
+          console.error("Failed to fetch /blogs/latest", res.status);
+          setLatestPosts([]);
+          return;
         }
-
-        const posts = normalize(responseData);
-
-        // Sort newest -> oldest by createdAt
+        const json = await res.json();
+        const posts = normalize(json);
         posts.sort((a: any, b: any) => {
-          const ta = new Date(a.createdAt).getTime() || 0;
-          const tb = new Date(b.createdAt).getTime() || 0;
+          const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
           return tb - ta;
         });
-
         setLatestPosts(posts);
-      } catch (error) {
-        console.error("Error fetching latest blogs:", error);
+      } catch (err) {
+        if (signal.aborted) return;
+        console.error("Error fetching latest blogs:", err);
         setLatestPosts([]);
       } finally {
         if (!signal.aborted) setIsLoading(false);
       }
     };
 
-    fetchAllBlogs();
-
+    fetchLatest();
     return () => controller.abort();
-  }, []);
+  }, [initialPosts]);
 
   const posts = latestPosts || [];
-  const authorDetails = data?.[0]?.__author__ || null;
 
-  // Navigate to a blog post
   const navigateToBlog = (slug: string) => {
     router.push(PATH.SINGLE_BLOG.replace(":id", slug || "no-slug"));
   };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Latest Posts Section */}
       <div className="my-8">
         <h2 className="text-center text-[19.03px] text-gray-800 font-semibold uppercase tracking-wider mb-8">
           Latest Posts
@@ -93,7 +90,7 @@ export default function BlogLayout({ data }: any) {
 
         {isLoading ? (
           <div className="flex justify-center">
-            <div className="w-12 h-12 border-4 border-[#7FA842] border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#7FA842] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center text-gray-500">No posts found.</div>
@@ -112,16 +109,28 @@ export default function BlogLayout({ data }: any) {
                     className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                   />
                 </div>
+
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-800 mb-3 line-clamp-2 transition-colors">
                     {post.title}
                   </h3>
+
                   <div className="text-sm font-medium mb-2 text-[#7FA842]">
                     {post?.category?.categoryTitle || "General"}
                   </div>
+
                   <div className="flex items-center text-gray-500 text-sm">
                     <FaCalendarAlt className="mr-2" />
-                    <span>Published {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown"}</span>
+                    <span>
+                      Published{" "}
+                      {post.createdAt
+                        ? new Date(post.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : "Unknown"}
+                    </span>
                   </div>
                 </div>
               </div>

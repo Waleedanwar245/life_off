@@ -75,7 +75,7 @@ const formatDate = (date: string) => {
 
         {/* Right Column - Trending Posts */}
         <div className="space-y-6">
-          <span className="px-4 text-lg font-semibold text-black whitespace-nowrap">
+          <span className="px-4 text-lg font-semibold text-gray-800 whitespace-nowrap">
           TRENDING
           </span>
           {trendingPosts?.slice(0, 4).map((blog: any, index: number) => (
