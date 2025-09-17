@@ -55,14 +55,21 @@ async function fetchProducts(): Promise<Product[]> {
       }) ?? [];
 
     // detect if backend uses isFeatured and pick featured items if present
+    // detect if backend uses isFeatured and pick featured items if present
+    // detect if backend uses isFeatured and pick featured items if present
     const hasFeaturedFlag = (list || []).some((it: any) => !!it?.isFeatured);
     if (hasFeaturedFlag) {
+      // map may produce undefined entries, so annotate the mapped element type:
       return (list || [])
-        .map((it: RawProduct, idx: number) => products[idx])
-        .filter(Boolean)
-        .filter((_, i) => list[i]?.isFeatured)
+        .map((it: RawProduct, idx: number): Product | undefined => products[idx])
+        // narrow out undefined entries; now array is Product[]
+        .filter((p: Product | undefined): p is Product => Boolean(p))
+        // now `p` is Product and `i` is number (no implicit any)
+        .filter((p: Product, i: number) => Boolean((list as any[])[i]?.isFeatured))
         .slice(0, 24);
     }
+
+
 
     return products.slice(0, 24);
   } catch (err) {

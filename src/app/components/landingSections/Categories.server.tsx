@@ -30,7 +30,11 @@ function formatCategories(data: any): Array<any> {
     );
     return {
       name: category?.categoryName ?? category?.categoryTitle ?? "General",
-      icon: categoryIcons[category?.categoryTitle] ?? <FaBuilding className="w-5 h-5" />,
+      // ensure we always index with a string (never undefined)
+      icon: (() => {
+        const titleKey: string = (category?.categoryTitle ?? category?.categoryName ?? "General") as string;
+        return categoryIcons[titleKey] ?? <FaBuilding className="w-5 h-5" />;
+      })(),
       deals: uniqueCoupons.map((coupon: any) => ({
         store: coupon?.store ?? null,
         slug: coupon?.store?.slug ?? null,
@@ -39,6 +43,7 @@ function formatCategories(data: any): Array<any> {
         offer: coupon?.name ?? "No details available",
       })),
     };
+
   });
 }
 

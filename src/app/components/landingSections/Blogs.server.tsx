@@ -14,6 +14,59 @@ type Blog = {
   excerpt?: string;
 };
 
+function decodeHtmlEntities(str: string): string {
+  if (!str) return "";
+  // quick named entity map (expand if you need more)
+  const namedEntities: Record<string, string> = {
+    nbsp: " ",
+    lt: "<",
+    gt: ">",
+    amp: "&",
+    quot: '"',
+    apos: "'",
+  };
+
+  // replace named (e.g. &nbsp; &lt;)
+  str = str.replace(/&([a-zA-Z]+);/g, (_m, name) => {
+    if (namedEntities[name]) return namedEntities[name];
+    return `&${name};`; // leave unknown named entity as-is for now
+  });
+
+  // replace decimal entities (e.g. &#123;)
+  str = str.replace(/&#(\d+);/g, (_m, dec) => {
+    try {
+      return String.fromCharCode(parseInt(dec, 10));
+    } catch {
+      return "";
+    }
+  });
+
+  // replace hex entities (e.g. &#x1F600;)
+  str = str.replace(/&#x([0-9a-fA-F]+);/g, (_m, hex) => {
+    try {
+      return String.fromCharCode(parseInt(hex, 16));
+    } catch {
+      return "";
+    }
+  });
+
+  return str;
+}
+
+function stripHtmlTags(input: string): string {
+  if (!input) return "";
+  // First decode entities (in case string is encoded HTML like &lt;p&gt;...)
+  let s = decodeHtmlEntities(input);
+
+  // Remove any HTML tags
+  s = s.replace(/<[^>]*>/g, "");
+
+  // Normalize whitespace
+  s = s.replace(/\s+/g, " ").trim();
+
+  return s;
+}
+
 async function fetchBlogs(): Promise<Blog[]> {
   try {
     const res = await fetch(`${API_URL}/blogs`, { next: { revalidate: 60 } });
@@ -24,13 +77,15 @@ async function fetchBlogs(): Promise<Blog[]> {
 
     const blogs = (list || [])
       .map((b: RawBlog, i: number) => {
-        const content = b?.content ?? b?.excerpt ?? "";
+        // Some APIs return encoded HTML inside strings (e.g. "&lt;p&gt;..."), others return raw HTML.
+        // We'll decode and strip tags to create a plain-text excerpt.
+        const rawContent = b?.content ?? b?.excerpt ?? b?.description ?? "";
+        const decoded = typeof rawContent === "string" ? decodeHtmlEntities(rawContent) : "";
+        const plain = stripHtmlTags(decoded);
+
+        // create truncated excerpt
         const excerpt =
-          typeof content === "string"
-            ? content.length > 300
-              ? content.slice(0, 200).trimEnd() + "..."
-              : content
-            : "";
+          plain.length > 300 ? plain.slice(0, 200).trimEnd().replace(/\s+\S*$/, "") + "..." : plain;
 
         return {
           id: b?.id ?? b?._id ?? i,
@@ -59,7 +114,7 @@ async function fetchBlogs(): Promise<Blog[]> {
 export default async function Blogs() {
   const blogs = await fetchBlogs();
 
-  // adjust limit if you want all blogs; default keep first 6 for layout:
+  // adjust limit if you want all blogs; currently keeping first 6 for layout
   const visible = blogs.slice(0, 6);
 
   return (
@@ -75,11 +130,7 @@ export default async function Blogs() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {visible.map((post) => (
               <article key={post.id} className="sha flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow border-2 border-[#8BC34B]">
-                <a
-                  href={`/blog/${post.slug || "no-slug"}`}
-                  className="flex w-full"
-                  aria-label={post.title}
-                >
+                <a href={`/blog/${post.slug || "no-slug"}`} className="flex w-full" aria-label={post.title}>
                   {/* Image column */}
                   <div className="w-1/3 bg-purple-100 relative">
                     <img
