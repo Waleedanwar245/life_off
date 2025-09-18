@@ -28,25 +28,14 @@ async function getStores() {
   }
 }
 
-export default async function Page({ searchParams }: { searchParams?: Record<string, string | string[]> }) {
+export default async function Page(props: any) {
   // Fetch data on the server
+  const { searchParams } = props ?? {}
   const stores = await getStores()
 
   return (
     <>
-      {/* <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "Stores on Offers | LiveOffCoupon",
-            description: "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
-            url: "https://liveoffcoupon.com/stores",
-          }),
-        }}
-      />
-       */}
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -103,41 +92,7 @@ export default async function Page({ searchParams }: { searchParams?: Record<str
 
       <div className="">
         <StoresContent stores={stores} searchParams={searchParams ?? {}} />
-        {/* <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2> */}
-
-        {/* Stores Grid */}
-        {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
-          {stores.length > 0 ? (
-            stores.slice(0, 30).map((store: any, index: number) => (
-              <Link
-                key={index}
-                href={`/coupons/${store?.slug || "no-slug"}`}
-                className={`${store.bgColor || "bg-white"} w-[206px] h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-6 transition-transform hover:scale-105 shadow-md`}
-              >
-                {store?.logoUrl ? (
-                  <img
-                    src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"}
-                    alt={`${store.name} logo`}
-                    width={150}
-                    height={150}
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <img
-                    src="/images/default_store_img.png"
-                    alt="Default store logo"
-                    width={150}
-                    height={150}
-                    className="w-full h-full object-contain"
-                  />
-                )}
-              </Link>
-            ))
-          ) : (
-            <p className="text-center col-span-full">No stores available.</p>
-          )}
-        </div> */}
-
+        
         {/* Add this section to ensure ALL links are in the HTML */}
         <div className="hidden">
           {stores.map((store: any) => (
