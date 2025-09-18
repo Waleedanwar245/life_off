@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import Link from "next/link"
 import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl"
-import StoresContent from "../components/store/StoresContent"
+import StoresContent from "@/app/components/store/StoresContent.server";
 
 export const metadata: Metadata = {
   title: "Coupons and Discounts on Your Favorite Stores | LiveOff Coupon",
@@ -28,7 +28,7 @@ async function getStores() {
   }
 }
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams?: Record<string, string | string[]> }) {
   // Fetch data on the server
   const stores = await getStores()
 
@@ -102,7 +102,7 @@ export default async function Page() {
       />
 
       <div className="">
-        <StoresContent />
+        <StoresContent stores={stores} searchParams={searchParams ?? {}} />
         {/* <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2> */}
 
         {/* Stores Grid */}

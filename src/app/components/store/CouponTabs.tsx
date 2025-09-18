@@ -416,7 +416,7 @@ export default function CouponTabs({ data }: { data: any }) {
                                   <div className="h-[] self-stretch w-px bg-gray-300 mx-2"></div>
                                   <div className="flex-1 pl-2 py-4">
                                     <div className="text-[9.32px] md:text-[13px] text-[#7FA842] font-[800] ">{coupon?.codeorDeal} {coupon.isExclusive && <span> <Tag className="text-[10px] md:text-[14px] " style={{ marginLeft: '10px', background: '#789A1A', color: 'white', height: '22px', lineHeight: '18px', }} color="success" >Exclusive</Tag></span>}</div>
-                                    <div className=" text-[12.9px] md:text-[16px]  ">{coupon.title}</div>
+                                    <div className=" text-[12.9px] md:text-[16px] text-gray-800">{coupon.title}</div>
 
                                     <div className="flex items-center text-xs mt-1">
                                       <FiClock className="text-gray-400 mr-1 hidden md:block" />
@@ -580,12 +580,12 @@ export default function CouponTabs({ data }: { data: any }) {
             <div className="w-full lg:w-1/3">
               {/* Website info */}
               <div className="mb-4 text-center hidden md:block">
-                <div className="text-xl font-bold mb-4">{activeCouponCount} Active Offers Available</div>
+                <div className="text-xl font-bold mb-4 text-gray-800">{activeCouponCount} Active Offers Available</div>
               </div>
 
               {/* Filters section */}
               <div className="mb-6 hidden md:block">
-                <h3 className="text-sm font-bold mb-2">Filters Offers</h3>
+                <h3 className="text-sm font-bold mb-2 text-gray-800">Filters Offers</h3>
                 <div className="space-y-2">
                   <button
                     className={`w-full transition-colors rounded-full py-2 font-medium text-sm ${activeFilter === "all"
@@ -632,7 +632,7 @@ export default function CouponTabs({ data }: { data: any }) {
               <div className="max-w-3xl mx-auto p-4 font-sans">
                 {/* Similar Stores Section */}
                 <div className="mb-6 bg-white rounded-lg shadow-sm border  border-[#14303B] p-4 ">
-                  <h2 className="text-lg font-medium text-center mb-4">Similar Stores</h2>
+                  <h2 className="text-lg font-medium text-center mb-4 text-gray-800">Similar Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {formattedSimilarStores?.length > 0 ? (
                       formattedSimilarStores.map((store: any, index: number) => (
@@ -709,7 +709,7 @@ export default function CouponTabs({ data }: { data: any }) {
           <Col xs={24} md={16} ref={faqsRef}>
 
             <div className=" ">
-              <h2 className=" font-bold py-12 text-[20px] md:text-[25px]">Frequently Asked Questions</h2>
+              <h2 className=" font-bold py-12 text-[20px] md:text-[25px] text-gray-800">Frequently Asked Questions</h2>
 
               <div className="space-y-4">
                 {(data?.store?.faqs || []).map((faq: any, index: number) => (
