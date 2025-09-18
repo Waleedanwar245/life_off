@@ -1,13 +1,12 @@
 // src/app/components/store/StoresContent.server.tsx
 import React from "react";
-import Link from "next/link";
-import { API_URL } from "@/app/components/utils/BASE_URL";
 import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl";
+import { API_URL } from "@/app/components/utils/BASE_URL";
 
 type Props = {
   stores?: any[] | null;
-  searchParams?: Record<string, string | string[]>;
-  // optional override
+  page?: string;                 // plain string page index (from parent)
+  letter?: string | null;        // plain single-letter filter or null
   itemsPerPage?: number;
 };
 
@@ -31,34 +30,26 @@ async function fetchStoresServer(): Promise<any[]> {
   }
 }
 
-/**
- * Server-rendered StoresContent
- * - Controlled by `searchParams.page` and `searchParams.letter`
- */
-export default async function StoresContent({ stores, searchParams = {}, itemsPerPage = 30 }: Props) {
-  // If caller didn't pass stores, fetch them on the server
+export default async function StoresContent({ stores, page = "0", letter = null, itemsPerPage = 30 }: Props) {
   const allStores = normalizeStores(stores ?? (await fetchStoresServer()));
 
-  // read page + letter from searchParams (strings or arrays)
-  const pageRaw = Array.isArray(searchParams.page) ? searchParams.page[0] : (searchParams.page as string | undefined);
-  const letterRaw = Array.isArray(searchParams.letter) ? searchParams.letter[0] : (searchParams.letter as string | undefined);
+  // page is already a simple string, convert safely to integer
+  const currentPage = Math.max(0, Number.isFinite(Number(page)) ? Math.max(0, parseInt(page || "0", 10)) : 0);
 
-  const currentPage = Math.max(0, Number.isFinite(Number(pageRaw)) ? Math.max(0, parseInt(pageRaw || "0", 10)) : 0);
-  const selectedLetter = letterRaw && letterRaw.length === 1 ? letterRaw.toUpperCase() : null;
+  // letter is already either null or a string; normalize to uppercase single char
+  const selectedLetter = typeof letter === "string" && letter.length > 0 ? letter[0].toUpperCase() : null;
 
-  // Filter (if letter selected)
   const filtered = selectedLetter
     ? allStores.filter((s: any) => typeof s?.name === "string" && s.name.trim().toUpperCase().startsWith(selectedLetter))
     : allStores;
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-  const page = Math.min(currentPage, totalPages - 1);
-  const visibleStores = filtered.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
+  const pageIdx = Math.min(currentPage, totalPages - 1);
+  const visibleStores = filtered.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage);
 
-  // Helper to build query string for links
-  const qs = (p: number, letter?: string | null) => {
+  const qs = (p: number, letterArg?: string | null) => {
     const params = new URLSearchParams();
-    if (typeof letter === "string" && letter) params.set("letter", letter);
+    if (letterArg) params.set("letter", letterArg);
     if (p && p > 0) params.set("page", String(p));
     const s = params.toString();
     return s ? `?${s}` : "";
@@ -68,90 +59,38 @@ export default async function StoresContent({ stores, searchParams = {}, itemsPe
 
   return (
     <div className="mt-[200px] md:mt-[110px] max-w-[1440px] mx-auto px-4 py-8">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8 w-full">
         <h2 className="text-2xl font-bold flex-1 text-gray-800 text-center">Save Big with Coupons for Every Store!</h2>
 
         <div className="gap-2 hidden md:flex">
-          <a
-            href={`/stores${qs(Math.max(0, page - 1), selectedLetter)}`}
-            aria-label="Previous page"
-            className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
-          >
-            ‹
-          </a>
-          <a
-            href={`/stores${qs(Math.min(totalPages - 1, page + 1), selectedLetter)}`}
-            aria-label="Next page"
-            className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
-          >
-            ›
-          </a>
+          <a href={`/stores${qs(Math.max(0, pageIdx - 1), selectedLetter)}`} aria-label="Previous page" className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors">‹</a>
+          <a href={`/stores${qs(Math.min(totalPages - 1, pageIdx + 1), selectedLetter)}`} aria-label="Next page" className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors">›</a>
         </div>
       </div>
 
-      {/* Stores Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 mb-8">
-        {visibleStores.length > 0 ? (
-          visibleStores.map((store: any, idx: number) => (
-            <a
-              key={store?.id ?? `${idx}-${store?.slug ?? idx}`}
-              href={`/coupons/${store?.slug ?? "no-slug"}`}
-              className={`${store?.bgColor || "bg-white"} w-[166px] md:w-[206px] h-[146px] md:h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-2 md:p-6 transition-transform hover:scale-105 shadow-md`}
-            >
-              <img
-                src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"}
-                alt={`${store?.name ?? "Store"} logo`}
-                className="w-[150px] h-[150px] object-contain"
-              />
-            </a>
-          ))
-        ) : (
-          <p className="text-center text-gray-600 col-span-full">No stores available.</p>
-        )}
+        {visibleStores.length > 0 ? visibleStores.map((store: any, idx: number) => (
+          <a key={store?.id ?? `${idx}-${store?.slug ?? idx}`} href={`/coupons/${store?.slug ?? "no-slug"}`} className={`${store?.bgColor || "bg-white"} w-[166px] md:w-[206px] h-[146px] md:h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-2 md:p-6 transition-transform hover:scale-105 shadow-md`}>
+            <img src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"} alt={`${store?.name ?? "Store"} logo`} className="w-[150px] h-[150px] object-contain" />
+          </a>
+        )) : <p className="text-center text-gray-600 col-span-full">No stores available.</p>}
       </div>
 
-      {/* Mobile Prev/Next (visible on small screens) */}
       <div className="w-full justify-center my-4 gap-2 flex md:hidden">
-        <a
-          href={`/stores${qs(Math.max(0, page - 1), selectedLetter)}`}
-          aria-label="Previous page"
-          className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
-        >
-          ‹
-        </a>
-        <a
-          href={`/stores${qs(Math.min(totalPages - 1, page + 1), selectedLetter)}`}
-          aria-label="Next page"
-          className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors"
-        >
-          ›
-        </a>
+        <a href={`/stores${qs(Math.max(0, pageIdx - 1), selectedLetter)}`} className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors">‹</a>
+        <a href={`/stores${qs(Math.min(totalPages - 1, pageIdx + 1), selectedLetter)}`} className="w-10 h-10 rounded-full bg-[#96C121] text-white flex items-center justify-center hover:bg-[#86AD1E] transition-colors">›</a>
       </div>
 
-      {/* Alphabet filter */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {alphabet.map((letter) => {
-          const active = selectedLetter === letter;
-          const href = `/stores${qs(0, active ? null : letter)}`;
-          return (
-            <a
-              key={letter}
-              href={href}
-              className={`w-8 h-8 flex items-center justify-center text-sm font-medium ${active ? "text-[#96C121]" : "text-gray-600 hover:text-[#96C121]"} transition-colors`}
-            >
-              {letter}
-            </a>
-          );
+        {alphabet.map((letterChar) => {
+          const active = selectedLetter === letterChar;
+          const href = `/stores${qs(0, active ? null : letterChar)}`;
+          return <a key={letterChar} href={href} className={`w-8 h-8 flex items-center justify-center text-sm font-medium ${active ? "text-[#96C121]" : "text-gray-600 hover:text-[#96C121]"} transition-colors`}>{letterChar}</a>;
         })}
       </div>
 
-      {/* Description (static, server-side) */}
       <div className="space-y-4 text-gray-600 text-sm">
-        <p className="text-[14px] md:text-[16px] leading-6">
-          Browse our directory of discounts, promo codes, and coupons for your favorite stores! Whether you're shopping for fashion, electronics, groceries, pet supplies, baby products, or travel, we’ve gathered the best money-saving coupons in one place. With new deals added daily, you will always find fresh ways to save on top brands.
-        </p>
-
+        <p className="text-[14px] md:text-[16px] leading-6">Browse our directory ...</p>
         <h2 className="text-[20px] md:text-[24px] font-bold leading-8">Why Check Our Store Coupons List?</h2>
         <ul className="list-disc pl-5 space-y-2 text-[14px] md:text-[16px] leading-6">
           <li>All stores have 100% verified promo codes, which we update regularly.</li>
