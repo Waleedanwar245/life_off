@@ -23,19 +23,16 @@ async function getStores() {
 }
 
 /**
- * IMPORTANT: destructure `searchParams` in the function signature.
- * That avoids the Next.js runtime warning about using dynamic APIs incorrectly.
+ * Important: await props.searchParams (not just props) before accessing its properties.
  */
-export default async function Page({
-  searchParams = {},
-}: {
-  searchParams?: Record<string, string | string[]>;
-}) {
-  // Normalize page/letter to plain strings (safe to pass to other server components)
-  const pageParam = Array.isArray(searchParams.page) ? searchParams.page[0] : (searchParams.page as string | undefined);
-  const letterParam = Array.isArray(searchParams.letter) ? searchParams.letter[0] : (searchParams.letter as string | undefined);
+export default async function Page(props: any) {
+  // await the searchParams proxy directly (this is the recommended safe pattern)
+  const searchParams = (await props?.searchParams) ?? {};
 
-  // fetch stores on the server
+  // normalize to plain strings (safe primitives to pass into server components)
+  const pageParam = Array.isArray(searchParams?.page) ? searchParams.page[0] : searchParams?.page;
+  const letterParam = Array.isArray(searchParams?.letter) ? searchParams.letter[0] : searchParams?.letter;
+
   const stores = await getStores();
 
   return (
@@ -81,11 +78,15 @@ export default async function Page({
         }}
       />
 
-      <div className="">
-        {/* pass plain primitives (strings) to the server component */}
-        <StoresContent stores={stores} page={pageParam ?? "0"} letter={letterParam ?? null} />
+      <div>
+        {/* pass plain primitives to the server component */}
+        <StoresContent
+          stores={stores}
+          page={String(pageParam ?? "0")}
+          letter={letterParam ? String(letterParam).charAt(0) : null}
+        />
 
-        {/* hidden links for SEO (keeps HTML links present) */}
+        {/* hidden SEO links */}
         <div className="hidden">
           {stores.map((store: any) =>
             store.slug ? (
