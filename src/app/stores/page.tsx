@@ -1,103 +1,156 @@
-// src/app/stores/page.tsx
-import { Metadata } from "next";
-import { API_URL } from "@/app/components/utils/BASE_URL";
-import Link from "next/link";
-import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl";
-import StoresContent from "@/app/components/store/StoresContent.server";
-// import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
+import { Metadata } from "next"
+import { API_URL } from "@/app/components/utils/BASE_URL"
+import Link from "next/link"
+import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl"
+import StoresContent from "../components/store/StoresContent"
 
 export const metadata: Metadata = {
   title: "Coupons and Discounts on Your Favorite Stores | LiveOff Coupon",
-  description:
-    "Find the best promo codes, discounts, and coupons for your favorite stores! Browse our complete list of brands and save big on every purchase you make.",
-};
+  description: "Find the best promo codes, discounts, and coupons for your favorite stores! Browse our complete list of brands and save big on every purchase you make.",
+  // Rest of your metadata stays the same
+}
 
+// Server-side data fetching
 async function getStores() {
   try {
-    const response = await fetch(`${API_URL}/store`, { next: { revalidate: 10 } });
-    if (!response.ok) throw new Error(`API responded with status: ${response.status}`);
-    return await response.json();
-  } catch (err) {
-    console.error("Error fetching stores:", err);
-    return [];
+    const response = await fetch(`${API_URL}/store`, {
+      next: { revalidate: 10 } // Revalidate every hour
+    })
+
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Error fetching stores:", error)
+    return []
   }
 }
 
-/**
- * Important: await props.searchParams (not just props) before accessing its properties.
- */
-export default async function Page(props: any) {
-  // await the searchParams proxy directly (this is the recommended safe pattern)
-  const searchParams = (await props?.searchParams) ?? {};
-
-  // normalize to plain strings (safe primitives to pass into server components)
-  const pageParam = Array.isArray(searchParams?.page) ? searchParams.page[0] : searchParams?.page;
-  const letterParam = Array.isArray(searchParams?.letter) ? searchParams.letter[0] : searchParams?.letter;
-
-  const stores = await getStores();
+export default async function Page() {
+  // Fetch data on the server
+  const stores = await getStores()
 
   return (
     <>
+      {/* <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Stores on Offers | LiveOffCoupon",
+            description: "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
+            url: "https://liveoffcoupon.com/stores",
+          }),
+        }}
+      />
+       */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Stores on Offers | LiveOffCoupon",
-            description: "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
-            url: "https://liveoffcoupon.com/stores",
-            breadcrumb: {
+            "name": "Stores on Offers | LiveOffCoupon",
+            "description": "Discover a wide range of stores offering exclusive discounts and coupons on LiveOffCoupon.",
+            "url": "https://liveoffcoupon.com/stores",
+
+            "breadcrumb": {
               "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://liveoffcoupon.com" },
-                { "@type": "ListItem", position: 2, name: "Stores", item: "https://liveoffcoupon.com/stores" },
-              ],
-            },
-            potentialAction: {
-              "@type": "ViewAction",
-              target: "https://liveoffcoupon.com/stores",
-              name: "Browse All Stores with Coupons",
-            },
-            mainEntity: {
-              "@type": "ItemList",
-              itemListElement: stores.map((store: any, index: number) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                url: `https://liveoffcoupon.com/coupons/${store.slug}`,
-                item: {
-                  "@type": "Store",
-                  name: store.name,
-                  url: `https://liveoffcoupon.com/coupons/${store.slug}`,
-                  image: convertToSecureUrl(store.logoUrl || "/images/default_store_img.png"),
-                  identifier: store.id,
-                  sameAs: store.websiteUrl || "",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://liveoffcoupon.com"
                 },
-              })),
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Stores",
+                  "item": "https://liveoffcoupon.com/stores"
+                }
+              ]
             },
-          }),
+
+            "potentialAction": {
+              "@type": "ViewAction",
+              "target": "https://liveoffcoupon.com/stores",
+              "name": "Browse All Stores with Coupons"
+            },
+
+            "mainEntity": {
+              "@type": "ItemList",
+              "itemListElement": stores.map((store: any, index: number) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+                "item": {
+                  "@type": "Store",
+                  "name": store.name,
+                  "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+                  "image": convertToSecureUrl(store.logoUrl || "/images/default_store_img.png"),
+                  "identifier": store.id,
+                  "sameAs": store.websiteUrl || "", // if available
+                }
+              }))
+            }
+          })
         }}
       />
 
-      <div>
-        {/* pass plain primitives to the server component */}
-        <StoresContent
-          stores={stores}
-          page={String(pageParam ?? "0")}
-          letter={letterParam ? String(letterParam).charAt(0) : null}
-        />
+      <div className="">
+        <StoresContent />
+        {/* <h2 className="text-2xl font-bold text-center mb-8">Stores on Offers</h2> */}
 
-        {/* hidden SEO links */}
+        {/* Stores Grid */}
+        {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+          {stores.length > 0 ? (
+            stores.slice(0, 30).map((store: any, index: number) => (
+              <Link
+                key={index}
+                href={`/coupons/${store?.slug || "no-slug"}`}
+                className={`${store.bgColor || "bg-white"} w-[206px] h-[166px] cursor-pointer aspect-square rounded-lg flex items-center justify-center p-6 transition-transform hover:scale-105 shadow-md`}
+              >
+                {store?.logoUrl ? (
+                  <img
+                    src={convertToSecureUrl(store?.logoUrl) || "/images/default_store_img.png"}
+                    alt={`${store.name} logo`}
+                    width={150}
+                    height={150}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <img
+                    src="/images/default_store_img.png"
+                    alt="Default store logo"
+                    width={150}
+                    height={150}
+                    className="w-full h-full object-contain"
+                  />
+                )}
+              </Link>
+            ))
+          ) : (
+            <p className="text-center col-span-full">No stores available.</p>
+          )}
+        </div> */}
+
+        {/* Add this section to ensure ALL links are in the HTML */}
         <div className="hidden">
-          {stores.map((store: any) =>
-            store.slug ? (
+          {stores.map((store: any) => (
+            store.slug && (
               <Link key={store.id} href={`/coupons/${store.slug}`}>
                 {store.name}
               </Link>
-            ) : null
-          )}
+            )
+          ))}
         </div>
+
+
       </div>
     </>
-  );
+  )
 }

@@ -1,8 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import axios from "axios"
 import CategoryBanner from "@/app/components/category/categoryBanner"
-// import CategoryCoupons from "@/app/components/category/CategoryCoupons"
-import CategoryCoupons from "@/app/components/category/CategoryCoupons.server"
+import CategoryCoupons from "@/app/components/category/CategoryCoupons"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import { redirect } from 'next/navigation'
 

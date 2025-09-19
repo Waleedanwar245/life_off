@@ -1,15 +1,14 @@
-// components/store/CouponTabs.server.tsx
+// app/components/store/CouponTabs.server.tsx
 import React from "react";
-import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import dayjs from "dayjs";
-import CouponTabsClient from "./CouponTabs.client"; // client-enhancer included at bottom
-import ProductSlider from "./ProductSlider";
+import ProductSlider from "./ProductSlider"; // server-safe markup
+import CouponTabsClient from "./CouponTabs.client"; // client enhancer (keeps modal/copy behavior)
+import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import { Row, Col } from "antd";
-import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
 
 type Props = { data: any };
 
-function isValidDateString(dateStr: any): boolean {
+function isValidDateString(dateStr: any) {
   if (!dateStr) return false;
   const d = dayjs(dateStr);
   return d.isValid();
@@ -56,15 +55,8 @@ function mapCouponsForServer(apiStore: any) {
     });
 }
 
-type SimilarStore = { storeId: string; name: string; logo: string };
-type LatestStore = { slug?: string; logoUrl?: string; name?: string };
-
-const SITE_ORIGIN = "https://liveoffcoupon.com";
-
 export default function CouponTabs({ data }: Props) {
-  // Defensive sanitize: ensure any HTML strings inside data have internal nofollow removed
-  const sanitized = sanitizeHomeData(data, SITE_ORIGIN);
-  const store = sanitized?.store ?? {};
+  const store = data?.store ?? {};
   const couponsList = mapCouponsForServer(store);
 
   const activeCoupons = couponsList.filter((c: any) => c.buttonText !== "Expired");
@@ -72,36 +64,66 @@ export default function CouponTabs({ data }: Props) {
   const activeDealsCount = activeCoupons.filter((c: any) => !c.code).length;
   const activeCodesCount = activeCoupons.filter((c: any) => c.code).length;
 
-  const formattedSimilarStores: SimilarStore[] = (sanitized?.similarStores || [])
-    .map((item: any) => ({
+  // For similar stores/coupons: server can render placeholders and client will fetch/enhance
+  const formattedSimilarStores: { storeId: string; name: string; logo: string }[] = (data?.similarStores || [])
+    .map((item: any, i: number) => ({
       storeId: item?.store?.slug || item?.slug || "",
       name: item?.store?.name || item?.name || "No Name",
       logo: item?.store?.logoUrl || item?.logo || "/default-logo.png",
     }))
     .slice(0, 8);
 
-  const latestStores: LatestStore[] = (sanitized?.latestStores || []).slice(0, 8);
+  const latestStores: any[] = (data?.latestStores || []).slice(0, 8);
 
+  // IMPORTANT: We use anchor links + CSS scroll-margin-top to preserve offset for sticky header.
+  // No client JS required for the basic scrolling behavior.
   return (
     <div className="max-w-[1280px] font-sans mx-auto px-4 py-8">
-      {/* Sticky Tabs */}
+      {/* Inline CSS: smooth scrolling + offset for sticky header (adjust offset if needed) */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            html { scroll-behavior: smooth; }
+            /* Adjust top offset for different viewports to account for your header height */
+            #coupons, #store-info, #faqs { scroll-margin-top: 140px; }
+            @media (max-width: 768px) {
+              #coupons, #store-info, #faqs { scroll-margin-top: 110px; }
+            }
+            @media (max-width: 480px) {
+              #coupons, #store-info, #faqs { scroll-margin-top: 90px; }
+            }
+          `,
+        }}
+      />
+
+      {/* Sticky Tabs: use anchor links so clicking them navigates to section and CSS keeps offset */}
       <div className="sticky top-0 z-10 bg-white border-b">
         <div className="flex">
-          <button className="px-4 py-2 text-sm font-medium text-green-600 border-b-2 border-green-600">Coupons</button>
-          <button className="px-4 py-2 text-sm font-medium text-gray-600">Store Info</button>
-          <button className="px-4 py-2 text-sm font-medium text-gray-600">FAQs</button>
+          <a href="#coupons" className="px-4 py-2 text-sm font-medium text-green-600 border-b-2 border-green-600">
+            Coupons
+          </a>
+          <a href="#store-info" className="px-4 py-2 text-sm font-medium text-gray-600">
+            Store Info
+          </a>
+          <a href="#faqs" className="px-4 py-2 text-sm font-medium text-gray-600">
+            FAQs
+          </a>
         </div>
       </div>
 
       {/* Main content */}
       <div>
-        <div className="py-4">
+        <div id="coupons" className="py-4">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left: Coupons */}
             <div className="w-full lg:w-2/3">
-              {["Active", "Similar", "Expired"].map((section) => {
+              {["Active", "Similar", "Expired"].map((section: string) => {
                 const sectionCoupons =
-                  section === "Active" ? activeCoupons : section === "Similar" ? (sanitized?.similarCoupons || []).slice(0, 8) : couponsList.filter((c: any) => c.buttonText === "Expired");
+                  section === "Active"
+                    ? activeCoupons
+                    : section === "Similar"
+                    ? (data?.similarCoupons || []).slice(0, 8)
+                    : couponsList.filter((c: any) => c.buttonText === "Expired");
 
                 return (
                   <div key={section}>
@@ -115,10 +137,22 @@ export default function CouponTabs({ data }: Props) {
                             <div className="flex-1">
                               <div className="flex items-start">
                                 <div className="text-center py-4 min-w-[70px] max-w-[90px] w-full overflow-hidden">
-                                  <div className="font-bold leading-tight text-center" style={{ fontSize: "clamp(16px, 2vw, 20px)", color: section === "Expired" ? "#4B5563" : "#7FA842" }}>
+                                  <div
+                                    className="font-bold leading-tight text-center"
+                                    style={{
+                                      fontSize: "clamp(16px, 2vw, 20px)",
+                                      color: section === "Expired" ? "#4B5563" : "#7FA842",
+                                    }}
+                                  >
                                     {coupon.discount}
                                   </div>
-                                  <div className="font-bold leading-tight text-center" style={{ fontSize: "clamp(16px, 2vw, 18px)", color: section === "Expired" ? "#4B5563" : "#7FA842" }}>
+                                  <div
+                                    className="font-bold leading-tight text-center"
+                                    style={{
+                                      fontSize: "clamp(16px, 2vw, 18px)",
+                                      color: section === "Expired" ? "#4B5563" : "#7FA842",
+                                    }}
+                                  >
                                     {coupon.second_img}
                                   </div>
                                 </div>
@@ -130,7 +164,9 @@ export default function CouponTabs({ data }: Props) {
                                     {coupon.codeorDeal}{" "}
                                     {coupon.isExclusive && (
                                       <span style={{ marginLeft: 10 }}>
-                                        <span style={{ background: "#789A1A", color: "white", padding: "2px 6px", borderRadius: 4, fontSize: 12 }}>Exclusive</span>
+                                        <span style={{ background: "#789A1A", color: "white", padding: "2px 6px", borderRadius: 4, fontSize: 12 }}>
+                                          Exclusive
+                                        </span>
                                       </span>
                                     )}
                                   </div>
@@ -145,19 +181,21 @@ export default function CouponTabs({ data }: Props) {
                               </div>
                             </div>
 
-                            {/* Action anchor */}
+                            {/* Action as anchor (server-rendered + accessible) */}
                             <div className="mt-3 md:mt-0 relative md:block hidden">
                               <a
                                 href={coupon.htmlCode || "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 data-coupon-action
-                                data-coupon-id={coupon.id}
-                                data-coupon-code={coupon.code || ""}
-                                data-coupon-title={coupon.title}
-                                data-coupon-logo={coupon.logo || ""}
-                                data-coupon-html={coupon.htmlCode || ""}
-                                className={`inline-flex items-center justify-center border px-4 py-1.5 rounded-full text-white ${section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800 hover:bg-gray-700"}`}
+                                data-coupon-id={String(coupon.id ?? "")}
+                                data-coupon-code={String(coupon.code ?? "")}
+                                data-coupon-title={String(coupon.title ?? "")}
+                                data-coupon-logo={String(coupon.logo ?? "")}
+                                data-coupon-html={String(coupon.htmlCode ?? "")}
+                                className={`inline-flex items-center justify-center border px-4 py-1.5 rounded-full text-white ${
+                                  section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800 hover:bg-gray-700"
+                                }`}
                                 aria-label={coupon.buttonText}
                               >
                                 {coupon.buttonText}
@@ -171,12 +209,14 @@ export default function CouponTabs({ data }: Props) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 data-coupon-action
-                                data-coupon-id={coupon.id}
-                                data-coupon-code={coupon.code || ""}
-                                data-coupon-title={coupon.title}
-                                data-coupon-logo={coupon.logo || ""}
-                                data-coupon-html={coupon.htmlCode || ""}
-                                className={`inline-flex items-center justify-center px-3 py-1 rounded text-white ${section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800"}`}
+                                data-coupon-id={String(coupon.id ?? "")}
+                                data-coupon-code={String(coupon.code ?? "")}
+                                data-coupon-title={String(coupon.title ?? "")}
+                                data-coupon-logo={String(coupon.logo ?? "")}
+                                data-coupon-html={String(coupon.htmlCode ?? "")}
+                                className={`inline-flex items-center justify-center px-3 py-1 rounded text-white ${
+                                  section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800"
+                                }`}
                                 aria-label={coupon.buttonText}
                               >
                                 {coupon.code ? "Get Code" : "Get Deal"}
@@ -184,12 +224,14 @@ export default function CouponTabs({ data }: Props) {
                             </div>
                           </div>
 
-                          <div className="text-xs text-gray-600 flex items-center mt-0 p-2 border-t cursor-pointer" data-coupon-toggle-details={coupon.id}>
+                          {/* See details toggle - server renders as text and data attribute for client to enhance */}
+                          <div className="text-xs text-gray-600 flex items-center mt-0 p-2 border-t cursor-pointer" data-coupon-toggle-details={String(coupon.id ?? "")}>
                             <span>See Details</span>
                             <span className="ml-1">+</span>
                           </div>
 
-                          <div className="mb-4 text-sm text-gray-700 hidden" data-coupon-details={coupon.id}>
+                          {/* Hidden details container - client may toggle */}
+                          <div className="mb-4 text-sm text-gray-700 hidden" data-coupon-details={String(coupon.id ?? "")}>
                             {coupon.description || "No additional details available."}
                           </div>
                         </article>
@@ -226,7 +268,7 @@ export default function CouponTabs({ data }: Props) {
                   <h2 className="text-lg font-medium text-center mb-4 text-gray-800">Similar Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {formattedSimilarStores.length > 0 ? (
-                      formattedSimilarStores.map((s: SimilarStore, i: number) => (
+                      formattedSimilarStores.map((s: { storeId: string; name: string; logo: string }, i: number) => (
                         <a key={i} href={`/coupons/${s.storeId}`} className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]">
                           <img src={convertToSecureUrl(s.logo)} alt={s.name} className="object-contain w-[120px] h-[120px]" />
                         </a>
@@ -242,7 +284,7 @@ export default function CouponTabs({ data }: Props) {
                   <h2 className="text-2xl font-bold text-center mb-6">Latest Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {latestStores.length > 0 ? (
-                      latestStores.map((s: LatestStore, i: number) => (
+                      latestStores.map((s: any, i: number) => (
                         <a key={i} href={`/coupons/${s.slug}`} className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]">
                           <img src={convertToSecureUrl(s.logoUrl)} alt={s.name} className="object-contain w-[120px] h-[120px]" />
                         </a>
@@ -263,7 +305,7 @@ export default function CouponTabs({ data }: Props) {
             {store?.products?.length > 0 && (
               <div className="my-16">
                 <p className="text-[25px] md:text-[35px] font-bold mb-4">{store?.name} Products</p>
-                <ProductSlider data={sanitized} />
+                <ProductSlider data={data} />
               </div>
             )}
           </Col>
@@ -271,7 +313,7 @@ export default function CouponTabs({ data }: Props) {
 
         {/* Store Info & FAQs */}
         <Row>
-          <Col xs={24} md={16}>
+          <Col id="store-info" xs={24} md={16}>
             <div className="pt-8 border-t">
               <div className="custom-class prose lg:prose-xl">
                 {store?.storeArticle ? <div dangerouslySetInnerHTML={{ __html: store?.storeArticle }} /> : <p className="text-gray-500">No article available at the moment.</p>}
@@ -279,7 +321,7 @@ export default function CouponTabs({ data }: Props) {
             </div>
           </Col>
 
-          <Col xs={24} md={16}>
+          <Col id="faqs" xs={24} md={16}>
             <div>
               <h2 className="font-bold py-12 text-[20px] md:text-[25px] text-gray-800">Frequently Asked Questions</h2>
               <div className="space-y-4">
@@ -299,7 +341,7 @@ export default function CouponTabs({ data }: Props) {
         </Row>
       </div>
 
-      {/* Include client enhancer for interactivity */}
+      {/* Include client enhancer for interactivity (modal/copy/keyboard toggles etc.) */}
       <CouponTabsClient />
     </div>
   );
