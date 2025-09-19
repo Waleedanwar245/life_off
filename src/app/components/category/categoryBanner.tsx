@@ -19,7 +19,7 @@ export default function CategoryBanner({ data }: any) {
 
         {/* Content */}
         <div className="flex flex-col gap-1">
-          <h1 className="text-[33.9px] font-bold tracking-tight" style={{fontSize:'clamp(24px, 2vw, 33.9px)'}}>
+          <h1 className="text-[33.9px] font-bold tracking-tight text-gray-800" style={{fontSize:'clamp(24px, 2vw, 33.9px)'}}>
             {category.categoryName || "Category"}
           </h1>
 

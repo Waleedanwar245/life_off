@@ -4,7 +4,7 @@ import { API_URL } from "@/app/components/utils/BASE_URL";
 import Link from "next/link";
 import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl";
 import StoresContent from "@/app/components/store/StoresContent.server";
-import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
+// import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
 
 export const metadata: Metadata = {
   title: "Coupons and Discounts on Your Favorite Stores | LiveOff Coupon",
@@ -12,15 +12,11 @@ export const metadata: Metadata = {
     "Find the best promo codes, discounts, and coupons for your favorite stores! Browse our complete list of brands and save big on every purchase you make.",
 };
 
-const SITE_ORIGIN = "https://liveoffcoupon.com";
-
 async function getStores() {
   try {
     const response = await fetch(`${API_URL}/store`, { next: { revalidate: 10 } });
     if (!response.ok) throw new Error(`API responded with status: ${response.status}`);
-    const json = await response.json();
-    // sanitize fetched data (removes nofollow from internal links)
-    return sanitizeHomeData(json, SITE_ORIGIN);
+    return await response.json();
   } catch (err) {
     console.error("Error fetching stores:", err);
     return [];
@@ -38,7 +34,6 @@ export default async function Page(props: any) {
   const pageParam = Array.isArray(searchParams?.page) ? searchParams.page[0] : searchParams?.page;
   const letterParam = Array.isArray(searchParams?.letter) ? searchParams.letter[0] : searchParams?.letter;
 
-  // Get sanitized stores
   const stores = await getStores();
 
   return (
@@ -66,17 +61,17 @@ export default async function Page(props: any) {
             },
             mainEntity: {
               "@type": "ItemList",
-              itemListElement: (Array.isArray(stores) ? stores : []).map((store: any, index: number) => ({
+              itemListElement: stores.map((store: any, index: number) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                url: `https://liveoffcoupon.com/coupons/${store?.slug}`,
+                url: `https://liveoffcoupon.com/coupons/${store.slug}`,
                 item: {
                   "@type": "Store",
-                  name: store?.name,
-                  url: `https://liveoffcoupon.com/coupons/${store?.slug}`,
-                  image: convertToSecureUrl(store?.logoUrl || "/images/default_store_img.png"),
-                  identifier: store?.id,
-                  sameAs: store?.websiteUrl || "",
+                  name: store.name,
+                  url: `https://liveoffcoupon.com/coupons/${store.slug}`,
+                  image: convertToSecureUrl(store.logoUrl || "/images/default_store_img.png"),
+                  identifier: store.id,
+                  sameAs: store.websiteUrl || "",
                 },
               })),
             },
@@ -94,8 +89,8 @@ export default async function Page(props: any) {
 
         {/* hidden SEO links */}
         <div className="hidden">
-          {(Array.isArray(stores) ? stores : []).map((store: any) =>
-            store?.slug ? (
+          {stores.map((store: any) =>
+            store.slug ? (
               <Link key={store.id} href={`/coupons/${store.slug}`}>
                 {store.name}
               </Link>

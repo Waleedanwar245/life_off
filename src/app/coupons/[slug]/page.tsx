@@ -1,13 +1,18 @@
+// page.tsx
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 import type { Metadata, ResolvingMetadata } from "next"
 import { Suspense } from "react"
 import axios from "axios"
 import StoreHeader from "@/app/components/store/StoreHeader"
-import CouponTabs from "@/app/components/store/CouponTabs"
+import CouponTabs from "@/app/components/store/CouponTabs.server";
 import dayjs from "dayjs"
 import { notFound, redirect } from "next/navigation" // ✅ server-side redirect
+import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
+
 export const dynamic = "force-dynamic";
+
+const SITE_ORIGIN = "https://liveoffcoupon.com";
 
 // Types
 interface Store {
@@ -55,17 +60,6 @@ export async function generateStaticParams() {
   }
 }
 
-// Fetch store data
-// async function getStoreBySlug(slug: string): Promise<StoreData> {
-//   console.log("slug:::",slug);
-//   try {
-//     const response = await axios.get(`${API_URL}/store/coupon-product-by-slug/${slug}`)
-//     return response.data
-//   } catch (error) {
-//     console.error("Error fetching store data:", error)
-//     throw error
-//   }
-// }
 async function getStoreBySlug(slug: string): Promise<StoreData> {
   console.log("slug:::", slug);
   try {
@@ -79,7 +73,9 @@ async function getStoreBySlug(slug: string): Promise<StoreData> {
     }
 
     const data = await res.json();
-    return data;
+    // sanitize the whole payload (removes internal nofollow tokens)
+    const sanitized = sanitizeHomeData(data, SITE_ORIGIN);
+    return sanitized as StoreData;
   } catch (error) {
     console.error("Error fetching store data:", error);
     throw error;
@@ -91,7 +87,6 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   try {
     // Await the params to get the id
     const { slug } = await params
-    console.log("params:::::", params);
     const data = await getStoreBySlug(slug)
     const store = data?.store
 
@@ -104,10 +99,10 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
     const storeTitle = store?.storeTitle || (store?.coupons?.[0]?.mainImage + " " + store?.coupons?.[0]?.secondaryImage + " " + store.name?.trim() + " " + store?.secondaryName) || store.name?.trim() || store.slug?.trim() || "Featured Store"
     const storeDescription =
-      `Get` + " " + storeTitle +". "+ "LiveOff Coupon offers updated coupon codes and exclusive savings. Updated regularly to help you save more." ||
+      `Get ${storeTitle}. LiveOff Coupon offers updated coupon codes and exclusive savings. Updated regularly to help you save more.` ||
       store.storeDescription?.trim() ||
       `Discover the latest coupons, discounts, and offers at ${storeTitle} on LiveOff Coupon.`
-    console.log("=====>", `${dayjs().format('MMMM YYYY')}`);
+
     return {
       title: `${storeTitle} ${dayjs().format('MMMM YYYY')} | LiveOff Coupon`,
       description: storeDescription,
@@ -140,8 +135,6 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
 
 // Generate JSON-LD schema
 function generateJsonLd(store: Store) {
-  console.log("store:::", store);
-
   return {
     "@context": "https://schema.org",
     "@type": "Store",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import FreeShippingContent from "../components/freeShipping/FreeShippingContent"
+import FreeShippingContent from "../components/freeShipping/FreeShippingContent.server"
 
 export const metadata: Metadata = {
   title: "Free Shipping Coupons & Deals | LiveOffCoupon",

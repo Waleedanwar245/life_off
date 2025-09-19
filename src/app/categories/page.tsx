@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import { API_URL } from "@/app/components/utils/BASE_URL"
 import axios from "axios"
 import Link from "next/link"
-import CategoriesCarousel from "@/app/components/category/CategoriesCarousel"
-import CategoryGrid from "@/app/components/category/CategoryGrid"
+import CategoriesCarousel from "@/app/components/category/CategoriesCarousel.server";
+import CategoryGrid from "@/app/components/category/CategoryGrid.server";
 
 export const metadata: Metadata = {
   title: "All Categories | LiveOffCoupon",
