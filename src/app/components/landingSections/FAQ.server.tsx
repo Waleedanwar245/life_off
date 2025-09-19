@@ -1,7 +1,6 @@
 // components/landingSections/FAQ.server.tsx
 import React from "react";
 import { API_URL } from "../utils/BASE_URL";
-import { removeNofollow } from "@/app/components/utils/removeNofollow"; // <- new util
 
 type FAQItem = {
   question?: string;
@@ -24,13 +23,6 @@ export default async function FAQ({ data }: { data?: any }) {
   const faqs: FAQItem[] = Array.isArray(source?.faqs) ? source.faqs : [];
   const descriptionHtml = source?.description ?? "";
 
-  // Pre-process: remove nofollow from answers + description
-  const processedFaqs = faqs.map((item) => ({
-    ...item,
-    safeAnswerHtml: removeNofollow(item.answer ?? ""),
-  }));
-  const safeDescriptionHtml = removeNofollow(descriptionHtml ?? "");
-
   return (
     <section id="faq-section" className="mx-auto px-4 py-12 max-w-[1440px]" aria-labelledby="faq-heading">
       <h2 id="faq-heading" className="text-3xl font-bold text-gray-900 mb-6" style={{ fontSize: "clamp(20px, 2vw, 30px)" }}>
@@ -38,10 +30,10 @@ export default async function FAQ({ data }: { data?: any }) {
       </h2>
 
       <div className="space-y-1" role="list">
-        {processedFaqs.length === 0 ? (
+        {faqs.length === 0 ? (
           <div className="text-center py-8 text-gray-500">No FAQs available at the moment.</div>
         ) : (
-          processedFaqs.map((item, index) => (
+          faqs.map((item, index) => (
             <div key={index} className="border-b border-gray-200" role="listitem">
               <div className="w-full py-4">
                 <button
@@ -72,7 +64,7 @@ export default async function FAQ({ data }: { data?: any }) {
                   data-index={index}
                   className="overflow-hidden transition-[max-height] duration-300 ease-in-out max-h-0"
                 >
-                  <div className="py-2 text-gray-600" dangerouslySetInnerHTML={{ __html: item.safeAnswerHtml }} />
+                  <div className="py-2 text-gray-600" dangerouslySetInnerHTML={{ __html: item.answer ?? "" }} />
                 </div>
               </div>
             </div>
@@ -81,7 +73,7 @@ export default async function FAQ({ data }: { data?: any }) {
       </div>
 
       <div className="custom-class mt-8 text-[17.23px] font-medium leading-[27px] tracking-[0.8%] font-montserrat">
-        {safeDescriptionHtml ? <div dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }} /> : "no description"}
+        {descriptionHtml ? <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} /> : "no description"}
       </div>
     </section>
   );

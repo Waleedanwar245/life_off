@@ -1,21 +1,62 @@
 // src/app/components/utils/removeNofollow.ts
 import { load, CheerioAPI } from "cheerio";
 
+type RemoveOptions = {
+  onlyInternal?: boolean; // default true
+  siteOrigin?: string; // e.g. "https://liveoffcoupon.com"
+};
+
 /**
- * Remove the "nofollow" token from all <a> rel attributes.
- * - Keeps other rel tokens intact.
- * - Keeps noopener/noreferrer if present (for security).
+ * Remove the "nofollow" token from <a> rel attributes.
+ * - If onlyInternal is true, remove nofollow only for internal links (relative URLs or same host).
+ * - Keeps other rel tokens (noopener/noreferrer) intact.
  * - If rel becomes empty, remove the attribute entirely.
  *
- * Use only on server (this uses cheerio).
+ * Server-only utility (uses cheerio).
  */
-export function removeNofollow(html?: string | null): string {
+export function removeNofollow(html?: string | null, options?: RemoveOptions): string {
   if (!html) return "";
 
-  const $: CheerioAPI = load(html); // avoid options that may disagree with typings
+  const onlyInternal = options?.onlyInternal ?? true;
+  const siteOrigin = options?.siteOrigin ?? "https://liveoffcoupon.com"; // change if needed
+
+  const siteHostname = (() => {
+    try {
+      return new URL(siteOrigin).hostname;
+    } catch {
+      return siteOrigin; // fallback: treat as hostname if no protocol present
+    }
+  })();
+
+  const $: CheerioAPI = load(html);
 
   $("a").each((_: number, el: any) => {
     const $el = $(el);
+    const href = ($el.attr("href") || "").trim();
+
+    // determine if link is internal
+    let isInternal = false;
+    if (!href) {
+      isInternal = false;
+    } else if (href.startsWith("/")) {
+      isInternal = true;
+    } else {
+      // if href is absolute URL, compare hostnames
+      try {
+        const u = new URL(href, siteOrigin);
+        if (u.hostname === siteHostname) isInternal = true;
+      } catch {
+        // If URL parsing fails, treat as external (conservative)
+        isInternal = false;
+      }
+    }
+
+    // Only alter rel if not required to keep external nofollow
+    if (onlyInternal && !isInternal) {
+      // skip external links when onlyInternal === true
+      return;
+    }
+
     const relAttr = ($el.attr("rel") || "").trim();
 
     // Build set of tokens (lower-cased)
@@ -46,6 +87,5 @@ export function removeNofollow(html?: string | null): string {
     }
   });
 
-  // return fragment HTML or full document
   return $.root().html() ?? $.html();
 }

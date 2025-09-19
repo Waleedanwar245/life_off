@@ -2,6 +2,7 @@
 import React from "react";
 import { convertToSecureUrl } from "@/app/components/utils/convertToSecureUrl";
 import { API_URL } from "@/app/components/utils/BASE_URL";
+import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
 
 type Props = {
   stores?: any[] | null;
@@ -9,6 +10,8 @@ type Props = {
   letter?: string | null;        // plain single-letter filter or null
   itemsPerPage?: number;
 };
+
+const SITE_ORIGIN = "https://liveoffcoupon.com";
 
 function normalizeStores(raw: any): any[] {
   if (!raw) return [];
@@ -23,7 +26,9 @@ async function fetchStoresServer(): Promise<any[]> {
     const res = await fetch(`${API_URL}/store`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
-    return normalizeStores(json);
+    // sanitize fetched data server-side (remove nofollow from internal links)
+    const sanitized = sanitizeHomeData(json, SITE_ORIGIN);
+    return normalizeStores(sanitized);
   } catch (err) {
     console.error("Stores fetch error:", err);
     return [];
@@ -31,7 +36,10 @@ async function fetchStoresServer(): Promise<any[]> {
 }
 
 export default async function StoresContent({ stores, page = "0", letter = null, itemsPerPage = 30 }: Props) {
-  const allStores = normalizeStores(stores ?? (await fetchStoresServer()));
+  // sanitize incoming stores prop too (defense-in-depth)
+  const incoming = stores ?? (await fetchStoresServer());
+  const sanitizedIncoming = sanitizeHomeData(incoming, SITE_ORIGIN);
+  const allStores = normalizeStores(sanitizedIncoming);
 
   // page is already a simple string, convert safely to integer
   const currentPage = Math.max(0, Number.isFinite(Number(page)) ? Math.max(0, parseInt(page || "0", 10)) : 0);

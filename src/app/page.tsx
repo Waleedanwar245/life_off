@@ -2,6 +2,7 @@ import { API_URL } from "@/app/components/utils/BASE_URL"
 import SplashScreen from "@/app/components/utils/SplashSvreen"
 import { Suspense } from "react"
 import type { Metadata } from "next"
+import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
 // import HeroBanner from "./components/landingSections/HeroBanner"
 import HeroBanner from "./components/landingSections/HeroBanner.server"
 import HeroBannerClient from "./components/landingSections/HeroBanner.client"
@@ -119,12 +120,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   // Fetch data in parallel
-  const [bannerData, allStores, allCoupons, categoryData] = await Promise.all([
+  const [bannerDataRaw, allStoresRaw, allCouponsRaw, categoryDataRaw] = await Promise.all([
     getLandingPageData(),
     getStoresData(),
     getCouponsData(),
     getCategoriesData(),
   ])
+
+  // Use your canonical site origin here
+  const SITE_ORIGIN = "https://liveoffcoupon.com";
+
+  // Sanitize (remove nofollow only for internal links) recursively from the fetched raw data:
+  const bannerData = sanitizeHomeData(bannerDataRaw, SITE_ORIGIN);
+  const allStores = sanitizeHomeData(allStoresRaw, SITE_ORIGIN);
+  const allCoupons = sanitizeHomeData(allCouponsRaw, SITE_ORIGIN);
+  const categoryData = sanitizeHomeData(categoryDataRaw, SITE_ORIGIN);
 
   // Generate JSON-LD schema
   const jsonLdWebsite = {
