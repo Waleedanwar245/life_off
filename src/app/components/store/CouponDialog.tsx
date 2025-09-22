@@ -86,7 +86,7 @@ export default function CouponDialog({ copyToClipboard, isModalOpen, handleCance
               </button>
             </div>
           ) : (
-            <div className="flex justify-center">No Coupon Code Required</div>
+            <div className="flex justify-center text-gray-800">No Coupon Code Required</div>
           )}
 
           {/* Instructions */}

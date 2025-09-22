@@ -118,7 +118,7 @@ export default function CategoryCoupons({ data }: any) {
 
           {/* Categories Section */}
           <div className="sticky top-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h2 className="text-xl font-bold p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">Categories</h2>
+            <h2 className="text-xl font-bold p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg text-gray-800">Categories</h2>
             <div className="max-h-[70vh] overflow-y-auto p-2">
               {categoriesLoading ? (
                 <div className="p-4 text-center">Loading categories...</div>
@@ -147,7 +147,7 @@ export default function CategoryCoupons({ data }: any) {
                               />
                             </div>
                           )}
-                          <span>{category.categoryName}</span>
+                          <span className="text-gray-800">{category.categoryName}</span>
                         </div>
                       </button>
                     </li>
@@ -162,7 +162,7 @@ export default function CategoryCoupons({ data }: any) {
 
         {/* Right Column - Coupons */}
         <div className="lg:col-span-3">
-          <h2 className="text-2xl font-bold mb-6">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
             {selectedCategory && categories.find((cat: any) => cat.id === selectedCategory)?.heading1}
           </h2>
 
@@ -186,12 +186,12 @@ export default function CategoryCoupons({ data }: any) {
                           className="h-56 w-auto object-contain"
                         />
                       </div>
-                      <div className="absolute right-0 top-0 border border-gray-300 rounded px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
+                      <div className="absolute right-0 top-0 border border-gray-300 rounded text-gray-800 px-3 py-1 text-sm group-hover:bg-[#7FA842] group-hover:text-white group-hover:border-[#7FA842] transition-all duration-300">
                         {coupon?.mainImage + " " + coupon?.secondaryImage}
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-bold mb-2 min-h-[3rem] line-clamp-2">{coupon.name}</h3>
+                    <h3 className="text-lg font-bold mb-2 min-h-[3rem] line-clamp-2 text-gray-800">{coupon.name}</h3>
 
                     <div className="mt-auto flex justify-center">
                       <div className="w-[60%]">
