@@ -70,7 +70,7 @@ export default function CategoriesCarousel({ data }: { data?: Category[] | any }
             role="list"
             aria-label="Categories"
             className="flex gap-16 items-center overflow-x-auto scroll-smooth py-6"
-            style={{ scrollBehavior: "smooth", paddingInline: "6rem" }} // <-- padding from edges so first/last visible
+            style={{ scrollBehavior: "smooth", paddingInline: "3rem" }} // <-- padding from edges so first/last visible
           >
             {categories.map((category) => (
               <div
