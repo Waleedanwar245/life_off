@@ -34,7 +34,7 @@ type Coupon = {
 
 async function fetchCategories(): Promise<Category[]> {
   try {
-    const res = await fetch(`${API_URL}/categories/all`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}/categories/all`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
     return Array.isArray(json) ? json : [];
@@ -47,9 +47,7 @@ async function fetchCategories(): Promise<Category[]> {
 async function fetchCouponsForCategory(categoryId?: string | number): Promise<Coupon[]> {
   if (!categoryId) return [];
   try {
-    const res = await fetch(`${API_URL}/categories/${categoryId}/coupons`, {
-      cache: "no-store",
-    });
+    const res = await fetch(`${API_URL}/categories/${categoryId}/coupons`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const json = await res.json();
     if (Array.isArray(json)) return json;
