@@ -281,7 +281,7 @@ export default function CouponTabs({ data }: Props) {
 
                 {/* Latest stores */}
                 <div className="bg-gray-50 rounded-xl p-6 max-w-[500px] shadow">
-                  <h2 className="text-2xl font-bold text-center mb-6">Latest Stores</h2>
+                  <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Latest Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
                     {latestStores.length > 0 ? (
                       latestStores.map((s: any, i: number) => (
@@ -328,7 +328,7 @@ export default function CouponTabs({ data }: Props) {
                 {(store?.faqs || []).map((faq: any, idx: number) => (
                   <div key={idx} className="border-b pb-4">
                     <details className="group">
-                      <summary className="text-[14px] md:text-[20px] flex justify-between items-center w-full text-left font-bold cursor-pointer">
+                      <summary className="text-[14px] md:text-[20px] flex justify-between items-center w-full text-left font-bold cursor-pointer text-gray-800">
                         {faq.question}
                       </summary>
                       <p className="mt-2 text-gray-700">{faq.answer}</p>
