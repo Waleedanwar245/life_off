@@ -1,5 +1,6 @@
 // components/landingSections/TrendingDeals.server.tsx
 import React from "react";
+import Image from "next/image";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import { API_URL } from "../utils/BASE_URL";
 import { BsLightning } from "react-icons/bs";
@@ -47,6 +48,9 @@ async function fetchTrending(): Promise<Deal[]> {
 export default async function TrendingDeals() {
   const deals = await fetchTrending();
 
+  // Match tailwind w-56 h-56 -> 14rem = 224px
+  const IMG_BOX_SIZE = 224;
+
   return (
     <section id="trending-deals-section" className="max-w-[1440px] mx-auto px-4 py-6" aria-labelledby="trending-deals-heading">
       <div className="flex items-center justify-between mb-6">
@@ -77,11 +81,17 @@ export default async function TrendingDeals() {
                 )}
 
                 <div className="w-56 h-56 flex items-center justify-center">
-                  <img
+                  {/* Next/Image - keep class 'trending-img' and data-fallback so client script can manage fallback */}
+                  <Image
                     src={convertToSecureUrl(deal.logo) || "/placeholder.svg"}
                     alt={`${deal.name} logo`}
+                    width={IMG_BOX_SIZE}
+                    height={IMG_BOX_SIZE}
                     className="object-contain p-2 mb-4 trending-img"
                     data-fallback="/placeholder.svg"
+                    loading="lazy"
+                    sizes="(max-width: 640px) 160px, 224px"
+                    unoptimized // remove this if you add external domains to next.config.js
                   />
                 </div>
               </div>

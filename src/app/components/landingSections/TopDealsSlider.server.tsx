@@ -1,5 +1,6 @@
 // components/landingSections/TopDealsSlider.server.tsx
 import React from "react";
+import Image from "next/image";
 import { API_URL } from "../utils/BASE_URL";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
@@ -46,7 +47,7 @@ async function fetchProducts(): Promise<Product[]> {
           image: item?.imageUrl ?? item?.image ?? "/placeholder.svg",
           discount,
           storeName: item?.store?.name ?? item?.storeName ?? "Unknown",
-          rating: Math.max(0, Math.min(5, Number(item?.rating ?? 0) || 0)), // clamp 0..5
+          rating: Math.max(0, Math.min(5, Number(item?.rating ?? 0) || 0)),
           originalPrice: String(oldPrice ?? ""),
           salePrice: String(currentPrice ?? ""),
           htmlUrl: item?.htmlUrl ?? item?.url ?? "#",
@@ -54,22 +55,14 @@ async function fetchProducts(): Promise<Product[]> {
         };
       }) ?? [];
 
-    // detect if backend uses isFeatured and pick featured items if present
-    // detect if backend uses isFeatured and pick featured items if present
-    // detect if backend uses isFeatured and pick featured items if present
     const hasFeaturedFlag = (list || []).some((it: any) => !!it?.isFeatured);
     if (hasFeaturedFlag) {
-      // map may produce undefined entries, so annotate the mapped element type:
       return (list || [])
         .map((it: RawProduct, idx: number): Product | undefined => products[idx])
-        // narrow out undefined entries; now array is Product[]
         .filter((p: Product | undefined): p is Product => Boolean(p))
-        // now `p` is Product and `i` is number (no implicit any)
         .filter((p: Product, i: number) => Boolean((list as any[])[i]?.isFeatured))
         .slice(0, 24);
     }
-
-
 
     return products.slice(0, 24);
   } catch (err) {
@@ -78,11 +71,6 @@ async function fetchProducts(): Promise<Product[]> {
   }
 }
 
-/** Render star icons for a rating (0..5).
- *  Full stars = floor(rating)
- *  Half star when fractional >= 0.5
- *  Empty stars fill to 5
- */
 function renderStars(rating: number) {
   const full = Math.floor(rating);
   const fraction = rating - full;
@@ -143,12 +131,19 @@ export default async function TopDealsSlider() {
                   aria-label={product.title}
                 >
                   <div className="relative overflow-hidden h-60">
-                    <img
+                    {/* next/image fill so it covers the parent .h-60 container */}
+                    <Image
                       src={convertToSecureUrl(product.image)}
                       alt={product.title}
+                      fill
                       className="w-full h-60 object-cover group-hover:scale-105 transition-transform duration-500 top-deal-img"
                       data-fallback="/placeholder.svg"
+                      sizes="(max-width: 768px) 100vw, 360px"
+                      loading="lazy"
+                      unoptimized
+                      priority={false}
                     />
+
                     <div className="absolute top-3 right-3 bg-[#7FA842] text-white text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-sm">
                       {product.discount}
                     </div>
@@ -162,10 +157,8 @@ export default async function TopDealsSlider() {
                       {product.title}
                     </h3>
 
-                    {/* Stars instead of numeric rating */}
                     <div className="flex items-center mb-3 gap-1" aria-label={`Rating: ${product.rating} out of 5`}>
                       {renderStars(product.rating)}
-                      {/* visually-hidden numeric fallback for screen readers */}
                       <span className="sr-only">{product.rating.toFixed(1)} out of 5</span>
                     </div>
 

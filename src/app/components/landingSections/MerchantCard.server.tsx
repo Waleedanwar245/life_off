@@ -1,5 +1,6 @@
 // components/landingSections/MerchantCard.server.tsx
 import React from "react";
+import Image from "next/image";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 
 export default function MerchantCard({ data }: { data: any }) {
@@ -8,6 +9,10 @@ export default function MerchantCard({ data }: { data: any }) {
   const duplicated = [...topMerchants, ...topMerchants];
 
   const CARD_GAP_PX = 40;
+
+  // sensible default size for logos (adjust if you have real logo dimensions)
+  const LOGO_WIDTH = 140;
+  const LOGO_HEIGHT = 80;
 
   return (
     <section className="w-full mx-auto py-16 px-4" style={{ backgroundColor: "#F5F5F5" }}>
@@ -28,21 +33,32 @@ export default function MerchantCard({ data }: { data: any }) {
             className="flex merchant-slider-inner transition-transform duration-300 ease-in-out"
             style={{ gap: `${CARD_GAP_PX}px`, transform: "translateX(0)" }}
           >
-            {duplicated.map((merchant: any, idx: number) => (
-              <div
-                key={idx}
-                className="merchant-card cursor-pointer flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex items-center justify-center p-6"
-                data-slug={merchant?.slug || ""}
-                data-name={merchant?.name || ""}
-                aria-label={merchant?.name || `merchant-${idx}`}
-              >
-                <img
-                  src={convertToSecureUrl(merchant?.logoUrl) || "/placeholder.svg"}
-                  alt={merchant?.name || ""}
-                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
-                />
-              </div>
-            ))}
+            {duplicated.map((merchant: any, idx: number) => {
+              const src = convertToSecureUrl(merchant?.logoUrl) || "/placeholder.svg";
+              return (
+                <div
+                  key={idx}
+                  className="merchant-card cursor-pointer flex-shrink-0 w-48 h-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex items-center justify-center p-6"
+                  data-slug={merchant?.slug || ""}
+                  data-name={merchant?.name || ""}
+                  aria-label={merchant?.name || `merchant-${idx}`}
+                >
+                  {/* next/image replaces img here */}
+                  <Image
+                    src={src}
+                    alt={merchant?.name || ""}
+                    width={LOGO_WIDTH}
+                    height={LOGO_HEIGHT}
+                    // next/image lazy loads by default for non-priority images
+                    loading="lazy"
+                    // ensure the image fits the box and doesn't distort
+                    className="max-w-full max-h-full object-contain coupon-img"
+                    // sizes helps the browser pick the right image if responsive, adjust as needed
+                    sizes="(max-width: 768px) 120px, 140px"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -56,7 +72,6 @@ export default function MerchantCard({ data }: { data: any }) {
         </button>
       </div>
 
-      {/* Dots container — client will populate and manage these */}
       <div className="flex justify-center mt-8 space-x-2 merchant-dots" aria-hidden={false} />
 
     </section>

@@ -1,5 +1,6 @@
 // components/landingSections/Blogs.server.tsx
 import React from "react";
+import Image from "next/image";
 import { API_URL } from "../utils/BASE_URL";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 
@@ -114,14 +115,20 @@ export default async function Blogs() {
             {visible.map((post) => (
               <article key={post.id} className="sha flex bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow border-2 border-[#8BC34B]">
                 <a href={`/blog/${post.slug || "no-slug"}`} className="flex w-full" aria-label={post.title}>
-                  {/* Image column */}
+                  {/* Image column (parent is relative so Image fill works) */}
                   <div className="w-1/3 bg-purple-100 relative">
-                    <img
-                      src={convertToSecureUrl(post.featuredImage) || "/placeholder.svg"}
-                      alt={post.title}
-                      className="w-full h-full object-cover rounded-[10px] blog-img"
-                      data-fallback="/placeholder.svg"
-                    />
+                    <div className="relative w-full h-full min-h-[140px]">
+                      <Image
+                        src={convertToSecureUrl(post.featuredImage) || "/placeholder.svg"}
+                        alt={post.title}
+                        fill
+                        sizes="(max-width: 768px) 33vw, 33vw"
+                        loading="lazy"
+                        unoptimized
+                        className="w-full h-full object-cover rounded-[10px] blog-img"
+                        data-fallback="/placeholder.svg"
+                      />
+                    </div>
                   </div>
 
                   {/* Content */}

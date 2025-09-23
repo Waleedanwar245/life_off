@@ -2,6 +2,13 @@
 "use client";
 import { useEffect } from "react";
 
+/**
+ * Client behaviour:
+ * - Toggle only utility classes (don't overwrite full className) so inner SVG/icon classes stay intact
+ * - Ensure icon wrapper gets the correct color (via style.color) so SVG (currentColor) is visible
+ * - Show/hide .category-deals and update vertical line height
+ */
+
 export default function CategoriesClient() {
   useEffect(() => {
     const section = document.getElementById("categories-section");
@@ -13,25 +20,90 @@ export default function CategoriesClient() {
     const categoriesListRef = section.querySelector<HTMLElement>(".categories-list-ref");
     const verticalLine = section.querySelector<HTMLElement>(".categories-vertical-line");
 
+    // toggle helper for mobile tab circle and label
+    const setMobileTabSelected = (el: HTMLElement, selected: boolean) => {
+      // circle is the first inner div (per server markup)
+      const circle = el.querySelector<HTMLElement>("div");
+      const label = el.querySelector<HTMLElement>("span");
+
+      if (circle) {
+        circle.classList.toggle("bg-[#14303B]", selected);
+        circle.classList.toggle("bg-white", !selected);
+
+        circle.classList.toggle("text-white", selected);
+        circle.classList.toggle("text-[#14303B]", !selected);
+      }
+
+      if (label) {
+        label.classList.toggle("text-white", selected);
+        label.classList.toggle("font-semibold", selected);
+        label.classList.toggle("text-gray-800", !selected);
+      }
+
+      // color the icon by using the svg parent's color (react-icons use currentColor)
+      const svg = el.querySelector<SVGElement>("svg");
+      if (svg && svg.parentElement) {
+        (svg.parentElement as HTMLElement).style.color = selected ? "#14303B" : "#ffffff";
+      }
+
+      el.classList.toggle("selected", selected);
+    };
+
+    // toggle helper for desktop tab circle and label
+    const setDesktopTabSelected = (el: HTMLElement, selected: boolean) => {
+      // circle has class w-9 in server markup
+      const circle = el.querySelector<HTMLElement>(".w-9");
+      const label = el.querySelector<HTMLElement>("span");
+
+      if (circle) {
+        circle.classList.toggle("bg-white", selected);
+        circle.classList.toggle("bg-[#14303B]", !selected);
+      }
+
+      if (label) {
+        label.classList.toggle("text-[#14303B]", selected);
+        label.classList.toggle("font-semibold", selected);
+        label.classList.toggle("font-medium", !selected);
+      }
+
+      // set svg / icon color via parent element style (safe and reliable)
+      const svg = el.querySelector<SVGElement>("svg");
+      if (svg && svg.parentElement) {
+        (svg.parentElement as HTMLElement).style.color = selected ? "#14303B" : "#ffffff";
+      }
+
+      el.classList.toggle("selected", selected);
+    };
+
     const setSelected = (index: number) => {
       mobileTabs.forEach((el) => {
-        const idx = Number(el.dataset.categoryIndex);
-        if (idx === index) el.classList.add("selected"); else el.classList.remove("selected");
+        const idx = Number(el.dataset.categoryIndex ?? -1);
+        setMobileTabSelected(el, idx === index);
       });
+
       desktopTabs.forEach((el) => {
-        const idx = Number(el.dataset.categoryIndex);
-        if (idx === index) el.classList.add("selected"); else el.classList.remove("selected");
+        const idx = Number(el.dataset.categoryIndex ?? -1);
+        setDesktopTabSelected(el, idx === index);
       });
+
       dealsBlocks.forEach((block) => {
-        const idx = Number(block.dataset.dealsIndex);
-        if (idx === index) block.classList.remove("hidden"); else block.classList.add("hidden");
+        const idx = Number(block.dataset.dealsIndex ?? -1);
+        if (idx === index) {
+          block.classList.remove("hidden");
+          block.setAttribute("aria-hidden", "false");
+        } else {
+          block.classList.add("hidden");
+          block.setAttribute("aria-hidden", "true");
+        }
       });
+
       updateLineHeight();
     };
 
+    // attach click handlers
     const mobileUnsubs: Array<() => void> = [];
     mobileTabs.forEach((el) => {
-      const idx = Number(el.dataset.categoryIndex);
+      const idx = Number(el.dataset.categoryIndex ?? -1);
       const handler = () => setSelected(idx);
       el.addEventListener("click", handler);
       mobileUnsubs.push(() => el.removeEventListener("click", handler));
@@ -39,7 +111,7 @@ export default function CategoriesClient() {
 
     const desktopUnsubs: Array<() => void> = [];
     desktopTabs.forEach((el) => {
-      const idx = Number(el.dataset.categoryIndex);
+      const idx = Number(el.dataset.categoryIndex ?? -1);
       const handler = () => setSelected(idx);
       el.addEventListener("click", handler);
       desktopUnsubs.push(() => el.removeEventListener("click", handler));
@@ -51,7 +123,9 @@ export default function CategoriesClient() {
     imgEls.forEach((img) => {
       const handler = () => {
         const fallback = img.dataset.fallback || "/placeholder.svg";
-        if (img.src !== fallback) img.src = fallback;
+        try {
+          if (!img.src.includes(fallback)) img.src = fallback;
+        } catch (e) {}
         img.onerror = null;
       };
       img.addEventListener("error", handler);
@@ -64,12 +138,16 @@ export default function CategoriesClient() {
       verticalLine.style.height = `${Math.max(0, height - 24)}px`;
     };
 
-    setSelected(0);
+    // initial selected
+    const firstIndex = mobileTabs.length ? Number(mobileTabs[0].dataset.categoryIndex ?? 0) : 0;
+    setSelected(firstIndex);
 
+    // keep the line height accurate on resize
     let resizeTimer: number | undefined;
     const onResize = () => {
+      if (typeof window === "undefined") return;
       window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(() => updateLineHeight(), 100);
+      resizeTimer = window.setTimeout(() => updateLineHeight(), 120);
     };
     window.addEventListener("resize", onResize);
 

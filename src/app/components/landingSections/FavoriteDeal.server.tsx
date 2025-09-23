@@ -1,5 +1,6 @@
 // components/landingSections/FavoriteDeal.server.tsx
 import React from "react";
+import Image from "next/image";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import { API_URL } from "../utils/BASE_URL";
 
@@ -54,11 +55,17 @@ export default async function FavoriteDeal() {
             aria-label={trendingDeal.title || "Trending Deal"}
           >
             <div className="relative w-full md:h-[420px] overflow-hidden rounded-lg">
-              <img
+              {/* Use next/image fill to cover container (object-cover). Keep class 'favorite-img' and data-fallback for client script. */}
+              <Image
                 src={convertToSecureUrl(trendingDeal.bannerImage) || "/placeholder.svg"}
                 alt={trendingDeal.title || "Trending Deal"}
-                className="w-full h-[270px] md:h-[420px] object-cover favorite-img rounded-lg"
+                fill
+                className="object-cover favorite-img"
                 data-fallback="/placeholder.svg"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 1200px"
+                unoptimized // remove if you enable image domains in next.config.js
+                priority={false}
               />
             </div>
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg pointer-events-none" />
@@ -82,11 +89,17 @@ export default async function FavoriteDeal() {
               >
                 {product?.imageUrl && (
                   <div className="w-1/2 relative h-32 flex-shrink-0">
-                    <img
+                    {/* Use next/image with fixed height (h-32 = 8rem = 128px). Keep class 'favorite-product-img' and data-fallback. */}
+                    <Image
                       src={convertToSecureUrl(product.imageUrl) || "/placeholder.svg"}
                       alt={product?.name || "Product Image"}
+                      width={160} // adequate width for the half column
+                      height={128} // match h-32 -> 128px
                       className="object-cover w-full h-full favorite-product-img"
                       data-fallback="/placeholder.svg"
+                      loading="lazy"
+                      sizes="(max-width: 640px) 50vw, 160px"
+                      unoptimized
                     />
                   </div>
                 )}

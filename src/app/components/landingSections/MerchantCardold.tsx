@@ -86,7 +86,7 @@ const MerchantCard = ({ data }: { data: any }) => {
     <div className="mx-auto w-full py-16 px-4" style={{ backgroundColor: "#F5F5F5" }}>
       <div className="">
         {/* Heading */}
-        <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12">Our Favorite Merchants</h2>
+        <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12"></h2>
         {/* Merchants Container */}
         <div className="relative flex items-center justify-center">
           {/* Left Arrow */}

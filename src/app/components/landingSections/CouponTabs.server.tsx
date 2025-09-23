@@ -1,7 +1,8 @@
 // components/landingSections/CouponTabs.server.tsx
 import React from "react";
+import Image from "next/image";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
-import { FiScissors } from "react-icons/fi"
+import { FiScissors } from "react-icons/fi";
 
 type Coupon = any;
 
@@ -53,6 +54,10 @@ function normalizeAndPrepare(data: any): Array<any> {
 export default function CouponTabs({ data }: { data: any }) {
   const couponData = normalizeAndPrepare(data);
 
+  // sensible default size for logos (adjust if you have exact dims)
+  const LOGO_WIDTH = 140;
+  const LOGO_HEIGHT = 80;
+
   return (
     <section id="coupon-tabs" className="max-w-[1440px] mx-auto px-4 pt-12">
       <h2
@@ -70,7 +75,10 @@ export default function CouponTabs({ data }: { data: any }) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 coupon-tabs-grid">
           {couponData.map((coupon: any, index: number) => {
             const slug = coupon?.slug || "no-slug";
-            const imgSrc = convertToSecureUrl(coupon.logo) || "/placeholder.svg";
+            // convertToSecureUrl or fallback to placeholder
+            const rawSrc = convertToSecureUrl(coupon.logo);
+            const imgSrc = rawSrc && typeof rawSrc === "string" ? rawSrc : "/placeholder.svg";
+
             return (
               <a
                 key={coupon.storeid ?? index}
@@ -79,17 +87,20 @@ export default function CouponTabs({ data }: { data: any }) {
               >
                 {/* Scissors Icon */}
                 <div className="absolute -top-2 -left-2 bg-white">
-                    <FiScissors className="w-4 h-4 text-gray-400" />
+                  <FiScissors className="w-4 h-4 text-gray-400" />
                 </div>
 
-
-                {/* Logo: NOTE: no onError function here; client will attach fallback */}
+                {/* Logo using next/image */}
                 <div className="h-32 flex items-center justify-center mb-4">
-                  <img
+                  <Image
                     src={imgSrc}
                     alt={`${coupon.name} logo`}
+                    width={LOGO_WIDTH}
+                    height={LOGO_HEIGHT}
+                    loading="lazy"                 // default for non-priority images
+                    sizes="(max-width: 768px) 120px, 140px"
                     className="max-h-full max-w-[140px] object-contain coupon-img"
-                    data-fallback="/placeholder.svg"
+                    // NOTE: next/image renders optimized image via /_next/image?url=...
                   />
                 </div>
 
