@@ -175,7 +175,7 @@ export default function SubmitOfferForm() {
   return (
     <>
       <div className="mt-[200px] md:mt-[100px] max-w-3xl mx-auto p-6">
-        <h1 className="text-2xl md:text-4xl font-bold text-center mb-6">Submit An Offer</h1>
+        <h1 className="text-2xl md:text-4xl font-bold text-center mb-6 text-gray-800">Submit An Offer</h1>
 
         {showSuccess && (
           <div className="bg-gray-100 p-4 mb-6 rounded relative flex items-center">
@@ -228,7 +228,7 @@ export default function SubmitOfferForm() {
                 onChange={() => handleCheckboxChange('Online Code')}
                 className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
-              <span>Online Code</span>
+              <span className='text-gray-800'>Online Code</span>
             </label>
 
             <label className="flex items-center">
@@ -238,7 +238,7 @@ export default function SubmitOfferForm() {
                 onChange={() => handleCheckboxChange('In-Store Offer')}
                 className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
-              <span>In-Store Offer</span>
+              <span className='text-gray-800'>In-Store Offer</span>
             </label>
 
             <label className="flex items-center">
@@ -248,7 +248,7 @@ export default function SubmitOfferForm() {
                 onChange={() => handleCheckboxChange('Sale')}
                 className="mr-2 h-4 md:h-5 w-4 md:w-5 accent-green-600"
               />
-              <span>Sale</span>
+              <span className='text-gray-800'>Sale</span>
             </label>
           </div>
 
@@ -317,8 +317,9 @@ export default function SubmitOfferForm() {
 
             <button
               type="button"
+              style={{ backgroundColor: '#14303B' }}
               onClick={clearForm}
-              className="text-gray-500 hover:text-gray-700"
+              className="hover:bg-green-600 text-white font-medium py-3 px-6 rounded-full w-full"
               disabled={isLoading}
             >
               Clear Form

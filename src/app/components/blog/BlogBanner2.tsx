@@ -80,7 +80,6 @@ export default function BlogBanner({ data }: any) {
           <img
             src={convertToSecureUrl(authorDetails?.imageUrl) || "/placeholder.svg?height=100&width=100"}
             alt="Author profile"
-            // fill
             className="object-cover"
             sizes="96px"
           />
@@ -93,7 +92,7 @@ export default function BlogBanner({ data }: any) {
           </p>
         </div>
         <div className='block md:hidden'>
-          <h2 className="text-green-600 font-[700] text-[12.44px] mb-1">{authorDetails?.name || "MARIA LALONDE"}<span className="text-gray-800 leading-relaxed font-[400] ">
+          <h2 className="text-green-600 font-[700] text-[12.44px] mb-1">{authorDetails?.name || "MARIA LALONDE"}<span className="text-gray-800 leading-relaxed font-[400] "><br /><br />
             {authorDetails?.description ||
               "A globe-trotting, Topo Chico-swilling and ukulele-pickin' writer, Maria Cristina Lalonde loves saving money as much as she hates Oxford commas."}
           </span></h2>

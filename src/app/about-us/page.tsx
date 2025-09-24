@@ -49,7 +49,7 @@ export default function AboutUsSection() {
             <div className="max-w-6xl mx-auto px-6 py-10 mt-[100px]">
                 {/* Hero Section */}
                 <div className="mb-8 text-start">
-                    <h1 className="text-4xl font-bold mb-4">The Promo Codes & Coupons Are Just A Click Away!</h1>
+                    <h1 className="text-4xl font-bold mb-4 text-gray-800">The Promo Codes & Coupons Are Just A Click Away!</h1>
                     <p className="text-gray-700 max-w-3xl ">
                         Who doesn't like discounts? But hunting down the best deals and promotions requires time and effort. With
                         LiveOffCoupon, you need not worry because we do the searching and present you with the best discounts and
@@ -60,7 +60,7 @@ export default function AboutUsSection() {
                 {/* About LiveOffCoupons Section */}
                 <div className="flex flex-col md:flex-row gap-8 mb-8">
                     <div className="md:w-3/5">
-                        <h2 className="text-2xl font-bold mb-6">About LiveOffCoupon</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800">About LiveOffCoupon</h2>
                         <div className="space-y-4 text-gray-700">
                             <p>
                                 LiveOffCoupon is a dedicated platform for people who want to save on their hard-earned money while
@@ -96,7 +96,7 @@ export default function AboutUsSection() {
                 {/* What You'll Find Here Section */}
                 <div className="flex flex-col md:flex-row gap-8 mb-8">
                     <div className="md:w-3/5">
-                        <h2 className="text-2xl font-bold mb-6">What You'll Find Here</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800">What You'll Find Here</h2>
                         <div className="space-y-4 text-gray-700">
                             <p>
                                 We bring you a variety of saving opportunities like coupon codes, discount deals, special seasonal
@@ -129,7 +129,7 @@ export default function AboutUsSection() {
                 {/* Partnering with the Best Section */}
                 <div className="flex flex-col md:flex-row gap-8 mb-8">
                     <div className="md:w-full">
-                        <h2 className="text-2xl font-bold mb-6">Partnering with the Best for Your Savings</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800">Partnering with the Best for Your Savings</h2>
                         <div className="space-y-4 text-gray-700">
                             <p>
                                 LiveOffCoupon is not just about finding the best deals for you. We create meaningful partnerships with the

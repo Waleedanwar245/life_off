@@ -166,7 +166,7 @@ const ContactForm = () => {
 
                                     <FaEnvelope className="text-[#7FA842] text-xl" />
                                 </div>
-                                <p className="font-semibold mb-[0px]">info@LiveOffCoupon.com</p>
+                                <p className="font-semibold text-gray-800 mb-[0px]">info@LiveOffCoupon.com</p>
                             </div>
 
                             <div>
