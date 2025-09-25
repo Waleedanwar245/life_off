@@ -645,7 +645,7 @@ export default function CouponTabs({
                 {(data?.store?.faqs || []).map((faq: any, index: number) => (
                   <div key={index} className="border-b pb-4">
                     <details className="group">
-                      <summary className="text-[14px] md:text-[20px] flex justify-between items-center w-full text-left font-bold cursor-pointer">
+                      <summary className="text-[14px] md:text-[20px] flex justify-between items-center w-full text-left font-bold cursor-pointer text-gray-800">
                         {faq.question}
                         <FiPlus className="text-gray-500 group-open:hidden" />
                         <FiCheck className="text-gray-500 hidden group-open:inline" />
