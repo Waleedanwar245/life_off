@@ -10,6 +10,7 @@ import dayjs from "dayjs"
 import { notFound, redirect } from "next/navigation" // ✅ server-side redirect
 import { sanitizeHomeData } from "@/app/components/utils/sanitizeHomeData";
 
+
 export const dynamic = "force-dynamic";
 
 const SITE_ORIGIN = "https://liveoffcoupon.com";
