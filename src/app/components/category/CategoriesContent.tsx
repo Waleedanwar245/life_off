@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Script from "next/script"
 import SplashScreen from "../utils/SplashSvreen"
 import CategoriesCarousel from "./CategoriesCarousel"
-import CategoryGrid from "./CategoryGridold"
+import CategoryGrid from "./CategoryGrid.server"
 import { API_URL } from "../utils/BASE_URL"
 import axios from "axios"
 

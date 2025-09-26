@@ -4,7 +4,6 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FiClock, FiCheck, FiPlus } from "react-icons/fi";
-// axios removed; client fallback uses fetch if needed
 import { API_URL } from "@/app/components/utils/BASE_URL";
 import Link from "next/link";
 import Image from "next/image";

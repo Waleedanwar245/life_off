@@ -12,7 +12,7 @@ export default function CategoryBanner({ data }: any) {
                   src={convertToSecureUrl(category.image )|| "/placeholder.svg"}
                   alt={category.title}
                   
-                  className= " rounded-full w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="rounded-full w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
           </div>
         </div>
