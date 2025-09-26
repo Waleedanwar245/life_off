@@ -7,7 +7,7 @@ import { FiClock, FiCheck, FiPlus } from "react-icons/fi";
 import { API_URL } from "@/app/components/utils/BASE_URL";
 import Link from "next/link";
 import Image from "next/image";
-import ProductSlider from "./ProductSlider";
+import ProductSlider from "./ProductSlider.server";
 import CouponDialog from "./CouponDialog";
 import { convertToSecureUrl } from "../utils/convertToSecureUrl";
 import { Col, Row, Tag } from "antd";
