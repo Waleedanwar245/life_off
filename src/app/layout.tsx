@@ -89,7 +89,7 @@ export default function RootLayout({
         <meta name="lhverifycode" content="32dc01246faccb7f5b3cad5016dd5033" />
         <meta name="impact-site-verification" content="2b1a2ed1-b061-470c-9954-733206903f12" />
         <meta name="fo-verify" content="804a9314-2d5e-402e-9f40-a1813c92647d" />
-        <link rel="alternate" href="https://liveoffcoupon.com/" hreflang="en-us" />
+        <link rel="alternate" href="https://liveoffcoupon.com/" hrefLang="en-us" />
 
 
         <script
