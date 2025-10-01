@@ -91,7 +91,7 @@ export default function HeroBanner({ data }: { data: { banners?: Banner[] } }) {
       </div>
 
       {/* Promo Cards */}
-      <div className="bg-[#14303B] grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 py-[10px]">
+      {/* <div className="bg-[#14303B] grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 py-[10px]">
         {promoCards.map((card, idx) => (
           <div
             key={idx}
@@ -101,7 +101,7 @@ export default function HeroBanner({ data }: { data: { banners?: Banner[] } }) {
             {idx !== promoCards.length - 1 && <div className="hidden sm:block absolute right-0 top-1/4 bottom-1/4 w-[1px] bg-gray-600" />}
           </div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }
