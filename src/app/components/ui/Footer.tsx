@@ -106,13 +106,15 @@ const FooterSection = () => {
           {/* Logo Section */}
           <div className="col-span-1">
             <div className="flex items-center gap-2 mb-4 cursor-pointer" onClick={() => router.push(PATH.LANDING_PAGE)}>
-              <Image
+              {/* <Image
                 src="/footer_logo.svg"
                 alt="LiveOffCoupons Logo"
                 width={150}
                 height={71}
                 className="h-[71.41480255126953px] w-auto"
-              />
+              /> */}
+
+              <img alt="LiveOffCoupons Logo" loading="lazy" width="150" height="71" decoding="async" data-nimg="1" className="w-[150px] aspect-[150/71]" style={{ color:"transparent" }} src="/footer_logo.svg"></img>
             </div>
           </div>
 

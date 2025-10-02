@@ -317,23 +317,56 @@ export default function CouponTabs({
     return coupons.filter((coupon: any) => coupon.type === section);
   };
 
+  // Skeleton loader for similar coupons
+  const SimilarCouponsSkeleton = () => (
+    <div className="similar-coupons-container min-h-[400px]">
+      {[1, 2, 3, 4].map((item) => (
+        <div key={item} className="coupon-skeleton border rounded-md p-4 mb-4">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <div className="flex-1">
+              <div className="flex items-start">
+                <div className="text-center py-4 min-w-[70px] max-w-[90px] w-full overflow-hidden">
+                  <div className="h-6 bg-gray-200 rounded mb-2 w-16 mx-auto"></div>
+                  <div className="h-4 bg-gray-200 rounded w-12 mx-auto"></div>
+                </div>
+                <div className="h-[60px] self-stretch w-px bg-gray-300 mx-2"></div>
+                <div className="flex-1 pl-2 py-4">
+                  <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                  <div className="h-5 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="flex items-center">
+                    <div className="h-3 bg-gray-200 rounded w-20 mr-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-16"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 md:mt-0 hidden md:block">
+              <div className="h-[42px] w-[148px] bg-gray-200 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   function StoreCard({ name, logo, storeId }: any) {
     return (
-      <Link href={`/coupons/${storeId || "no-slug"}`} className="cursor-pointer bg-white rounded  flex items-center justify-center h-[120px] w-[120px] ">
+      <Link href={`/coupons/${storeId || "no-slug"}`} className="cursor-pointer bg-white rounded flex items-center justify-center h-[120px] w-[120px]">
         <div className="relative w-full h-full">
           <img
             src={convertToSecureUrl(logo) || "/placeholder.svg?height=64&width=96"}
             alt={`${name} logo`}
-            className="object-contain h-[120px] w-[120px]"
+            className="object-contain w-full h-full"
+            width={120}
+            height={120}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.style.display = "none";
-
               const parent = target.parentElement;
               if (parent) {
                 const textDiv = document.createElement("div");
-                textDiv.className = "absolute inset-0 flex items-center justify-center text-blue-500";
-                textDiv.textContent = name;
+                textDiv.className = "absolute inset-0 flex items-center justify-center text-blue-500 bg-gray-100 rounded";
+                textDiv.textContent = name?.substring(0, 12) + (name?.length > 12 ? '...' : '');
                 parent.appendChild(textDiv);
               }
             }}
@@ -342,6 +375,15 @@ export default function CouponTabs({
       </Link>
     );
   }
+
+  // Store Card Skeleton
+  const StoreCardSkeleton = () => (
+    <div className="bg-white rounded flex items-center justify-center h-[120px] w-[120px] animate-pulse">
+      <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+        <div className="text-gray-400">Loading...</div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="max-w-[1280px] font-sans mx-auto px-4 py-8">
@@ -370,20 +412,27 @@ export default function CouponTabs({
                 const filteredCoupons = getFilteredCoupons(section);
 
                 return (
-                  <div key={section}>
+                  <div key={section} className="mb-8">
                     <h2 className="text-xl font-bold mb-4 text-gray-800">{section} Coupons</h2>
 
-                    {section.toLowerCase() === "similar" && isLoading.similarCoupons && <div className="text-gray-500 text-sm">Loading similar coupons...</div>}
+                    {/* Loading State for Similar Coupons */}
+                    {section.toLowerCase() === "similar" && isLoading.similarCoupons && (
+                      <SimilarCouponsSkeleton />
+                    )}
 
+                    {/* Empty State */}
                     {!isLoading.similarCoupons && (!filteredCoupons || filteredCoupons.length === 0) ? (
-                      <div className="text-gray-500 text-sm">No coupons available in this category.</div>
+                      <div className="text-gray-500 text-sm border rounded-md p-4 text-center">
+                        No coupons available in this category.
+                      </div>
                     ) : (
+                      // Actual Coupon Content
                       !isLoading.similarCoupons &&
                       filteredCoupons.map((coupon: any) => {
                         console.log("coupon::::", coupon?.code);
                         const hasDescription = coupon.description && coupon.description.trim() !== "";
                         return (
-                          <div key={coupon.id} className="border rounded-md p-0 mb-4 px-4 ">
+                          <div key={coupon.id} className="coupon-item border rounded-md p-0 mb-4 px-4 min-h-[140px]">
                             <div className="flex flex-col md:flex-row md:items-center">
                               <div className="flex-1">
                                 <div className="flex items-start">
@@ -408,7 +457,7 @@ export default function CouponTabs({
                                     </div>
                                   </div>
 
-                                  <div className="h-[] self-stretch w-px bg-gray-300 mx-2"></div>
+                                  <div className="h-[60px] self-stretch w-px bg-gray-300 mx-2"></div>
                                   <div className="flex-1 pl-2 py-4">
                                     <div className="text-[9.32px] md:text-[13px] text-[#7FA842] font-[800] ">
                                       {coupon?.codeorDeal}{" "}
@@ -425,7 +474,7 @@ export default function CouponTabs({
                                         </span>
                                       )}
                                     </div>
-                                    <div className=" text-[12.9px] md:text-[16px] text-gray-800">{coupon.title}</div>
+                                    <div className="text-[12.9px] md:text-[16px] text-gray-800">{coupon.title}</div>
 
                                     <div className="flex items-center text-xs mt-1">
                                       <FiClock className="text-gray-400 mr-1 hidden md:block" />
@@ -454,7 +503,7 @@ export default function CouponTabs({
                                     letterSpacing: "0%",
                                     textAlign: "center",
                                   }}
-                                  className={`border px-4 py-1.5  text-white  ${section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800 hover:bg-gray-700"}`}
+                                  className={`border px-4 py-1.5 text-white ${section === "Expired" ? "bg-gray-400" : coupon.code ? "bg-[#7FA842]" : "bg-gray-800 hover:bg-gray-700"}`}
                                   onClick={() => {
                                     localStorage.setItem(
                                       "couponData",
@@ -483,7 +532,7 @@ export default function CouponTabs({
                                   {coupon.buttonText}
                                 </button>
                               </div>
-                              <div className="mt-3 md:mt-0 relative block md:hidden ">
+                              <div className="mt-3 md:mt-0 relative block md:hidden">
                                 <div className="absolute bottom-[-55px] right-[25px]"></div>
 
                                 <Tag
@@ -537,7 +586,11 @@ export default function CouponTabs({
                             </div>
 
                             {/* Expandable Section */}
-                            {expandedId === coupon.id && <div className="mb-4 text-sm text-gray-700">{hasDescription ? coupon.description : "No additional details available."}</div>}
+                            {expandedId === coupon.id && (
+                              <div className="mb-4 text-sm text-gray-700 p-2 bg-gray-50 rounded">
+                                {hasDescription ? coupon.description : "No additional details available."}
+                              </div>
+                            )}
                           </div>
                         );
                       })
@@ -581,26 +634,40 @@ export default function CouponTabs({
 
               <div className="max-w-3xl mx-auto p-4 font-sans">
                 {/* Similar Stores Section */}
-                <div className="mb-6 bg-white rounded-lg shadow-sm border  border-[#14303B] p-4 ">
+                <div className="mb-6 bg-white rounded-lg shadow-sm border border-[#14303B] p-4 similar-stores-grid min-h-[300px]">
                   <h2 className="text-lg font-medium text-center mb-4 text-gray-800">Similar Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
-                    {formattedSimilarStores?.length > 0 ? (
+                    {isLoading.similarStores ? (
+                      // Skeleton for similar stores
+                      [1, 2, 3, 4].map((item) => (
+                        <div className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]" key={`similar-skeleton-${item}`}>
+                          <StoreCardSkeleton />
+                        </div>
+                      ))
+                    ) : formattedSimilarStores?.length > 0 ? (
                       formattedSimilarStores.map((store: any, index: number) => (
                         <div className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]" key={`similar-${index}`}>
                           <StoreCard name={store.name} logo={store.logo} storeId={store.storeId} />
                         </div>
                       ))
                     ) : (
-                      <div className="text-center text-gray-500 py-4 flex justify-center w-[100%]">No records found</div>
+                      <div className="text-center text-gray-500 py-4 flex justify-center w-full">No records found</div>
                     )}
                   </div>
                 </div>
 
                 {/* Latest Stores Section */}
-                <div className="bg-gray-50 rounded-xl p-6 max-w-[500px] shadow">
+                <div className="bg-gray-50 rounded-xl p-6 max-w-[500px] shadow latest-stores-grid min-h-[300px]">
                   <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Latest Stores</h2>
                   <div className="grid grid-cols-2 gap-4">
-                    {latestStores?.length > 0 ? (
+                    {isLoading.latestStores ? (
+                      // Skeleton for latest stores
+                      [1, 2, 3, 4].map((item) => (
+                        <div key={`latest-skeleton-${item}`} className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]">
+                          <StoreCardSkeleton />
+                        </div>
+                      ))
+                    ) : latestStores?.length > 0 ? (
                       latestStores.map((store: any, index: number) => (
                         <div key={`latest-${index}`} className="bg-white rounded-md border border-[#7FA842] p-4 flex items-center justify-center h-[140px]">
                           <StoreCard name={store.name} logo={store.logoUrl} storeId={store?.slug} />
@@ -637,8 +704,8 @@ export default function CouponTabs({
             </div>
           </Col>
           <Col xs={24} md={16} ref={faqsRef}>
-            <div className=" ">
-              <h2 className=" font-bold py-12 text-[20px] md:text-[25px] text-gray-800">Frequently Asked Questions</h2>
+            <div className="">
+              <h2 className="font-bold py-12 text-[20px] md:text-[25px] text-gray-800">Frequently Asked Questions</h2>
 
               <div className="space-y-4">
                 {(data?.store?.faqs || []).map((faq: any, index: number) => (
