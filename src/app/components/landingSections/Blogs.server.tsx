@@ -104,9 +104,9 @@ export default async function Blogs() {
   return (
     <section id="blogs-section" className="max-w-[1440px] mx-auto p-4 md:p-8" aria-labelledby="blogs-heading">
       <div className="h-full mx-auto">
-        <h1 id="blogs-heading" className="text-[35px] text-gray-800 font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
+        <h2 id="blogs-heading" className="text-[35px] text-gray-800 font-bold mb-8" style={{ fontSize: "clamp(24px, 1vw, 35px)" }}>
           Blogs
-        </h1>
+        </h2>
 
         {visible.length === 0 ? (
           <p className="text-center text-gray-500 text-lg">No Blogs Available</p>

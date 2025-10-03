@@ -81,8 +81,9 @@ export async function generateMetadata(
         images: data.image ? [data.image] : ["https://liveoffcoupon.com/default.jpg"],
       },
       alternates: {
-        canonical: `https://liveoffcoupon.com/category/${data.slug}`,
+        canonical: `https://liveoffcoupon.com/category/${(data?.slug || 'all')}`
       },
+
       other: {
         "google-site-verification": "jun25llOGzjnJpsoK3-Qvha-gL5rLMB73W68lVU-h6M",
       },

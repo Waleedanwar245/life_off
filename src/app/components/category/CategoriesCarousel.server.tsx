@@ -27,7 +27,7 @@ export default function CategoriesCarousel({ data }: { data?: Category[] | any }
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="text-2xl text-gray-800 font-bold mb-8 text-center">Top Coupons & Deals Categories</h2>
+      <h1 className="text-2xl text-gray-800 font-bold mb-8 text-center">Top Coupons & Deals Categories</h1>
 
       {/* visually hide native scrollbar but keep accessible */}
       <style
