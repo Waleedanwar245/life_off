@@ -3,8 +3,8 @@ import ContactForm from '../components/contactus'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Contact Us | LiveOffCoupon",
-  description: "Contact LiveOffCoupon — send us a message or question.",
+  title: "LiveOff Coupon Contact | Ask Us Anything About Coupons & Deals",
+  description: "Need quick help with discount codes or offers? Contact LiveOff Coupon now for fast, friendly customer support to maximize your savings on every purchase.",
   alternates: {
     canonical: "https://liveoffcoupon.com/contact-us"
   },

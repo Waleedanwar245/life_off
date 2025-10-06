@@ -4,22 +4,18 @@ import type { Metadata } from 'next'
 import SubmitOfferForm from './submitoffer' // adjust if your component path differs
 
 export const metadata: Metadata = {
-  title: 'Submit an Offer | LiveOffCoupon',
-  description: 'Submit an offer or coupon for your store to LiveOffCoupon.',
+  title: 'Submit An Offer | Share Your Best Coupons With LiveOff Coupon',
+  description: 'Reach more shoppers by submitting your coupon codes and promo deals to LiveOff Coupon. Fill easy form, fast approval, and get wide exposure for your offers.',
   alternates: {
     canonical: 'https://liveoffcoupon.com/submit'
   },
   openGraph: {
-    title: 'Submit an Offer | LiveOffCoupon',
-    description: 'Submit an offer or coupon for your store to LiveOffCoupon.',
+    title: 'Submit An Offer | Share Your Best Coupons With LiveOff Coupon',
+    description: 'Reach more shoppers by submitting your coupon codes and promo deals to LiveOff Coupon. Fill easy form, fast approval, and get wide exposure for your offers.',
     url: 'https://liveoffcoupon.com/submit',
     siteName: 'LiveOffCoupon',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Submit an Offer | LiveOffCoupon',
-    description: 'Submit an offer or coupon for your store to LiveOffCoupon.',
-  },
+  
 }
 
 export default function SubmitOfferPage() {
