@@ -7,7 +7,11 @@ import StoresContent from "../components/store/StoresContent"
 export const metadata: Metadata = {
   title: "Coupons and Discounts on Your Favorite Stores | LiveOff Coupon",
   description: "Find the best promo codes, discounts, and coupons for your favorite stores! Browse our complete list of brands and save big on every purchase you make.",
-  // Rest of your metadata stays the same
+  
+  alternates: {
+    canonical: "https://liveoffcoupon.com/stores", 
+  },
+
 }
 
 // Server-side data fetching
