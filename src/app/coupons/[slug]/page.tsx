@@ -183,6 +183,65 @@ function generateViewActionSchema(store: Store) {
   }
 }
 
+// Generate Coupon/Offer Schema for SEO
+function generateCouponOffersSchema(store: Store) {
+  const today = new Date();
+  const activeCoupons = (store.coupons || [])
+    .filter((coupon: any) => {
+      if (!coupon.endDate) return true;
+      const endDate = new Date(coupon.endDate);
+      return endDate >= today;
+    })
+    .slice(0, 10); // Limit to top 10 active coupons
+
+  if (activeCoupons.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": activeCoupons.map((coupon: any, index: number) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Offer",
+        "name": coupon.name || "Discount Offer",
+        "description": coupon.detail || `Special offer at ${store.name}`,
+        "url": `https://liveoffcoupon.com/coupons/${store.slug}`,
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "availability": "https://schema.org/InStock",
+        "validFrom": coupon.startDate || new Date().toISOString(),
+        "validThrough": coupon.endDate || undefined,
+        "seller": {
+          "@type": "Organization",
+          "name": store.name
+        }
+      }
+    }))
+  };
+}
+
+// Generate FAQ Schema for SEO
+function generateFAQSchema(store: Store) {
+  if (!store.faqs || store.faqs.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": store.faqs.map((faq: any) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+}
+
 
 export default async function StorePage({ params }: Props) {
   try {
@@ -214,6 +273,24 @@ export default async function StorePage({ params }: Props) {
             __html: JSON.stringify(generateViewActionSchema(data.store)),
           }}
         />
+        {/* SEO Enhancement: Coupon/Offer Schema */}
+        {generateCouponOffersSchema(data.store) && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(generateCouponOffersSchema(data.store)),
+            }}
+          />
+        )}
+        {/* SEO Enhancement: FAQ Schema */}
+        {generateFAQSchema(data.store) && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(generateFAQSchema(data.store)),
+            }}
+          />
+        )}
         <Suspense fallback={<SplashScreen />}>
           <div className='mt-[250px] md:mt-[135px]' >
             <StoreHeader data={data} />
